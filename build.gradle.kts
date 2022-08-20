@@ -69,7 +69,7 @@ dependencies {
 
   modImplementation(include("com.terraformersmc", "modmenu", modMenuVersion))
 
-  implementation("org.cache2k", "cache2k-api", cache2kVersion)
+  implementation(include("org.cache2k", "cache2k-api", cache2kVersion))
   implementation(include("org.cache2k", "cache2k-core", cache2kVersion))
 }
 
