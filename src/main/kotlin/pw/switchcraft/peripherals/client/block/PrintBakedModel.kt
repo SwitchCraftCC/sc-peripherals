@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext
 import net.minecraft.block.BlockState
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.render.model.BakedQuad
 import net.minecraft.client.render.model.json.ModelOverrideList
@@ -30,6 +31,9 @@ import java.util.function.Supplier
 class PrintBakedModel(
   private val sprite: Sprite
 ) : BakedModel, FabricBakedModel {
+  private val mc by lazy { MinecraftClient.getInstance() }
+  private val missingModel by lazy { mc.bakedModelManager.missingModel }
+
   override fun isVanillaAdapter() = false
 
   override fun emitBlockQuads(blockView: BlockRenderView, state: BlockState, pos: BlockPos,
@@ -45,13 +49,33 @@ class PrintBakedModel(
   }
 
   override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<Random>, ctx: RenderContext) {
-    val printData = itemCache.computeIfAbsent(stack) { PrintItem.printData(stack) }
-    val shapes = printData.shapesOff
-
-    val mesh = itemMeshCache.computeIfAbsent(shapes) {
-      buildPrintMesh(shapes)
+    // Quick-fail for completely empty item stacks (REI, JEI, etc)
+    if (!stack.hasNbt()) {
+      ctx.fallbackConsumer().accept(missingModel)
+      return
     }
-    ctx.meshConsumer().accept(mesh)
+
+    try {
+      // Allow this to throw when there are no shapes for the item stack
+      val printData = itemCache.computeIfAbsent(stack) {
+        PrintItem.printData(stack) ?: throw NoPrintDataException()
+      }
+      val shapes = printData.shapesOff
+
+      val mesh = itemMeshCache.computeIfAbsent(shapes) {
+        buildPrintMesh(shapes)
+      }
+      ctx.meshConsumer().accept(mesh)
+    } catch (e: Exception) {
+      when(e) {
+        is NoPrintDataException -> { /* no-op */ }
+        else -> throw e // Let this bubble up to the consumer
+      }
+
+      // Show the invalid model
+      ctx.fallbackConsumer().accept(missingModel)
+      return
+    }
   }
 
   private fun buildPrintMesh(shapes: Shapes, facing: Direction = Direction.SOUTH): Mesh? {
@@ -110,6 +134,8 @@ class PrintBakedModel(
   override fun getTransformation(): ModelTransformation = ModelHelper.MODEL_TRANSFORM_BLOCK
   override fun getOverrides(): ModelOverrideList = ModelOverrideList.EMPTY
   override fun getParticleSprite() = sprite
+
+  class NoPrintDataException : IllegalArgumentException("No print data found")
 
   companion object {
     // TODO: Tune these caches

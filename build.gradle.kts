@@ -45,7 +45,9 @@ repositories {
   maven("https://squiddev.cc/maven")
   maven("https://jitpack.io") // CC:Restitched
   maven("https://maven.terraformersmc.com/releases") // Mod Menu
-  maven("https://maven.shedaniel.me") // Cloth Config
+  maven("https://maven.shedaniel.me") // Cloth Config, REI
+  maven("https://dvs1.progwml6.com/files/maven/") // JEI
+  maven("https://modmaven.dev/") // JEI
 }
 
 dependencies {
