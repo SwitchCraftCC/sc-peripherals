@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "id": "sc-peripherals",
+  "version": "${version}",
+
+  "name": "SwitchCraft Peripherals",
+  "description": "Peripherals for ComputerCraft inspired by other computer mods.",
+  "authors": [
+    "SwitchCraft",
+    "Lemmmy"
+  ],
+  "contact": {
+    "homepage": "https://switchcraft.pw/"
+  },
+
+  "license": "MIT",
+  "icon": "assets/sc-peripherals/icon.png",
+
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "pw.switchcraft.peripherals.ScPeripherals"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "pw.switchcraft.peripherals.client.ScPeripheralsClient"
+      }
+    ],
+    "fabric-datagen": [
+      {
+        "adapter": "kotlin",
+        "value": "pw.switchcraft.peripherals.datagen.ScPeripheralsDatagen"
+      }
+    ]
+  },
+  "mixins": [
+    "sc-peripherals.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_target_version}",
+    "java": ">=17",
+    "fabric-language-kotlin": ">=${fabric_kotlin_version}",
+    "computercraft": "${cc_target_version}"
+  }
+}

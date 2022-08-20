@@ -1,0 +1,27 @@
+[printer]
+# The amount of time, in ticks, it takes for the printer to print a single item.
+print_ticks = 100
+# How much a single piece of Chamelium will fill up the printer's chamelium
+# tank by. The maximum stored in the tank is 256,000.
+chamelium_value = 2000
+# How much a single Ink Cartridge will fill up the printer's ink tank by. The
+# maximum stored in the tank is 100,000.
+ink_value = 50000
+# The maximum light level a printed block can emit when it was not crafted with
+# any glowstone. This defaults to the light level of a redstone torch.
+max_base_light_level = 7
+# The maximum number of shapes that can be printed in a single state of a 3D
+# print. This is for the individual on/off states, so it is possible for a
+# single print to have twice this many shapes, but only this many will be
+# visible at a time.
+max_shapes = 128
+# The additional material cost added when printing a model with a custom
+# redstone output value - i.e. a value that is not 0 or 15.
+custom_redstone_cost = 300
+# The multiplier applied to the base material cost when printing a model with
+# at least one non-collidable state.
+noclip_cost_multiplier = 2
+# The multiplier to calculate much chamelium is refunded when recycling a
+# printed model. The multiplier is applied to the original material cost. 1 is
+# a full refund, 0 disables refunding completely.
+recycle_value_multiplier = 0.75
