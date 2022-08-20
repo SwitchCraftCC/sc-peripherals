@@ -16,6 +16,26 @@ mod in your own modpack.
 Please note that each custom SwitchCraft mod has its own license, so check the license of each mod before using it in 
 your modpack.
 
+## Differences from OpenComputers
+
+- 3D printers, ink cartridges are simpler to craft
+  - The ink cartridge recipe is crafted as a filled cartridge to begin with, but a refill recipe is still provided
+- 3D printers do not require the use of energy
+- 3D printers have externally-visible progress bars for chamelium and ink levels
+- First-class ComputerCraft peripheral API support
+- `print3d` program included in the ROM by default via a data pack in the mod
+  - Printing can be safely terminated by the user, and it will automatically stop after the current item is finished
+  - `print3d stop` command to stop a printer via the CLI
+  - Uses [3dj format](#3dj-format) instead of 3dm (converter here: https://3dj.lem.sh/)
+- Default maximum shape count (configurable) for each state of a print raised from 24 to 128
+- The default maximum light level in printed models is now 7 instead of 8 - this is now equivalent to a redstone torch
+  - Prints can still be crafted with 8 pieces of glowstone dust to reach maximum brightness level
+- 3D prints are waterloggable
+- The included "white" texture name changed from `opencomputers:blocks/white` to `sc-peripherals:block/white`
+- Print models are more efficiently cached, so chunks with lots of identical prints will only bake the print model once
+  - Note that this is not the be-all and end-all of performance, there may still be a lot of vertex data to upload to
+    the chunk
+
 ## .3dj format
 
 The 3dj format was created as a more versatile alternative for processing and storing 3D models compared to the old
@@ -54,8 +74,8 @@ All arguments except for `shapesOff`, `shapesOn`, `bounds` and `texture` are opt
 - `isButton`: (optional, boolean) Whether the 3D print acts as a button when right-clicked. If true, the print will
   automatically switch to the 'off' state after 20 ticks when right-clicked. If false, right-clicking will toggle the 
   state.
-- `collideWhenOn`: (optional, boolean) Whether the 3D print is collidable when in the 'on' state.
 - `collideWhenOff`: (optional, boolean) Whether the 3D print is collidable when in the 'off' state.
+- `collideWhenOn`: (optional, boolean) Whether the 3D print is collidable when in the 'on' state.
 - `lightLevel`: (optional, number) The light level of the 3D print. Must be between 0 or 15, but values above 7 will
   be clamped to 7 unless the print is later crafted with glowstone dust.
 - `redstoneLevel`: (optional, number) The redstone level of the 3D print. Must be between 0 or 15.
@@ -72,6 +92,15 @@ All arguments except for `shapesOff`, `shapesOn`, `bounds` and `texture` are opt
 - `shapesOn`: (**required**, array of objects) Same as `shapesOff`, but for the 'on' state. To disallow state changes
   and have no 'on' state, pass an empty array.
 
+#### Differences from 3dm
+
+- Uses JSON instead of Lua tables
+- `emitRedstone` renamed to `redstoneLevel`
+- `collidable` array is now two separate `collideWhenOff`, `collideWhenOn` boolean fields (default to true)
+- `buttonMode` renamed to `isButton`
+- `shapes` array has been separated into `shapesOff`, `shapesOn`
+  - `state` field removed 
+  - `tint` in a shape may now be a number or a hex string (`RRGGBB`)
   
 ## License
 
