@@ -14,8 +14,8 @@ import pw.switchcraft.peripherals.client.block.PrinterRenderer
 import pw.switchcraft.peripherals.client.gui.PrinterScreen
 import pw.switchcraft.peripherals.prints.PrintBlock
 import pw.switchcraft.peripherals.prints.PrintItem
-import pw.switchcraft.peripherals.prints.printer.PrinterInkPacket
 import pw.switchcraft.peripherals.prints.printer.PrinterDataPacket
+import pw.switchcraft.peripherals.prints.printer.PrinterInkPacket
 import pw.switchcraft.peripherals.util.registerClientReceiver
 
 object ScPeripheralsClient : ClientModInitializer {
@@ -28,7 +28,7 @@ object ScPeripheralsClient : ClientModInitializer {
     HandledScreens.register(Registration.ModScreens.printer, ::PrinterScreen)
 
     // Allow transparent textures to work in 3D prints
-    BlockRenderLayerMap.INSTANCE.putBlock(Registration.ModBlocks.print, RenderLayer.getCutoutMipped())
+    BlockRenderLayerMap.INSTANCE.putBlock(Registration.ModBlocks.print, RenderLayer.getTranslucent())
 
     ModelLoadingRegistry.INSTANCE.registerResourceProvider { ModelResourceProvider { id, _ -> when(id) {
       PrintBlock.id, PrintItem.id -> PrintUnbakedModel()
