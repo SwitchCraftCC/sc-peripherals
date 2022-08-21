@@ -94,7 +94,8 @@ export function Converter(): JSX.Element {
       : <>
         <Paragraph className="mb-3">
           The print in the new sc-peripherals 3dj-format (JSON file).
-          Download the file to drag+drop it into your ComputerCraft computer.
+          Download the file to drag &amp; drop it into your ComputerCraft
+          computer.
         </Paragraph>
 
         <Paragraph className="mb-3">
@@ -107,13 +108,18 @@ export function Converter(): JSX.Element {
         <Textarea className="mb-1" readOnly value={contents ?? ""} />
 
         {/* Download button */}
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row gap-3 items-center">
           <Button
             disabled={!contents}
             onClick={() => downloadFile(contents, filename)}
           >
             Download file
           </Button>
+
+          <span className="text-slate-500">
+            <span className="text-green-500 font-medium">Tip! </span>
+            Drag &amp; drop the file into ComputerCraft!
+          </span>
         </div>
       </>}
   </>;

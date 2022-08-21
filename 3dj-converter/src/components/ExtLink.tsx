@@ -5,6 +5,6 @@ export const ExtLink: FC<HTMLProps<HTMLAnchorElement>> = ({ children, ...props }
     {...props}
     target="_blank"
     rel="noopener noreferrer"
-    className="text-slate-400"
+    className="text-indigo-500"
   >{children}</a>;
 };
