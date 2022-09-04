@@ -11,7 +11,7 @@ fun interface ImplementedInventory : Inventory {
 
   override fun size() = getItems().size
 
-  override fun isEmpty() = getItems().any { it.isEmpty }
+  override fun isEmpty() = getItems().all { it.isEmpty }
 
   override fun getStack(slot: Int) = getItems()[slot]
 
