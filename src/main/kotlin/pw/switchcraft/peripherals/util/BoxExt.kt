@@ -30,7 +30,7 @@ val Box.surfaceArea: Int
 
 fun Box.rotateTowards(facing: Direction): Box = rotateY(when(facing) {
   Direction.EAST -> 3
-  Direction.NORTH -> 2
+  Direction.SOUTH -> 2
   Direction.WEST -> 1
   else -> 0
 })
