@@ -11,6 +11,7 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
+import pw.switchcraft.library.ext.*
 import pw.switchcraft.peripherals.Registration.ModBlockEntities.print
 import pw.switchcraft.peripherals.util.*
 

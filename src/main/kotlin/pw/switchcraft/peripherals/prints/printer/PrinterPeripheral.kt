@@ -8,13 +8,13 @@ import dan200.computercraft.api.lua.MethodResult.of
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
 import net.minecraft.util.Identifier
+import pw.switchcraft.library.ext.intBox
 import pw.switchcraft.peripherals.config.ScPeripheralsConfig.config
 import pw.switchcraft.peripherals.prints.MAX_LABEL_LENGTH
 import pw.switchcraft.peripherals.prints.MAX_TOOLTIP_LENGTH
 import pw.switchcraft.peripherals.prints.PrintData
 import pw.switchcraft.peripherals.prints.Shape
 import pw.switchcraft.peripherals.util.getTableInt
-import pw.switchcraft.peripherals.util.intBox
 import java.util.*
 
 class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {

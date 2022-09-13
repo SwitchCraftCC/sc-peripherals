@@ -8,11 +8,11 @@ import net.minecraft.text.Text.literal
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.GRAY
 import net.minecraft.world.World
+import pw.switchcraft.library.ext.optCompound
 import pw.switchcraft.peripherals.Registration.ModBlocks
 import pw.switchcraft.peripherals.Registration.ModItems
 import pw.switchcraft.peripherals.ScPeripherals.ModId
 import pw.switchcraft.peripherals.ScPeripherals.modId
-import pw.switchcraft.peripherals.util.optCompound
 
 class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
   override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

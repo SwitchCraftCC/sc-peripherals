@@ -4,9 +4,9 @@ import net.fabricmc.fabric.api.util.NbtType.COMPOUND
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
+import pw.switchcraft.library.ext.optString
+import pw.switchcraft.library.ext.putOptString
 import pw.switchcraft.peripherals.config.ScPeripheralsConfig.config
-import pw.switchcraft.peripherals.util.optString
-import pw.switchcraft.peripherals.util.putOptString
 
 const val MAX_LABEL_LENGTH = 48
 const val MAX_TOOLTIP_LENGTH = 256

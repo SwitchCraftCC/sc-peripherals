@@ -22,10 +22,10 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockRenderView
 import org.cache2k.Cache2kBuilder
+import pw.switchcraft.library.ext.faces
+import pw.switchcraft.library.ext.rotateTowards
 import pw.switchcraft.peripherals.Registration.ModBlockEntities
 import pw.switchcraft.peripherals.prints.*
-import pw.switchcraft.peripherals.util.faces
-import pw.switchcraft.peripherals.util.rotateTowards
 import java.util.function.Supplier
 
 class PrintBakedModel(

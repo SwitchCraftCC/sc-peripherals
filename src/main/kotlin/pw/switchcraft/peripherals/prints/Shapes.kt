@@ -4,10 +4,10 @@ import net.minecraft.nbt.NbtList
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
-import pw.switchcraft.peripherals.util.rotateTowards
-import pw.switchcraft.peripherals.util.surfaceArea
-import pw.switchcraft.peripherals.util.toDiv16VoxelShape
-import pw.switchcraft.peripherals.util.volume
+import pw.switchcraft.library.ext.rotateTowards
+import pw.switchcraft.library.ext.surfaceArea
+import pw.switchcraft.library.ext.toDiv16VoxelShape
+import pw.switchcraft.library.ext.volume
 
 class Shapes : HashSet<Shape>() {
   private val hashCode by lazy { super.hashCode() }

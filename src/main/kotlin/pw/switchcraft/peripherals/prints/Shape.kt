@@ -3,10 +3,10 @@ package pw.switchcraft.peripherals.prints
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Box
-import pw.switchcraft.peripherals.util.byteToDouble
-import pw.switchcraft.peripherals.util.optInt
-import pw.switchcraft.peripherals.util.optString
-import pw.switchcraft.peripherals.util.putOptInt
+import pw.switchcraft.library.ext.byteToDouble
+import pw.switchcraft.library.ext.optInt
+import pw.switchcraft.library.ext.optString
+import pw.switchcraft.library.ext.putOptInt
 
 data class Shape(
   val bounds: Box,

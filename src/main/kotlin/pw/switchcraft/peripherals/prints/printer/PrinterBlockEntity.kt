@@ -20,6 +20,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
+import pw.switchcraft.library.ext.optCompound
 import pw.switchcraft.peripherals.Registration.ModBlockEntities.printer
 import pw.switchcraft.peripherals.Registration.ModItems
 import pw.switchcraft.peripherals.config.ScPeripheralsConfig.config
@@ -28,7 +29,6 @@ import pw.switchcraft.peripherals.prints.PrintItem
 import pw.switchcraft.peripherals.util.BaseBlockEntity
 import pw.switchcraft.peripherals.util.ImplementedInventory
 import pw.switchcraft.peripherals.util.NetworkUtil.sendToAllTracking
-import pw.switchcraft.peripherals.util.optCompound
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

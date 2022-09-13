@@ -4,7 +4,7 @@ plugins {
   val kotlinVersion: String by System.getProperties()
   kotlin("jvm").version(kotlinVersion)
 
-  id("fabric-loom") version "0.12-SNAPSHOT"
+  id("fabric-loom") version "1.0-SNAPSHOT"
   id("io.github.juuxel.loom-quiltflower") version "1.7.3"
   id("maven-publish")
 }
@@ -28,6 +28,8 @@ val nightConfigVersion: String by project
 val clothConfigVersion: String by project
 val clothApiVersion: String by project
 val modMenuVersion: String by project
+
+val scLibraryVersion: String by project
 
 val archivesBaseName = "sc-peripherals"
 version = modVersion
@@ -56,6 +58,8 @@ dependencies {
   modImplementation("net.fabricmc", "fabric-loader", loaderVersion)
   modImplementation("net.fabricmc.fabric-api", "fabric-api", fabricVersion)
   modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
+
+  modApi("pw.switchcraft", "sc-library", scLibraryVersion)
 
   // CC: Restitched
   modApi("com.github.cc-tweaked:cc-restitched:${ccVersion}")
