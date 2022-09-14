@@ -16,6 +16,20 @@
   "license": "MIT",
   "icon": "assets/sc-peripherals/icon.png",
 
+  "custom": {
+    "modmenu": {
+      "links": {
+        "switchcraft.discord": "https://discord.switchcraft.pw"
+      },
+      "parent": {
+        "id": "switchcraft",
+        "name": "SwitchCraft",
+        "url": "https://switchcraft.pw",
+        "icon": "assets/sc-peripherals/icon.png"
+      }
+    }
+  },
+
   "entrypoints": {
     "main": [
       {
@@ -47,7 +61,6 @@
     "java": ">=17",
     "fabric-language-kotlin": ">=${fabric_kotlin_version}",
     "computercraft": "${cc_target_version}",
-    "sc-library": "1.x",
-    "trinkets": ">=3.4.0"
+    "sc-library": "1.x"
   }
 }

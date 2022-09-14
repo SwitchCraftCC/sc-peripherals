@@ -44,6 +44,12 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 repositories {
+  mavenLocal {
+    content {
+      includeGroup("pw.switchcraft")
+    }
+  }
+
   maven("https://squiddev.cc/maven")
   maven("https://jitpack.io") // CC:Restitched
   maven("https://maven.terraformersmc.com/releases") // Mod Menu
@@ -56,13 +62,17 @@ dependencies {
   minecraft("com.mojang", "minecraft", minecraftVersion)
   mappings("net.fabricmc", "yarn", yarnMappings, null, "v2")
   modImplementation("net.fabricmc", "fabric-loader", loaderVersion)
-  modImplementation("net.fabricmc.fabric-api", "fabric-api", fabricVersion)
+  modImplementation("net.fabricmc.fabric-api", "fabric-api", fabricVersion) {
+    exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
+  }
   modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
-  modApi("pw.switchcraft", "sc-library", scLibraryVersion)
+  modImplementation(include("pw.switchcraft", "sc-library", scLibraryVersion))
 
   // CC: Restitched
-  modApi("com.github.cc-tweaked:cc-restitched:${ccVersion}")
+  modApi("com.github.cc-tweaked:cc-restitched:${ccVersion}") {
+    exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
+  }
 
   implementation(include("com.electronwill.night-config", "core", nightConfigVersion))
   implementation(include("com.electronwill.night-config", "toml", nightConfigVersion))
