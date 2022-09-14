@@ -5,8 +5,8 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.world.World
+import pw.switchcraft.library.Tooltips.addDescLines
 import pw.switchcraft.peripherals.ScPeripherals.modId
-import pw.switchcraft.peripherals.util.Tooltips.addDescLines
 
 abstract class BaseItem(
   private val itemName: String,

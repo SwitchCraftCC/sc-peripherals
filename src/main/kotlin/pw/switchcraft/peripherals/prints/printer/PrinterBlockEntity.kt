@@ -28,7 +28,7 @@ import pw.switchcraft.peripherals.prints.PrintData
 import pw.switchcraft.peripherals.prints.PrintItem
 import pw.switchcraft.peripherals.util.BaseBlockEntity
 import pw.switchcraft.peripherals.util.ImplementedInventory
-import pw.switchcraft.peripherals.util.NetworkUtil.sendToAllTracking
+import pw.switchcraft.library.networking.NetworkUtil.sendToAllTracking
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

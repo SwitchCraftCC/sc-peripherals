@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import pw.switchcraft.peripherals.util.Tooltips.addDescLines
+import pw.switchcraft.library.Tooltips.addDescLines
 
 abstract class BaseBlockWithEntity(settings: Settings) : BlockWithEntity(settings) {
   override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {

@@ -5,18 +5,18 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.math.BlockPos
-import pw.switchcraft.peripherals.util.ScPeripheralsPacket
-import pw.switchcraft.peripherals.util.packetId
+import pw.switchcraft.library.networking.ScLibraryPacket
+import pw.switchcraft.peripherals.ScPeripherals.ModId
 
 data class PrinterInkPacket(
   val pos: BlockPos,
   val chamelium: Int,
   val ink: Int
-) : ScPeripheralsPacket() {
+) : ScLibraryPacket() {
   override val id = PrinterInkPacket.id
 
   companion object {
-    val id = packetId("printer_ink")
+    val id = ModId("printer_ink")
 
     fun fromBytes(buf: PacketByteBuf) = PrinterInkPacket(
       pos = buf.readBlockPos(),

@@ -6,10 +6,10 @@ import org.slf4j.LoggerFactory
 import pw.switchcraft.peripherals.config.ScPeripheralsConfig
 
 object ScPeripherals : ModInitializer {
-  val log = LoggerFactory.getLogger("ScPeripherals")!!
+  internal val log = LoggerFactory.getLogger("ScPeripherals")!!
 
-  val modId = "sc-peripherals"
-  fun ModId(value: String) = Identifier(modId, value)
+  internal const val modId = "sc-peripherals"
+  internal fun ModId(value: String) = Identifier(modId, value)
 
   override fun onInitialize() {
     log.info("sc-peripherals initializing")

@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.render.RenderLayer
 import org.slf4j.LoggerFactory
+import pw.switchcraft.library.networking.registerClientReceiver
 import pw.switchcraft.peripherals.Registration
 import pw.switchcraft.peripherals.client.block.PrintUnbakedModel
 import pw.switchcraft.peripherals.client.block.PrinterRenderer
@@ -16,7 +17,6 @@ import pw.switchcraft.peripherals.prints.PrintBlock
 import pw.switchcraft.peripherals.prints.PrintItem
 import pw.switchcraft.peripherals.prints.printer.PrinterDataPacket
 import pw.switchcraft.peripherals.prints.printer.PrinterInkPacket
-import pw.switchcraft.peripherals.util.registerClientReceiver
 
 object ScPeripheralsClient : ClientModInitializer {
   val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!

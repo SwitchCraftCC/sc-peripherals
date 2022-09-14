@@ -67,7 +67,7 @@ dependencies {
   }
   modImplementation("net.fabricmc", "fabric-language-kotlin", fabricKotlinVersion)
 
-  modImplementation(include("pw.switchcraft", "sc-library", scLibraryVersion))
+  modImplementation("pw.switchcraft", "sc-library", scLibraryVersion)
 
   // CC: Restitched
   modApi("com.github.cc-tweaked:cc-restitched:${ccVersion}") {
