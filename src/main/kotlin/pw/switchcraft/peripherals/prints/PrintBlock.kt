@@ -27,13 +27,13 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
+import pw.switchcraft.library.WaterloggableBlock
+import pw.switchcraft.library.WaterloggableBlock.Companion.waterlogged
 import pw.switchcraft.peripherals.Registration.ModBlockEntities
 import pw.switchcraft.peripherals.Registration.ModBlocks
 import pw.switchcraft.peripherals.Registration.ModItems
 import pw.switchcraft.peripherals.ScPeripherals.ModId
 import pw.switchcraft.peripherals.util.BaseBlockWithEntity
-import pw.switchcraft.peripherals.util.WaterloggableBlock
-import pw.switchcraft.peripherals.util.WaterloggableBlock.Companion.waterlogged
 
 class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {

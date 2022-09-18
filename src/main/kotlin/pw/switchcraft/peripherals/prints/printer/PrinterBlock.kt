@@ -19,10 +19,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
+import pw.switchcraft.library.WaterloggableBlock
+import pw.switchcraft.library.WaterloggableBlock.Companion.waterlogged
 import pw.switchcraft.peripherals.Registration.ModBlockEntities.printer
 import pw.switchcraft.peripherals.util.BaseBlockWithEntity
-import pw.switchcraft.peripherals.util.WaterloggableBlock
-import pw.switchcraft.peripherals.util.WaterloggableBlock.Companion.waterlogged
 
 class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {

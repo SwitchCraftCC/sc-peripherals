@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.registry.Registry.*
 import pw.switchcraft.peripherals.ScPeripherals.ModId
 import pw.switchcraft.peripherals.block.ChameliumBlock
+import pw.switchcraft.peripherals.datagen.recipes.handlers.RecipeHandlers
 import pw.switchcraft.peripherals.item.ChameliumItem
 import pw.switchcraft.peripherals.item.EmptyInkCartridgeItem
 import pw.switchcraft.peripherals.item.InkCartridgeItem
@@ -23,10 +24,8 @@ import pw.switchcraft.peripherals.item.TextureAnalyzerItem
 import pw.switchcraft.peripherals.prints.PrintBlock
 import pw.switchcraft.peripherals.prints.PrintBlockEntity
 import pw.switchcraft.peripherals.prints.PrintItem
-import pw.switchcraft.peripherals.prints.PrintRecipe
 import pw.switchcraft.peripherals.prints.printer.PrinterBlock
 import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity
-import pw.switchcraft.peripherals.prints.printer.PrinterRecipe
 import pw.switchcraft.peripherals.prints.printer.PrinterScreenHandler
 
 object Registration {
@@ -34,8 +33,7 @@ object Registration {
     // Similar to how CC behaves - touch each static class to force the static initializers to run.
     listOf(ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer)
 
-    register(RECIPE_SERIALIZER, ModId("printer"), PrinterRecipe.recipeSerializer)
-    register(RECIPE_SERIALIZER, ModId("print"), PrintRecipe.recipeSerializer)
+    RecipeHandlers.registerSerializers()
   }
 
   object ModBlocks {
