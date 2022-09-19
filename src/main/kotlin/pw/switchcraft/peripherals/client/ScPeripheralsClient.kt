@@ -17,6 +17,7 @@ import pw.switchcraft.peripherals.prints.PrintBlock
 import pw.switchcraft.peripherals.prints.PrintItem
 import pw.switchcraft.peripherals.prints.printer.PrinterDataPacket
 import pw.switchcraft.peripherals.prints.printer.PrinterInkPacket
+import pw.switchcraft.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket
 
 object ScPeripheralsClient : ClientModInitializer {
   val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!
@@ -37,5 +38,8 @@ object ScPeripheralsClient : ClientModInitializer {
 
     registerClientReceiver(PrinterInkPacket.id, PrinterInkPacket::fromBytes)
     registerClientReceiver(PrinterDataPacket.id, PrinterDataPacket::fromBytes)
+
+    // Vanilla ScreenHandlerPropertyUpdateS2CPacket sends shorts instead of ints over the wire
+    ScreenHandlerPropertyUpdateIntS2CPacket.registerReceiver()
   }
 }
