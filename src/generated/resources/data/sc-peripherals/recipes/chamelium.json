@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "c:coal"
+    },
+    "G": {
+      "item": "minecraft:gravel"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    },
+    "W": {
+      "tag": "c:water_buckets"
+    }
+  },
+  "pattern": [
+    "GRG",
+    "RCR",
+    "GWG"
+  ],
+  "result": {
+    "count": 16,
+    "item": "sc-peripherals:chamelium"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "C": {
+      "tag": "c:cyan_dyes"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "K": {
+      "tag": "c:black_dyes"
+    },
+    "M": {
+      "tag": "c:magenta_dyes"
+    },
+    "P": {
+      "tag": "c:glass_panes"
+    },
+    "R": {
+      "tag": "c:redstone_dusts"
+    },
+    "Y": {
+      "tag": "c:yellow_dyes"
+    }
+  },
+  "pattern": [
+    "GPE",
+    "RRC",
+    "MYK"
+  ],
+  "result": {
+    "item": "sc-peripherals:texture_analyzer"
+  }
+}

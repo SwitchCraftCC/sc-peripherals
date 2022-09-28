@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "sc-peripherals:empty_ink_cartridge"
+    },
+    {
+      "tag": "c:cyan_dyes"
+    },
+    {
+      "tag": "c:magenta_dyes"
+    },
+    {
+      "tag": "c:yellow_dyes"
+    },
+    {
+      "tag": "c:black_dyes"
+    }
+  ],
+  "result": {
+    "item": "sc-peripherals:ink_cartridge"
+  }
+}
