@@ -7,6 +7,8 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.fabricmc.fabric.api.renderer.v1.model.ModelHelper
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.block.BlockState
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.model.BakedModel
@@ -16,7 +18,12 @@ import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.client.texture.Sprite
 import net.minecraft.client.util.SpriteIdentifier
 import net.minecraft.item.ItemStack
+import net.minecraft.resource.ResourceManager
+import net.minecraft.resource.ResourceType
 import net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE
+import net.minecraft.text.Text.literal
+import net.minecraft.util.Formatting.BOLD
+import net.minecraft.util.Formatting.YELLOW
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
@@ -25,6 +32,7 @@ import org.cache2k.Cache2kBuilder
 import pw.switchcraft.library.ext.faces
 import pw.switchcraft.library.ext.rotateTowards
 import pw.switchcraft.peripherals.Registration.ModBlockEntities
+import pw.switchcraft.peripherals.ScPeripherals.ModId
 import pw.switchcraft.peripherals.prints.*
 import java.util.function.Supplier
 
@@ -138,15 +146,39 @@ class PrintBakedModel(
   class NoPrintDataException : IllegalArgumentException("No print data found")
 
   companion object {
+    private val reloadId = ModId("print_baked_model_cache_reloader")
+
     // TODO: Tune these caches
-    val meshCache = object : Cache2kBuilder<ShapesFacing, Mesh>() {}
+    private val meshCache = object : Cache2kBuilder<ShapesFacing, Mesh>() {}
       .entryCapacity(10000)
       .build()
-    val itemMeshCache = object : Cache2kBuilder<Shapes, Mesh>() {}
+    private val itemMeshCache = object : Cache2kBuilder<Shapes, Mesh>() {}
       .entryCapacity(1000)
       .build()
-    val itemCache = object : Cache2kBuilder<ItemStack, PrintData>() {}
+    private val itemCache = object : Cache2kBuilder<ItemStack, PrintData>() {}
       .entryCapacity(10000)
       .build()
+
+    private fun clearCaches() {
+      val count = meshCache.keys().size + itemMeshCache.keys().size + itemCache.keys().size
+
+      meshCache.clear()
+      itemMeshCache.clear()
+      itemCache.clear()
+
+      MinecraftClient.getInstance().player?.sendMessage(literal("")
+        .append(literal("[sc-peripherals] ").formatted(YELLOW, BOLD))
+        .append(literal("Cleared $count cached 3d print models")), false)
+    }
+
+    fun init() {
+      ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(object : SimpleSynchronousResourceReloadListener {
+        override fun reload(manager: ResourceManager) {
+          clearCaches()
+        }
+
+        override fun getFabricId() = reloadId
+      })
+    }
   }
 }

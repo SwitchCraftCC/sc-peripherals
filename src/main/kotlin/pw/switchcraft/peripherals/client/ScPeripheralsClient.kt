@@ -10,6 +10,7 @@ import net.minecraft.client.render.RenderLayer
 import org.slf4j.LoggerFactory
 import pw.switchcraft.library.networking.registerClientReceiver
 import pw.switchcraft.peripherals.Registration
+import pw.switchcraft.peripherals.client.block.PrintBakedModel
 import pw.switchcraft.peripherals.client.block.PrintUnbakedModel
 import pw.switchcraft.peripherals.client.block.PrinterRenderer
 import pw.switchcraft.peripherals.client.gui.PrinterScreen
@@ -41,5 +42,8 @@ object ScPeripheralsClient : ClientModInitializer {
 
     // Vanilla ScreenHandlerPropertyUpdateS2CPacket sends shorts instead of ints over the wire
     ScreenHandlerPropertyUpdateIntS2CPacket.registerReceiver()
+
+    // Clear 3D print cache on resource reload
+    PrintBakedModel.init()
   }
 }
