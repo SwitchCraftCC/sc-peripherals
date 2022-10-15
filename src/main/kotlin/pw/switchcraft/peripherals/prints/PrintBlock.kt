@@ -8,6 +8,8 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
+import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
@@ -77,6 +79,16 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
 
   override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
     // Don't call super. TODO: Notify neighbors of state change
+  }
+
+  override fun getDroppedStacks(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
+    val stacks = super.getDroppedStacks(state, builder)
+
+    val pos = BlockPos(builder.get(LootContextParameters.ORIGIN))
+    val be = blockEntity(builder.world, pos) ?: return stacks
+    stacks.add(PrintItem.fromBlockEntity(be))
+
+    return stacks
   }
 
   // Shapes - outline and collision
