@@ -1,8 +1,10 @@
 import { parse } from "lua-json";
 
 import { clamp, isArray } from "lodash-es";
-import textureMap from "./assets/texture-mapping.json";
+import rawTextureMap from "./assets/texture-mapping.json";
 import sanitizeFilename from "sanitize-filename";
+
+const textureMap = rawTextureMap as Record<string, string>;
 
 interface PrintData {
   label?: string;
@@ -68,7 +70,7 @@ export function convert(original: string): ConversionResults {
 
         // Attempts to convert vanilla 1.12 texture names to 1.13+ texture names
         // (primarily targets 1.19)
-        texture = (textureMap as Record<string, string>)[texture] ?? texture;
+        texture = tryFindTexture(texture);
 
         let tint = findKey(shape, "tint")
         if (typeof tint !== "number") tint = 0xFFFFFF
@@ -131,4 +133,12 @@ function findKey(arr: Array<number | Array<string | number>>, key: string): stri
   const val = def[1]
   const type = typeof val;
   if (type === "number" || type === "string" || type === "boolean") return val;
+}
+
+function tryFindTexture(name: string): string {
+  return textureMap[name] ??
+    textureMap["minecraft:" + name] ??
+    textureMap["minecraft:blocks/" + name] ??
+    textureMap["minecraft:blocks/" + name.replace(/^minecraft:/, "")] ??
+    name;
 }
