@@ -118,7 +118,7 @@ export function Converter(): JSX.Element {
 
           <span className="text-slate-500">
             <span className="text-green-500 font-medium">Tip! </span>
-            Drag &amp; drop the file into ComputerCraft!
+            Drag &amp; drop the file into ComputerCraft by running <Code>import</Code> in CraftOS!
           </span>
         </div>
       </>}
