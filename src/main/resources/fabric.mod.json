@@ -10,7 +10,7 @@
     "Lemmmy"
   ],
   "contact": {
-    "homepage": "https://switchcraft.pw/"
+    "homepage": "https://sc3.io/"
   },
 
   "license": "MIT",
@@ -19,12 +19,12 @@
   "custom": {
     "modmenu": {
       "links": {
-        "switchcraft.discord": "https://discord.switchcraft.pw"
+        "switchcraft.discord": "https://discord.sc3.io"
       },
       "parent": {
         "id": "switchcraft",
         "name": "SwitchCraft",
-        "url": "https://switchcraft.pw",
+        "url": "https://sc3.io",
         "icon": "assets/sc-peripherals/icon.png"
       }
     }
