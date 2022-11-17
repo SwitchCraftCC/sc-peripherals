@@ -1,11 +1,13 @@
 package pw.switchcraft.peripherals.datagen.recipes.handlers
 
-import dan200.computercraft.shared.Registry
+import dan200.computercraft.api.ComputerCraftTags
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
 import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.Items
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 import net.minecraft.util.registry.Registry.RECIPE_SERIALIZER
 import net.minecraft.util.registry.Registry.register
 import pw.switchcraft.library.recipe.BetterComplexRecipeJsonBuilder
@@ -92,10 +94,8 @@ object PrinterRecipes : RecipeHandler {
   }
 
   private val computerCriteria = mapOf(
-    "has_computer_normal"   to inventoryChange(Registry.ModItems.COMPUTER_NORMAL),
-    "has_computer_advanced" to inventoryChange(Registry.ModItems.COMPUTER_ADVANCED),
-    "has_turtle_normal"     to inventoryChange(Registry.ModItems.TURTLE_NORMAL),
-    "has_turtle_advanced"   to inventoryChange(Registry.ModItems.TURTLE_ADVANCED)
+    "has_computer" to inventoryChange(ComputerCraftTags.Items.COMPUTER),
+    "has_turtle" to inventoryChange(ComputerCraftTags.Items.TURTLE)
   )
 
   private fun BetterComplexRecipeJsonBuilder<*, *>.hasComputer() = apply {
