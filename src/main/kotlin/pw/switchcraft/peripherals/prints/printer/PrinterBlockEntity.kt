@@ -1,7 +1,6 @@
 package pw.switchcraft.peripherals.prints.printer
 
 import dan200.computercraft.api.peripheral.IComputerAccess
-import dan200.computercraft.api.peripheral.IPeripheralTile
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -18,7 +17,6 @@ import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 import pw.switchcraft.library.ext.optCompound
 import pw.switchcraft.library.networking.NetworkUtil.sendToAllTracking
@@ -35,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap
 class PrinterBlockEntity(
   pos: BlockPos,
   state: BlockState
-) : BaseBlockEntity(printer, pos, state), NamedScreenHandlerFactory, ImplementedInventory, IPeripheralTile {
+) : BaseBlockEntity(printer, pos, state), NamedScreenHandlerFactory, ImplementedInventory {
   private val inventory = DefaultedList.ofSize(INV_SIZE, ItemStack.EMPTY)
 
   /** Set of computers that are attached as a peripheral to the printer, so they may receive print state events. */
@@ -292,8 +290,7 @@ class PrinterBlockEntity(
     }
   }
 
-  private val peripheral by lazy { PrinterPeripheral(this) }
-  override fun getPeripheral(side: Direction) = peripheral
+  val peripheral by lazy { PrinterPeripheral(this) }
 
   companion object {
     const val maxChamelium = 256000

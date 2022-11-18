@@ -60,7 +60,6 @@ repositories {
     }
   }
 
-  maven("https://jitpack.io") // CC:Restitched
   maven("https://maven.terraformersmc.com/releases") // Mod Menu
   maven("https://maven.shedaniel.me") // Cloth Config, REI
   maven("https://dvs1.progwml6.com/files/maven/") // JEI
@@ -78,7 +77,10 @@ dependencies {
 
   modImplementation(include("pw.switchcraft", "sc-library", scLibraryVersion))
 
-  modApi("cc.tweaked:cc-tweaked-$minecraftVersion-fabric-api:$ccVersion") {
+  modCompileOnly("cc.tweaked:cc-tweaked-$minecraftVersion-fabric-api:$ccVersion") {
+    exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
+  }
+  modRuntimeOnly("cc.tweaked:cc-tweaked-$minecraftVersion-fabric:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
   }
 

@@ -1,5 +1,6 @@
 package pw.switchcraft.peripherals
 
+import dan200.computercraft.api.peripheral.PeripheralLookup
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.AbstractBlock
@@ -34,6 +35,8 @@ object Registration {
     listOf(ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer)
 
     RecipeHandlers.registerSerializers()
+
+    PeripheralLookup.get().registerForBlockEntity({ be, _ -> be.peripheral }, ModBlockEntities.printer)
   }
 
   object ModBlocks {
