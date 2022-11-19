@@ -1,6 +1,6 @@
 # sc-peripherals
 
-Fabric 1.19 [CC-Restitched](https://github.com/cc-tweaked/cc-restitched) peripheral mod for the SwitchCraft server. 
+Fabric 1.19 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
 The main feature currently is 3D Printers in the style of 
 [OpenComputers](https://github.com/MightyPirates/OpenComputers).
 
