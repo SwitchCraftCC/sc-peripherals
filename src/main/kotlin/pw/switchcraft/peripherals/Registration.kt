@@ -1,7 +1,7 @@
 package pw.switchcraft.peripherals
 
 import dan200.computercraft.api.peripheral.PeripheralLookup
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
 import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -12,9 +12,10 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries.*
+import net.minecraft.registry.Registry.register
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.registry.Registry.*
 import pw.switchcraft.peripherals.ScPeripherals.ModId
 import pw.switchcraft.peripherals.block.ChameliumBlock
 import pw.switchcraft.peripherals.datagen.recipes.handlers.RecipeHandlers
@@ -30,6 +31,8 @@ import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity
 import pw.switchcraft.peripherals.prints.printer.PrinterScreenHandler
 
 object Registration {
+  private val items = mutableListOf<Item>()
+
   internal fun init() {
     // Similar to how CC behaves - touch each static class to force the static initializers to run.
     listOf(ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer)
@@ -40,35 +43,40 @@ object Registration {
   }
 
   object ModBlocks {
-    val printer = register("printer", PrinterBlock(settings()))
-    val print = register("print", PrintBlock(settings()
+    val printer = rBlock("printer", PrinterBlock(settings()))
+    val print = rBlock("print", PrintBlock(settings()
       .nonOpaque()
       .dynamicBounds()
       .luminance { it.get(PrintBlock.luminance) }))
 
-    val chamelium = register("chamelium", ChameliumBlock(settings()))
+    val chamelium = rBlock("chamelium", ChameliumBlock(settings()))
 
-    private fun <T : Block> register(name: String, value: T): T =
+    private fun <T : Block> rBlock(name: String, value: T): T =
       register(BLOCK, ModId(name), value)
     private fun settings() = AbstractBlock.Settings.of(STONE).strength(2.0f).nonOpaque()
   }
 
   object ModItems {
-    val itemGroup = FabricItemGroupBuilder.build(ModId("main")) { ItemStack(printer) }
-
     val printer = ofBlock(ModBlocks.printer, ::BlockItem)
-    val print = register("print", PrintItem(Item.Settings())) // no group
+    val print = rItem("print", PrintItem(Item.Settings())) // no group
 
-    val chamelium = register("chamelium", ChameliumItem(settings()))
-    val inkCartridge = register("ink_cartridge", InkCartridgeItem(settings().maxCount(1)))
-    val emptyInkCartridge = register("empty_ink_cartridge", EmptyInkCartridgeItem(settings().maxCount(1)))
-    val textureAnalyzer = register("texture_analyzer", TextureAnalyzerItem(settings().maxCount(1)))
+    val chamelium = rItem("chamelium", ChameliumItem(settings()))
+    val inkCartridge = rItem("ink_cartridge", InkCartridgeItem(settings().maxCount(1)))
+    val emptyInkCartridge = rItem("empty_ink_cartridge", EmptyInkCartridgeItem(settings().maxCount(1)))
+    val textureAnalyzer = rItem("texture_analyzer", TextureAnalyzerItem(settings().maxCount(1)))
 
-    private fun <T : Item> register(name: String, value: T): T =
-      register(ITEM, ModId(name), value)
+    init {
+      FabricItemGroup.builder(ModId("main"))
+        .icon { ItemStack(printer) }
+        .entries { _, entries, _ -> items.forEach(entries::add) }
+        .build()
+    }
+
+    private fun <T : Item> rItem(name: String, value: T): T =
+      register(ITEM, ModId(name), value).also { items.add(it) }
     private fun <B : Block, I : Item> ofBlock(parent: B, supplier: (B, Item.Settings) -> I): I =
-      register(ITEM, BLOCK.getId(parent), supplier(parent, settings()))
-    private fun settings() = Item.Settings().group(itemGroup)
+      register(ITEM, BLOCK.getId(parent), supplier(parent, settings())).also { items.add(it) }
+    private fun settings() = Item.Settings()
   }
 
   object ModBlockEntities {

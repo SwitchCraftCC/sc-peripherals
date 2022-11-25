@@ -6,10 +6,9 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
 import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
 import net.minecraft.item.Items
-import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import net.minecraft.util.registry.Registry.RECIPE_SERIALIZER
-import net.minecraft.util.registry.Registry.register
+import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries.RECIPE_SERIALIZER
+import net.minecraft.registry.Registry.register
 import pw.switchcraft.library.recipe.BetterComplexRecipeJsonBuilder
 import pw.switchcraft.library.recipe.RecipeHandler
 import pw.switchcraft.peripherals.Registration.ModItems
@@ -39,7 +38,7 @@ object PrinterRecipes : RecipeHandler {
 
     // Chamelium
     ShapedRecipeJsonBuilder
-      .create(ModItems.chamelium, 16)
+      .create(RecipeCategory.MISC, ModItems.chamelium, 16)
       .pattern("GRG")
       .pattern("RCR")
       .pattern("GWG")
@@ -52,7 +51,7 @@ object PrinterRecipes : RecipeHandler {
 
     // Ink cartridges
     ShapedRecipeJsonBuilder
-      .create(ModItems.inkCartridge, 1)
+      .create(RecipeCategory.MISC, ModItems.inkCartridge, 1)
       .pattern("CMY")
       .pattern("KDB")
       .pattern("III")
@@ -67,7 +66,7 @@ object PrinterRecipes : RecipeHandler {
       .offerTo(exporter, ModId("ink_cartridge"))
 
     ShapelessRecipeJsonBuilder
-      .create(ModItems.inkCartridge, 1)
+      .create(RecipeCategory.MISC, ModItems.inkCartridge, 1)
       .input(ModItems.emptyInkCartridge)
       .input(ConventionalItemTags.CYAN_DYES)
       .input(ConventionalItemTags.MAGENTA_DYES)
@@ -77,7 +76,7 @@ object PrinterRecipes : RecipeHandler {
       .offerTo(exporter, ModId("ink_cartridge_refill"))
 
     ShapedRecipeJsonBuilder
-      .create(ModItems.textureAnalyzer, 1)
+      .create(RecipeCategory.MISC, ModItems.textureAnalyzer, 1)
       .pattern("GPE")
       .pattern("RRC")
       .pattern("MYK")
@@ -98,7 +97,7 @@ object PrinterRecipes : RecipeHandler {
     "has_turtle" to inventoryChange(ComputerCraftTags.Items.TURTLE)
   )
 
-  private fun BetterComplexRecipeJsonBuilder<*, *>.hasComputer() = apply {
+  private fun BetterComplexRecipeJsonBuilder<*>.hasComputer() = apply {
     computerCriteria.forEach { criterion(it.key, it.value) }
   }
 }
