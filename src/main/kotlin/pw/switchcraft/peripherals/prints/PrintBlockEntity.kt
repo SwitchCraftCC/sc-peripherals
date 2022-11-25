@@ -58,7 +58,7 @@ class PrintBlockEntity(
 
     // If we're in button mode, turn off after 20 ticks
     if (on && data?.isButton == true) {
-      world.createAndScheduleBlockTick(pos, block, block.toggleTicks)
+      world.scheduleBlockTick(pos, block, block.toggleTicks)
     }
   }
 

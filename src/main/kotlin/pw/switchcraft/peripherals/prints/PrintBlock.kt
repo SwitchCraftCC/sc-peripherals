@@ -121,7 +121,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
 
     val be = blockEntity(world, pos) ?: return
     if (state.get(on)) be.toggle()
-    if (state.get(on)) world.createAndScheduleBlockTick(pos, this, toggleTicks)
+    if (state.get(on)) world.scheduleBlockTick(pos, this, toggleTicks)
   }
 
   override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,

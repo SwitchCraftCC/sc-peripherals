@@ -7,9 +7,9 @@ import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import net.minecraft.client.render.model.json.ModelTransformation.Mode
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.Matrix3f
-import net.minecraft.util.math.Matrix4f
-import net.minecraft.util.math.Vec3f
+import net.minecraft.util.math.RotationAxis
+import org.joml.Matrix3f
+import org.joml.Matrix4f
 import pw.switchcraft.peripherals.client.gui.PrinterScreen.Companion.tex
 import pw.switchcraft.peripherals.prints.printer.PrinterBlock
 import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity
@@ -36,7 +36,7 @@ object PrinterRenderer : BlockEntityRenderer<PrinterBlockEntity> {
     matrices.translate(0.5, 0.7, 0.5)
 
     val animationAngle = (System.currentTimeMillis() % 20000) / 20000.0f * 360.0f
-    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(animationAngle))
+    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(animationAngle))
     matrices.scale(0.5f, 0.5f, 0.5f)
 
     val model = itemRenderer.getModel(stack, printer.world, null, 0)
@@ -54,7 +54,7 @@ object PrinterRenderer : BlockEntityRenderer<PrinterBlockEntity> {
     matrices.push()
 
     matrices.translate(0.5, 0.5, 0.5)
-    matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-facing.opposite.asRotation()))
+    matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-facing.opposite.asRotation()))
     matrices.translate(-0.5, -0.5, -0.5)
 
     matrices.translate(0.0, 0.0, -0.001)

@@ -19,7 +19,7 @@ class ProgressBar(
   var progress = 0
 
   override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-    RenderSystem.setShader(GameRenderer::getPositionTexShader)
+    RenderSystem.setShader(GameRenderer::getPositionTexProgram)
     RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
     RenderSystem.setShaderTexture(0, texture)
 

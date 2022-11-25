@@ -20,7 +20,7 @@ class PrinterRecipe(id: Identifier) : BetterSpecialRecipe(id) {
   private val hopper = ofItems(HOPPER)
   private val stickyPiston = ofItems(STICKY_PISTON)
   private val diamondBlock = ofItems(DIAMOND_BLOCK)
-  private val advancedComputer = ofItems(Registry.ITEM.get(Identifier(ComputerCraftAPI.MOD_ID, "computer_advanced")))
+  private val advancedComputer = ofItems(Registries.ITEM.get(Identifier(ComputerCraftAPI.MOD_ID, "computer_advanced")))
 
   override val ingredients = listOf(
     ironIngot,    hopper,           ironIngot,

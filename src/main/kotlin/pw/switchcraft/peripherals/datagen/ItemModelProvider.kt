@@ -1,13 +1,13 @@
 package pw.switchcraft.peripherals.datagen
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider
 import net.minecraft.data.client.BlockStateModelGenerator
 import net.minecraft.data.client.ItemModelGenerator
 import net.minecraft.data.client.Models.GENERATED
 import pw.switchcraft.peripherals.Registration.ModItems
 
-class ItemModelProvider(generator: FabricDataGenerator) : FabricModelProvider(generator) {
+class ItemModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
   override fun generateBlockStateModels(gen: BlockStateModelGenerator) {
   }
 
