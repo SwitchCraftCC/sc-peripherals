@@ -8,12 +8,16 @@ import net.minecraft.recipe.Ingredient
 import net.minecraft.recipe.Ingredient.fromTag
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.SpecialRecipeSerializer
+import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import pw.switchcraft.library.recipe.BetterSpecialRecipe
 import pw.switchcraft.peripherals.Registration.ModItems
 
-class PrinterRecipe(id: Identifier) : BetterSpecialRecipe(id) {
+class PrinterRecipe(
+  id: Identifier,
+  category: CraftingRecipeCategory = CraftingRecipeCategory.MISC
+) : BetterSpecialRecipe(id, category) {
   override val outputItem = ItemStack(ModItems.printer)
 
   private val ironIngot = fromTag(IRON_INGOTS)
@@ -41,6 +45,6 @@ class PrinterRecipe(id: Identifier) : BetterSpecialRecipe(id) {
   override fun getSerializer() = recipeSerializer
 
   companion object {
-    val recipeSerializer = SpecialRecipeSerializer { PrinterRecipe(it) }
+    val recipeSerializer = SpecialRecipeSerializer(::PrinterRecipe)
   }
 }

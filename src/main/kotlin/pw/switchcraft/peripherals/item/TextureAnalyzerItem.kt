@@ -31,7 +31,7 @@ class TextureAnalyzerItem(settings: Settings) : BaseItem("texture_analyzer", set
     val sides = listOf(*Direction.values(), null)
     val sprites = sides.flatMap {
       model.getQuads(blockState, it, rand)
-        .mapNotNull { quad -> quad.sprite?.id?.toString() }
+        .mapNotNull { quad -> quad.sprite?.contents?.id?.toString() }
     }.toSet()
 
     val name = blockState.toString()
