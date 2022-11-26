@@ -6,11 +6,15 @@ import net.minecraft.item.Items.*
 import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
+import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
 import pw.switchcraft.peripherals.Registration.ModItems
 
-class PrintRecipe(id: Identifier) : SpecialCraftingRecipe(id) {
+class PrintRecipe(
+  id: Identifier,
+  category: CraftingRecipeCategory = CraftingRecipeCategory.MISC
+) : SpecialCraftingRecipe(id, category) {
   private val outputItem = ItemStack(ModItems.print)
 
   private val print = ofItems(ModItems.print)
@@ -91,6 +95,6 @@ class PrintRecipe(id: Identifier) : SpecialCraftingRecipe(id) {
   )
 
   companion object {
-    val recipeSerializer = SpecialRecipeSerializer { PrintRecipe(it) }
+    val recipeSerializer = SpecialRecipeSerializer(::PrintRecipe)
   }
 }
