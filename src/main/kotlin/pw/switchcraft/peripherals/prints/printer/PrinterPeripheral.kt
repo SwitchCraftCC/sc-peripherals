@@ -173,7 +173,7 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
     val maxBaseLightLevel: Int = config.get("printer.max_base_light_level")
     val maxShapes: Int = config.get("printer.max_shapes")
 
-    fun printerStatus(be: PrinterBlockEntity): Pair<Any, Any> {
+    fun printerStatus(be: PrinterBlockEntity): Pair<String, Any> {
       return if (be.printing || be.printProgress > 0) Pair("busy", be.printProgress)
       else if (be.canPrint) Pair("idle", true)
       else Pair("idle", false)

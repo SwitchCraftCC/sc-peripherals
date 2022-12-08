@@ -108,6 +108,16 @@ local function parseTint(tint)
   end
 end
 
+local function addShape(shapes, shape, state)
+  table.insert(shapes, {
+    shape.bounds[1], shape.bounds[2], shape.bounds[3],
+    shape.bounds[4], shape.bounds[5], shape.bounds[6],
+    state = state,
+    texture = shape.texture,
+    tint = parseTint(shape.tint)
+  })
+end
+
 local function commitPrint(data)
   printer.reset()
 
@@ -120,12 +130,10 @@ local function commitPrint(data)
 
   local shapes = {}
   for _, shape in ipairs(data.shapesOff) do
-    table.insert(shapes, {
-      shape.bounds[1], shape.bounds[2], shape.bounds[3], 
-      shape.bounds[4], shape.bounds[5], shape.bounds[6], 
-      texture = shape.texture,
-      tint = parseTint(shape.tint)
-    })
+    addShape(shapes, shape, false)
+  end
+  for _, shape in ipairs(data.shapesOn) do
+    addShape(shapes, shape, true)
   end
 
   printer.addShapes(shapes)
