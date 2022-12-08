@@ -72,7 +72,7 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   }
 
   @LuaFunction(mainThread = true)
-  fun isCollidable(): Array<Boolean> = arrayOf(be.data.collideWhenOff, be.data.collideWhenOn)
+  fun isCollidable(): MethodResult = of(be.data.collideWhenOff, be.data.collideWhenOn)
 
   @LuaFunction(mainThread = true)
   fun setCollidable(collideWhenOff: Boolean, collideWhenOn: Boolean) {
@@ -82,7 +82,7 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   }
   
   @LuaFunction(mainThread = true)
-  fun getShapeCount(): Array<Int> = arrayOf(be.data.shapesOff.size, be.data.shapesOn.size)
+  fun getShapeCount(): MethodResult = of(be.data.shapesOff.size, be.data.shapesOn.size)
 
   @LuaFunction
   fun getMaxShapeCount(): Int = maxShapes

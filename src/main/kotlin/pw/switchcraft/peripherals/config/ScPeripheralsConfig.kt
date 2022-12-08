@@ -12,7 +12,7 @@ object ScPeripheralsConfig {
     spec.define("printer.chamelium_value", 2000)
     spec.define("printer.ink_value", 50000)
 
-    spec.define("printer.max_base_light_level", 8)
+    spec.define("printer.max_base_light_level", 7)
     spec.define("printer.max_shapes", 128)
 
     spec.define("printer.custom_redstone_cost", 300)
