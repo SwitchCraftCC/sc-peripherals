@@ -58,7 +58,7 @@ object Registration {
 
   object ModItems {
     val printer = ofBlock(ModBlocks.printer, ::BlockItem)
-    val print = rItem("print", PrintItem(Item.Settings())) // no group
+    val print = rItem("print", PrintItem(Item.Settings()), addItem = false)
 
     val chamelium = rItem("chamelium", ChameliumItem(settings()))
     val inkCartridge = rItem("ink_cartridge", InkCartridgeItem(settings().maxCount(1)))
@@ -72,8 +72,8 @@ object Registration {
         .build()
     }
 
-    private fun <T : Item> rItem(name: String, value: T): T =
-      register(ITEM, ModId(name), value).also { items.add(it) }
+    private fun <T : Item> rItem(name: String, value: T, addItem: Boolean = true): T =
+      register(ITEM, ModId(name), value).also { items.takeIf { addItem }?.add(it) }
     private fun <B : Block, I : Item> ofBlock(parent: B, supplier: (B, Item.Settings) -> I): I =
       register(ITEM, BLOCK.getId(parent), supplier(parent, settings())).also { items.add(it) }
     private fun settings() = Item.Settings()

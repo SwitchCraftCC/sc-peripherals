@@ -12,8 +12,7 @@ object ScPeripheralsDatagen : DataGeneratorEntrypoint {
     log.info("sc-peripherals datagen initializing")
 
     val pack = generator.createPack()
-    pack.addProvider(::BlockModelProvider)
-    pack.addProvider(::ItemModelProvider)
+    pack.addProvider(::ModelProvider)
     pack.addProvider(::RecipeGenerator)
   }
 }
