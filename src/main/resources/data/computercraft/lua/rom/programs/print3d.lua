@@ -47,7 +47,6 @@ if #args == 2 then
 end
 
 -- Load the 3dj file
--- TODO: Implement shell autocompletions
 local filename = args[1]
 if filename:match(".3dm$") then
   warn3dm()
