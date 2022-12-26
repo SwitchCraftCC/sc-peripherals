@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.BlockItem
@@ -8,11 +8,11 @@ import net.minecraft.text.Text.literal
 import net.minecraft.text.Text.translatable
 import net.minecraft.util.Formatting.GRAY
 import net.minecraft.world.World
-import pw.switchcraft.library.ext.optCompound
-import pw.switchcraft.peripherals.Registration.ModBlocks
-import pw.switchcraft.peripherals.Registration.ModItems
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.ScPeripherals.modId
+import io.sc3.library.ext.optCompound
+import io.sc3.peripherals.Registration.ModBlocks
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.ScPeripherals.modId
 
 class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
   override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {

@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints.printer
+package io.sc3.peripherals.prints.printer
 
 import dan200.computercraft.api.ComputerCraftAPI
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.IRON_INGOTS
@@ -11,8 +11,8 @@ import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import pw.switchcraft.library.recipe.BetterSpecialRecipe
-import pw.switchcraft.peripherals.Registration.ModItems
+import io.sc3.library.recipe.BetterSpecialRecipe
+import io.sc3.peripherals.Registration.ModItems
 
 class PrinterRecipe(
   id: Identifier,

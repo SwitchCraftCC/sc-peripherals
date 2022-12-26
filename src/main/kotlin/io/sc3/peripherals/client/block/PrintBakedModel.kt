@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client.block
+package io.sc3.peripherals.client.block
 
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh
@@ -29,11 +29,11 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockRenderView
 import org.cache2k.Cache2kBuilder
-import pw.switchcraft.library.ext.faces
-import pw.switchcraft.library.ext.rotateTowards
-import pw.switchcraft.peripherals.Registration.ModBlockEntities
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.prints.*
+import io.sc3.library.ext.faces
+import io.sc3.library.ext.rotateTowards
+import io.sc3.peripherals.Registration.ModBlockEntities
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.prints.*
 import java.util.function.Supplier
 
 class PrintBakedModel(

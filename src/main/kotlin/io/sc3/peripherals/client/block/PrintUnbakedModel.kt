@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client.block
+package io.sc3.peripherals.client.block
 
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.render.model.Baker

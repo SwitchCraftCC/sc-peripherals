@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.util
+package io.sc3.peripherals.util
 
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity

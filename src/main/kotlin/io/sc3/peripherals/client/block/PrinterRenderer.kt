@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client.block
+package io.sc3.peripherals.client.block
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
@@ -10,11 +10,11 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.util.math.RotationAxis
 import org.joml.Matrix3f
 import org.joml.Matrix4f
-import pw.switchcraft.peripherals.client.gui.PrinterScreen.Companion.tex
-import pw.switchcraft.peripherals.prints.printer.PrinterBlock
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
+import io.sc3.peripherals.client.gui.PrinterScreen.Companion.tex
+import io.sc3.peripherals.prints.printer.PrinterBlock
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
 
 object PrinterRenderer : BlockEntityRenderer<PrinterBlockEntity> {
   private val mc by lazy { MinecraftClient.getInstance() }

@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.util
+package io.sc3.peripherals.util
 
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
-import pw.switchcraft.library.Tooltips.addDescLines
+import io.sc3.library.Tooltips.addDescLines
 
 abstract class BaseBlockWithEntity(settings: Settings) : BlockWithEntity(settings) {
   override fun appendTooltip(stack: ItemStack, world: BlockView?, tooltip: MutableList<Text>, options: TooltipContext) {

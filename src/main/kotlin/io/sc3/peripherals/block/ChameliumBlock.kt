@@ -1,5 +1,5 @@
-package pw.switchcraft.peripherals.block
+package io.sc3.peripherals.block
 
-import pw.switchcraft.peripherals.util.BaseBlock
+import io.sc3.peripherals.util.BaseBlock
 
 class ChameliumBlock(settings: Settings) : BaseBlock(settings)

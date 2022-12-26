@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.util
+package io.sc3.peripherals.util
 
 import net.minecraft.screen.PropertyDelegate
 import kotlin.reflect.KProperty

@@ -1,12 +1,12 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.fabricmc.fabric.api.util.NbtType.COMPOUND
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
-import pw.switchcraft.library.ext.optString
-import pw.switchcraft.library.ext.putOptString
-import pw.switchcraft.peripherals.config.ScPeripheralsConfig.config
+import io.sc3.library.ext.optString
+import io.sc3.library.ext.putOptString
+import io.sc3.peripherals.config.ScPeripheralsConfig.config
 
 const val MAX_LABEL_LENGTH = 48
 const val MAX_TOOLTIP_LENGTH = 256

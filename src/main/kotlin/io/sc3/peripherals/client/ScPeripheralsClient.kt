@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client
+package io.sc3.peripherals.client
 
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
@@ -8,17 +8,17 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
 import net.minecraft.client.gui.screen.ingame.HandledScreens
 import net.minecraft.client.render.RenderLayer
 import org.slf4j.LoggerFactory
-import pw.switchcraft.library.networking.registerClientReceiver
-import pw.switchcraft.peripherals.Registration
-import pw.switchcraft.peripherals.client.block.PrintBakedModel
-import pw.switchcraft.peripherals.client.block.PrintUnbakedModel
-import pw.switchcraft.peripherals.client.block.PrinterRenderer
-import pw.switchcraft.peripherals.client.gui.PrinterScreen
-import pw.switchcraft.peripherals.prints.PrintBlock
-import pw.switchcraft.peripherals.prints.PrintItem
-import pw.switchcraft.peripherals.prints.printer.PrinterDataPacket
-import pw.switchcraft.peripherals.prints.printer.PrinterInkPacket
-import pw.switchcraft.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket
+import io.sc3.library.networking.registerClientReceiver
+import io.sc3.peripherals.Registration
+import io.sc3.peripherals.client.block.PrintBakedModel
+import io.sc3.peripherals.client.block.PrintUnbakedModel
+import io.sc3.peripherals.client.block.PrinterRenderer
+import io.sc3.peripherals.client.gui.PrinterScreen
+import io.sc3.peripherals.prints.PrintBlock
+import io.sc3.peripherals.prints.PrintItem
+import io.sc3.peripherals.prints.printer.PrinterDataPacket
+import io.sc3.peripherals.prints.printer.PrinterInkPacket
+import io.sc3.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket
 
 object ScPeripheralsClient : ClientModInitializer {
   val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!

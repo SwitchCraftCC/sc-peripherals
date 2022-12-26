@@ -1,9 +1,9 @@
-package pw.switchcraft.peripherals
+package io.sc3.peripherals
 
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
-import pw.switchcraft.peripherals.config.ScPeripheralsConfig
+import io.sc3.peripherals.config.ScPeripheralsConfig
 
 object ScPeripherals : ModInitializer {
   internal val log = LoggerFactory.getLogger("ScPeripherals")!!

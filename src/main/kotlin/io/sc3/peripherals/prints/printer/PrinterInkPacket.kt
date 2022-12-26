@@ -1,12 +1,12 @@
-package pw.switchcraft.peripherals.prints.printer
+package io.sc3.peripherals.prints.printer
 
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.util.math.BlockPos
-import pw.switchcraft.library.networking.ScLibraryPacket
-import pw.switchcraft.peripherals.ScPeripherals.ModId
+import io.sc3.library.networking.ScLibraryPacket
+import io.sc3.peripherals.ScPeripherals.ModId
 
 data class PrinterInkPacket(
   val pos: BlockPos,

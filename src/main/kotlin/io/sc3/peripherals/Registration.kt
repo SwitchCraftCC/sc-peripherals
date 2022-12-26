@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals
+package io.sc3.peripherals
 
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
@@ -16,19 +16,19 @@ import net.minecraft.registry.Registries.*
 import net.minecraft.registry.Registry.register
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.math.BlockPos
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.block.ChameliumBlock
-import pw.switchcraft.peripherals.datagen.recipes.handlers.RecipeHandlers
-import pw.switchcraft.peripherals.item.ChameliumItem
-import pw.switchcraft.peripherals.item.EmptyInkCartridgeItem
-import pw.switchcraft.peripherals.item.InkCartridgeItem
-import pw.switchcraft.peripherals.item.TextureAnalyzerItem
-import pw.switchcraft.peripherals.prints.PrintBlock
-import pw.switchcraft.peripherals.prints.PrintBlockEntity
-import pw.switchcraft.peripherals.prints.PrintItem
-import pw.switchcraft.peripherals.prints.printer.PrinterBlock
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity
-import pw.switchcraft.peripherals.prints.printer.PrinterScreenHandler
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.block.ChameliumBlock
+import io.sc3.peripherals.datagen.recipes.handlers.RecipeHandlers
+import io.sc3.peripherals.item.ChameliumItem
+import io.sc3.peripherals.item.EmptyInkCartridgeItem
+import io.sc3.peripherals.item.InkCartridgeItem
+import io.sc3.peripherals.item.TextureAnalyzerItem
+import io.sc3.peripherals.prints.PrintBlock
+import io.sc3.peripherals.prints.PrintBlockEntity
+import io.sc3.peripherals.prints.PrintItem
+import io.sc3.peripherals.prints.printer.PrinterBlock
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity
+import io.sc3.peripherals.prints.printer.PrinterScreenHandler
 
 object Registration {
   private val items = mutableListOf<Item>()

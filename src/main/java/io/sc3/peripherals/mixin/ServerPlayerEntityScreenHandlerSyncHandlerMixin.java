@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.mixin;
+package io.sc3.peripherals.mixin;
 
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import pw.switchcraft.peripherals.prints.printer.PrinterScreenHandler;
-import pw.switchcraft.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket;
+import io.sc3.peripherals.prints.printer.PrinterScreenHandler;
+import io.sc3.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket;
 
 @Mixin(targets = "net.minecraft.server.network.ServerPlayerEntity$1")
 public abstract class ServerPlayerEntityScreenHandlerSyncHandlerMixin {

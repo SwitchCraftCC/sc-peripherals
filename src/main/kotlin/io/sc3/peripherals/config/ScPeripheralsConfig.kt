@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.config
+package io.sc3.peripherals.config
 
 import com.electronwill.nightconfig.core.ConfigSpec
 import com.electronwill.nightconfig.core.file.CommentedFileConfig

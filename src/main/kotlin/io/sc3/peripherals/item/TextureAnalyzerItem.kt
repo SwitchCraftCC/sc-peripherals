@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.item
+package io.sc3.peripherals.item
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemUsageContext
@@ -10,7 +10,7 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting.*
 import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
-import pw.switchcraft.peripherals.util.BaseItem
+import io.sc3.peripherals.util.BaseItem
 
 class TextureAnalyzerItem(settings: Settings) : BaseItem("texture_analyzer", settings) {
   private val copyText = translatable("$translationKey.copy")

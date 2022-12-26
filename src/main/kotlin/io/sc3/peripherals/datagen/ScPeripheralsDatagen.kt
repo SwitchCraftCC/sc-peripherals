@@ -1,9 +1,9 @@
-package pw.switchcraft.peripherals.datagen
+package io.sc3.peripherals.datagen
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import org.slf4j.LoggerFactory
-import pw.switchcraft.peripherals.datagen.recipes.RecipeGenerator
+import io.sc3.peripherals.datagen.recipes.RecipeGenerator
 
 object ScPeripheralsDatagen : DataGeneratorEntrypoint {
   private val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsDatagen")!!

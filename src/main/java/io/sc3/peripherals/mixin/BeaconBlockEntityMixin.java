@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.mixin;
+package io.sc3.peripherals.mixin;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BeaconBlockEntity;
@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import pw.switchcraft.peripherals.prints.PrintBlock;
+import io.sc3.peripherals.prints.PrintBlock;
 
 @Mixin(BeaconBlockEntity.class)
 public class BeaconBlockEntityMixin {

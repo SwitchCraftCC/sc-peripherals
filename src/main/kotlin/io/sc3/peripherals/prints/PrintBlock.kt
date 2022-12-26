@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -29,13 +29,13 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import pw.switchcraft.library.WaterloggableBlock
-import pw.switchcraft.library.WaterloggableBlock.Companion.waterlogged
-import pw.switchcraft.peripherals.Registration.ModBlockEntities
-import pw.switchcraft.peripherals.Registration.ModBlocks
-import pw.switchcraft.peripherals.Registration.ModItems
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.util.BaseBlockWithEntity
+import io.sc3.library.WaterloggableBlock
+import io.sc3.library.WaterloggableBlock.Companion.waterlogged
+import io.sc3.peripherals.Registration.ModBlockEntities
+import io.sc3.peripherals.Registration.ModBlocks
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.util.BaseBlockWithEntity
 
 class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {

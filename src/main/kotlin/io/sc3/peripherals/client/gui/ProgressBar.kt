@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client.gui
+package io.sc3.peripherals.client.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.Drawable

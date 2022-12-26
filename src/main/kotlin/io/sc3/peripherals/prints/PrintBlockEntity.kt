@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -11,9 +11,9 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
-import pw.switchcraft.library.ext.*
-import pw.switchcraft.peripherals.Registration.ModBlockEntities.print
-import pw.switchcraft.peripherals.util.*
+import io.sc3.library.ext.*
+import io.sc3.peripherals.Registration.ModBlockEntities.print
+import io.sc3.peripherals.util.*
 
 class PrintBlockEntity(
   pos: BlockPos,

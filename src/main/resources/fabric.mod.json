@@ -34,19 +34,19 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "pw.switchcraft.peripherals.ScPeripherals"
+        "value": "io.sc3.peripherals.ScPeripherals"
       }
     ],
     "client": [
       {
         "adapter": "kotlin",
-        "value": "pw.switchcraft.peripherals.client.ScPeripheralsClient"
+        "value": "io.sc3.peripherals.client.ScPeripheralsClient"
       }
     ],
     "fabric-datagen": [
       {
         "adapter": "kotlin",
-        "value": "pw.switchcraft.peripherals.datagen.ScPeripheralsDatagen"
+        "value": "io.sc3.peripherals.datagen.ScPeripheralsDatagen"
       }
     ]
   },

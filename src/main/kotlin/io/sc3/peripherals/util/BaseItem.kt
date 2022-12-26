@@ -1,12 +1,12 @@
-package pw.switchcraft.peripherals.util
+package io.sc3.peripherals.util
 
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.world.World
-import pw.switchcraft.library.Tooltips.addDescLines
-import pw.switchcraft.peripherals.ScPeripherals.modId
+import io.sc3.library.Tooltips.addDescLines
+import io.sc3.peripherals.ScPeripherals.modId
 
 abstract class BaseItem(
   private val itemName: String,

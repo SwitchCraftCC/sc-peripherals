@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.datagen.recipes.handlers
+package io.sc3.peripherals.datagen.recipes.handlers
 
 import dan200.computercraft.api.ComputerCraftTags
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
@@ -9,13 +9,13 @@ import net.minecraft.item.Items
 import net.minecraft.recipe.book.RecipeCategory
 import net.minecraft.registry.Registries.RECIPE_SERIALIZER
 import net.minecraft.registry.Registry.register
-import pw.switchcraft.library.recipe.BetterComplexRecipeJsonBuilder
-import pw.switchcraft.library.recipe.RecipeHandler
-import pw.switchcraft.peripherals.Registration.ModItems
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.datagen.recipes.inventoryChange
-import pw.switchcraft.peripherals.prints.PrintRecipe
-import pw.switchcraft.peripherals.prints.printer.PrinterRecipe
+import io.sc3.library.recipe.BetterComplexRecipeJsonBuilder
+import io.sc3.library.recipe.RecipeHandler
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.datagen.recipes.inventoryChange
+import io.sc3.peripherals.prints.PrintRecipe
+import io.sc3.peripherals.prints.printer.PrinterRecipe
 import java.util.function.Consumer
 
 object PrinterRecipes : RecipeHandler {

@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints.printer
+package io.sc3.peripherals.prints.printer
 
 import dan200.computercraft.api.peripheral.IComputerAccess
 import net.minecraft.block.BlockState
@@ -18,15 +18,15 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import pw.switchcraft.library.ext.optCompound
-import pw.switchcraft.library.networking.NetworkUtil.sendToAllTracking
-import pw.switchcraft.peripherals.Registration.ModBlockEntities.printer
-import pw.switchcraft.peripherals.Registration.ModItems
-import pw.switchcraft.peripherals.config.ScPeripheralsConfig.config
-import pw.switchcraft.peripherals.prints.PrintData
-import pw.switchcraft.peripherals.prints.PrintItem
-import pw.switchcraft.peripherals.util.BaseBlockEntity
-import pw.switchcraft.peripherals.util.ImplementedInventory
+import io.sc3.library.ext.optCompound
+import io.sc3.library.networking.NetworkUtil.sendToAllTracking
+import io.sc3.peripherals.Registration.ModBlockEntities.printer
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.config.ScPeripheralsConfig.config
+import io.sc3.peripherals.prints.PrintData
+import io.sc3.peripherals.prints.PrintItem
+import io.sc3.peripherals.util.BaseBlockEntity
+import io.sc3.peripherals.util.ImplementedInventory
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 

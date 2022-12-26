@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.datagen.recipes
+package io.sc3.peripherals.datagen.recipes
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
@@ -8,7 +8,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemConvertible
 import net.minecraft.predicate.item.ItemPredicate
 import net.minecraft.registry.tag.TagKey
-import pw.switchcraft.peripherals.datagen.recipes.handlers.RecipeHandlers.RECIPE_HANDLERS
+import io.sc3.peripherals.datagen.recipes.handlers.RecipeHandlers.RECIPE_HANDLERS
 import java.util.function.Consumer
 
 class RecipeGenerator(out: FabricDataOutput) : FabricRecipeProvider(out) {

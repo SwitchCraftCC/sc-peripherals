@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.client.gui
+package io.sc3.peripherals.client.gui
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.ingame.HandledScreen
@@ -6,11 +6,11 @@ import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.text.Text
-import pw.switchcraft.peripherals.ScPeripherals.ModId
-import pw.switchcraft.peripherals.ScPeripherals.modId
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
-import pw.switchcraft.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
-import pw.switchcraft.peripherals.prints.printer.PrinterScreenHandler
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.ScPeripherals.modId
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
+import io.sc3.peripherals.prints.printer.PrinterScreenHandler
 
 class PrinterScreen(
   handler: PrinterScreenHandler,

@@ -1,5 +1,5 @@
-package pw.switchcraft.peripherals.item
+package io.sc3.peripherals.item
 
-import pw.switchcraft.peripherals.util.BaseItem
+import io.sc3.peripherals.util.BaseItem
 
 class ChameliumItem(settings: Settings) : BaseItem("chamelium", settings)

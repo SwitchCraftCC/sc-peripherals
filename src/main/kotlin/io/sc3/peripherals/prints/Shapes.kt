@@ -1,13 +1,13 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.nbt.NbtList
 import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
-import pw.switchcraft.library.ext.rotateTowards
-import pw.switchcraft.library.ext.surfaceArea
-import pw.switchcraft.library.ext.toDiv16VoxelShape
-import pw.switchcraft.library.ext.volume
+import io.sc3.library.ext.rotateTowards
+import io.sc3.library.ext.surfaceArea
+import io.sc3.library.ext.toDiv16VoxelShape
+import io.sc3.library.ext.volume
 
 class Shapes : HashSet<Shape>() {
   private val hashCode by lazy { super.hashCode() }

@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints.printer
+package io.sc3.peripherals.prints.printer
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -9,10 +9,10 @@ import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
-import pw.switchcraft.peripherals.Registration.ModItems
-import pw.switchcraft.peripherals.Registration.ModScreens.printer
-import pw.switchcraft.peripherals.util.PropertyDelegateGetter
-import pw.switchcraft.peripherals.util.ValidatingSlot
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.Registration.ModScreens.printer
+import io.sc3.peripherals.util.PropertyDelegateGetter
+import io.sc3.peripherals.util.ValidatingSlot
 
 const val CHAMELIUM_SLOT = 0
 const val INK_SLOT = 1

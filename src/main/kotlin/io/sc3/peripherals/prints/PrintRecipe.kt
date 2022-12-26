@@ -1,4 +1,4 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.inventory.CraftingInventory
 import net.minecraft.item.ItemStack
@@ -9,7 +9,7 @@ import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
-import pw.switchcraft.peripherals.Registration.ModItems
+import io.sc3.peripherals.Registration.ModItems
 
 class PrintRecipe(
   id: Identifier,

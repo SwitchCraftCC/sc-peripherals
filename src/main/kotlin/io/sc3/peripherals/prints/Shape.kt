@@ -1,12 +1,12 @@
-package pw.switchcraft.peripherals.prints
+package io.sc3.peripherals.prints
 
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Box
-import pw.switchcraft.library.ext.byteToDouble
-import pw.switchcraft.library.ext.optInt
-import pw.switchcraft.library.ext.optString
-import pw.switchcraft.library.ext.putOptInt
+import io.sc3.library.ext.byteToDouble
+import io.sc3.library.ext.optInt
+import io.sc3.library.ext.optString
+import io.sc3.library.ext.putOptInt
 
 data class Shape(
   val bounds: Box,
