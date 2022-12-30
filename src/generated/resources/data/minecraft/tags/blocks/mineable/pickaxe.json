@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "sc-peripherals:print",
+    "sc-peripherals:printer"
+  ]
+}

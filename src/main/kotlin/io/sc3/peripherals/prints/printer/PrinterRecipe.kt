@@ -1,6 +1,8 @@
 package io.sc3.peripherals.prints.printer
 
 import dan200.computercraft.api.ComputerCraftAPI
+import io.sc3.library.recipe.BetterSpecialRecipe
+import io.sc3.peripherals.Registration.ModItems
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags.IRON_INGOTS
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items.*
@@ -11,8 +13,6 @@ import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.Registries
 import net.minecraft.util.Identifier
-import io.sc3.library.recipe.BetterSpecialRecipe
-import io.sc3.peripherals.Registration.ModItems
 
 class PrinterRecipe(
   id: Identifier,
@@ -27,9 +27,9 @@ class PrinterRecipe(
   private val advancedComputer = ofItems(Registries.ITEM.get(Identifier(ComputerCraftAPI.MOD_ID, "computer_advanced")))
 
   override val ingredients = listOf(
-    ironIngot,    hopper,           ironIngot,
-    stickyPiston, diamondBlock,     stickyPiston,
-    ironIngot,    advancedComputer, ironIngot
+    fromTag(IRON_INGOTS),       hopper,           fromTag(IRON_INGOTS),
+    stickyPiston, diamondBlock, stickyPiston,
+    fromTag(IRON_INGOTS),       advancedComputer, fromTag(IRON_INGOTS)
   )
   override val ingredientPredicates = listOf(
     Ingredient::test, Ingredient::test, Ingredient::test,

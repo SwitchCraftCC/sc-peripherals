@@ -1,9 +1,9 @@
 package io.sc3.peripherals.datagen
 
+import io.sc3.peripherals.datagen.recipes.RecipeGenerator
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator
 import org.slf4j.LoggerFactory
-import io.sc3.peripherals.datagen.recipes.RecipeGenerator
 
 object ScPeripheralsDatagen : DataGeneratorEntrypoint {
   private val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsDatagen")!!
@@ -13,6 +13,8 @@ object ScPeripheralsDatagen : DataGeneratorEntrypoint {
 
     val pack = generator.createPack()
     pack.addProvider(::ModelProvider)
+    pack.addProvider(::BlockLootTableProvider)
+    pack.addProvider(::BlockTagProvider)
     pack.addProvider(::RecipeGenerator)
   }
 }
