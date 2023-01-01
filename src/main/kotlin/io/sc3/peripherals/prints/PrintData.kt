@@ -1,18 +1,19 @@
 package io.sc3.peripherals.prints
 
-import net.fabricmc.fabric.api.util.NbtType.COMPOUND
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.math.Direction
-import net.minecraft.util.shape.VoxelShape
 import io.sc3.library.ext.optString
 import io.sc3.library.ext.putOptString
 import io.sc3.peripherals.config.ScPeripheralsConfig.config
+import net.fabricmc.fabric.api.util.NbtType.COMPOUND
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.text.Text
+import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
 
 const val MAX_LABEL_LENGTH = 48
 const val MAX_TOOLTIP_LENGTH = 256
 
 data class PrintData(
-  var label: String? = null,
+  private val initialLabel: String? = null,
   var tooltip: String? = null,
 
   var isButton: Boolean = false,
@@ -26,6 +27,15 @@ data class PrintData(
   val shapesOff: Shapes = Shapes(),
   val shapesOn: Shapes = Shapes(),
 ) {
+  var label: String? = initialLabel
+    set(value) {
+      field = value?.takeIf { it.length <= MAX_LABEL_LENGTH }
+      labelText = field?.let { Text.of(it) }
+    }
+
+  var labelText: Text? = initialLabel?.let { Text.of(it) }
+    private set
+
   private val voxelShapesOff = mutableMapOf<Direction, VoxelShape>()
   private val voxelShapesOn = mutableMapOf<Direction, VoxelShape>()
 
@@ -73,7 +83,7 @@ data class PrintData(
     val noclipCostMultiplier: Int = config.get("printer.noclip_cost_multiplier")
 
     fun fromNbt(nbt: NbtCompound) = PrintData(
-      label = nbt.optString("label"),
+      initialLabel = nbt.optString("label"),
       tooltip = nbt.optString("tooltip"),
       isButton = nbt.getBoolean("isButton"),
       collideWhenOn = nbt.getBoolean("collideWhenOn"),
