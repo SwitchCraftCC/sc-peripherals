@@ -120,10 +120,10 @@ end
 local function commitPrint(data)
   printer.reset()
 
-  printer.setLabel(data.label)
-  printer.setTooltip(data.tooltip)
+  if data.label then printer.setLabel(data.label) end
+  if data.tooltip then printer.setTooltip(data.tooltip) end
   printer.setButtonMode(data.isButton or false)
-  printer.setCollidable(data.collideWhenOff, data.collideWhenOn)
+  printer.setCollidable(data.collideWhenOff ~= false, data.collideWhenOn ~= false)
   printer.setRedstoneLevel(data.redstoneLevel or 0)
   printer.setLightLevel(data.lightLevel or 0)
 
