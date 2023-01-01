@@ -191,9 +191,20 @@ while true do
   local e, p1 = os.pullEventRaw()
   local n = math.min(math.max((count - remaining) + 1, 1), count)
 
-  if e == "3d_printer_complete" or e == "3d_printer_status" then
+  if e == "3d_printer_complete" or e == "3d_printer_state" then
     remaining = p1
-    showPrintStatus()    
+    showPrintStatus()
+
+    if remaining <= 0 then
+      -- Printing complete, print the count we managed to print
+      local _, y = term.getCursorPos()
+      term.setCursorPos(1, y)
+      term.clearLine()
+      term.setTextColor(colors.green)
+      print("Printed " .. n .. " item" .. (n ~= 1 and "s" or ""))
+
+      break
+    end
   elseif e == "terminate" then    
     -- Halt printing and print the count we managed to print
     printer.stop()
@@ -204,17 +215,6 @@ while true do
     term.setTextColor(colors.red)
     print("Printing terminated. Printed " .. n .. " item" .. 
       (n ~= 1 and "s" or "") .. " out of " .. count)
-
-    break 
-  end
-
-  if p1 <= 0 then 
-    -- Printing complete, print the count we managed to print
-    local _, y = term.getCursorPos()
-    term.setCursorPos(1, y)
-    term.clearLine()
-    term.setTextColor(colors.green)
-    print("Printed " .. n .. " item" .. (n ~= 1 and "s" or ""))
 
     break 
   end
