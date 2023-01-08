@@ -1,5 +1,12 @@
 package io.sc3.peripherals.prints
 
+import io.sc3.library.WaterloggableBlock
+import io.sc3.library.WaterloggableBlock.Companion.waterlogged
+import io.sc3.peripherals.Registration.ModBlockEntities
+import io.sc3.peripherals.Registration.ModBlocks
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.util.BaseBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
@@ -29,13 +36,6 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import io.sc3.library.WaterloggableBlock
-import io.sc3.library.WaterloggableBlock.Companion.waterlogged
-import io.sc3.peripherals.Registration.ModBlockEntities
-import io.sc3.peripherals.Registration.ModBlocks
-import io.sc3.peripherals.Registration.ModItems
-import io.sc3.peripherals.ScPeripherals.ModId
-import io.sc3.peripherals.util.BaseBlockWithEntity
 
 class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {
@@ -75,10 +75,6 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     val be = blockEntity(world, pos) ?: return
     be.data = PrintItem.printData(stack)
     be.markDirty()
-  }
-
-  override fun onStateReplaced(state: BlockState, world: World, pos: BlockPos, newState: BlockState, moved: Boolean) {
-    // Don't call super. TODO: Notify neighbors of state change
   }
 
   override fun getDroppedStacks(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
