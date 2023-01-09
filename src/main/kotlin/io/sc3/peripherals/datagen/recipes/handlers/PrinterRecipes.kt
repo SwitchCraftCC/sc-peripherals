@@ -1,32 +1,49 @@
 package io.sc3.peripherals.datagen.recipes.handlers
 
+import dan200.computercraft.api.ComputerCraftAPI
 import dan200.computercraft.api.ComputerCraftTags
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
-import net.minecraft.data.server.recipe.RecipeJsonProvider
-import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
-import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
-import net.minecraft.item.Items
-import net.minecraft.recipe.book.RecipeCategory
-import net.minecraft.registry.Registries.RECIPE_SERIALIZER
-import net.minecraft.registry.Registry.register
 import io.sc3.library.recipe.BetterComplexRecipeJsonBuilder
 import io.sc3.library.recipe.RecipeHandler
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.datagen.recipes.inventoryChange
 import io.sc3.peripherals.prints.PrintRecipe
-import io.sc3.peripherals.prints.printer.PrinterRecipe
+import net.fabricmc.fabric.api.recipe.v1.ingredient.DefaultCustomIngredients
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags
+import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder
+import net.minecraft.data.server.recipe.RecipeJsonProvider
+import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder
+import net.minecraft.data.server.recipe.ShapelessRecipeJsonBuilder
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.recipe.book.RecipeCategory
+import net.minecraft.registry.Registries
+import net.minecraft.registry.Registries.RECIPE_SERIALIZER
+import net.minecraft.registry.Registry.register
+import net.minecraft.util.Identifier
 import java.util.function.Consumer
 
 object PrinterRecipes : RecipeHandler {
   override fun registerSerializers() {
-    register(RECIPE_SERIALIZER, ModId("printer"), PrinterRecipe.recipeSerializer)
     register(RECIPE_SERIALIZER, ModId("print"), PrintRecipe.recipeSerializer)
   }
 
   override fun generateRecipes(exporter: Consumer<RecipeJsonProvider>) {
     // Printers
-    BetterComplexRecipeJsonBuilder(ModItems.printer, PrinterRecipe.recipeSerializer)
+    ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.printer)
+      .pattern("IHI")
+      .pattern("PDP")
+      .pattern("ICI")
+      .input('I', ConventionalItemTags.IRON_INGOTS)
+      .input('H', Items.HOPPER)
+      .input('P', Items.STICKY_PISTON)
+      .input('D', Items.DIAMOND_BLOCK)
+      .input(
+        'C', DefaultCustomIngredients.nbt(
+          ItemStack(Registries.ITEM.get(Identifier(ComputerCraftAPI.MOD_ID, "computer_advanced"))),
+          true
+        )
+      )
       .hasComputer()
       .offerTo(exporter)
 
@@ -97,7 +114,7 @@ object PrinterRecipes : RecipeHandler {
     "has_turtle" to inventoryChange(ComputerCraftTags.Items.TURTLE)
   )
 
-  private fun BetterComplexRecipeJsonBuilder<*>.hasComputer() = apply {
+  private fun CraftingRecipeJsonBuilder.hasComputer() = apply {
     computerCriteria.forEach { criterion(it.key, it.value) }
   }
 }
