@@ -78,13 +78,12 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
   }
 
   override fun getDroppedStacks(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
-    val stacks = super.getDroppedStacks(state, builder)
+    val be = builder.get(LootContextParameters.BLOCK_ENTITY)
+    if(be is PrintBlockEntity) {
+      builder.putDrop(dropId) { _, consumer -> consumer.accept(PrintItem.fromBlockEntity(be)) }
+    }
 
-    val pos = BlockPos(builder.get(LootContextParameters.ORIGIN))
-    val be = blockEntity(builder.world, pos) ?: return stacks
-    stacks.add(PrintItem.fromBlockEntity(be))
-
-    return stacks
+    return super.getDroppedStacks(state, builder)
   }
 
   // Shapes - outline and collision
@@ -162,6 +161,8 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
 
   companion object {
     val id = ModId("block/print")
+
+    val dropId = ModId("print")
 
     val facing: DirectionProperty = Properties.HORIZONTAL_FACING
     val on: BooleanProperty = BooleanProperty.of("on")
