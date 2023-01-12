@@ -1,5 +1,9 @@
 # sc-peripherals
 
+[![Modrinth Downloads](https://img.shields.io/modrinth/dt/sc-peripherals)](https://modrinth.com/mod/sc-peripherals/)
+
+[![Download on Modrinth](https://i.imgur.com/hbYUrTZ.png)](https://modrinth.com/mod/sc-peripherals/)
+
 Fabric 1.19 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
 The main feature currently is 3D Printers in the style of 
 [OpenComputers](https://github.com/MightyPirates/OpenComputers).
@@ -104,4 +108,4 @@ All arguments except for `shapesOff`, `shapesOn`, `bounds` and `texture` are opt
   
 ## License
 
-This repository is licensed under the [MIT license](LICENSE.md).
+This mod and it's source code is licensed under the [MIT license](https://github.com/SwitchCraftCC/sc-peripherals/blob/HEAD/LICENSE).
