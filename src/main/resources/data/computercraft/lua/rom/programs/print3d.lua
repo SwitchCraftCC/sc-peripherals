@@ -54,6 +54,7 @@ if filename:match(".3dm$") then
 end
 
 local function load3djFile(name)
+  name = shell.resolve(name)
   if not fs.exists(name) then
     -- Try to find a .3dj file if the user didn't specify the extension
     if not filename:match(".3dj$") then
@@ -63,7 +64,7 @@ local function load3djFile(name)
       end
     end
 
-    error("File not found: ", 0)
+    error("File not found: " .. name, 0)
   end
 
   local f = fs.open(name, "r")
