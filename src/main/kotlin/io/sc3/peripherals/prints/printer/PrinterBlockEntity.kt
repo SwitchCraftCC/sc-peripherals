@@ -1,10 +1,20 @@
 package io.sc3.peripherals.prints.printer
 
 import dan200.computercraft.api.peripheral.IComputerAccess
+import io.sc3.library.ext.optCompound
+import io.sc3.library.networking.NetworkUtil.sendToAllTracking
+import io.sc3.peripherals.Registration.ModBlockEntities.printer
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.config.ScPeripheralsConfig.config
+import io.sc3.peripherals.prints.PrintData
+import io.sc3.peripherals.prints.PrintItem
+import io.sc3.peripherals.util.BaseBlockEntity
+import io.sc3.peripherals.util.ImplementedInventory
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
+import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.Packet
@@ -17,23 +27,15 @@ import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.math.Direction
 import net.minecraft.world.World
-import io.sc3.library.ext.optCompound
-import io.sc3.library.networking.NetworkUtil.sendToAllTracking
-import io.sc3.peripherals.Registration.ModBlockEntities.printer
-import io.sc3.peripherals.Registration.ModItems
-import io.sc3.peripherals.config.ScPeripheralsConfig.config
-import io.sc3.peripherals.prints.PrintData
-import io.sc3.peripherals.prints.PrintItem
-import io.sc3.peripherals.util.BaseBlockEntity
-import io.sc3.peripherals.util.ImplementedInventory
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class PrinterBlockEntity(
   pos: BlockPos,
   state: BlockState
-) : BaseBlockEntity(printer, pos, state), NamedScreenHandlerFactory, ImplementedInventory {
+) : BaseBlockEntity(printer, pos, state), NamedScreenHandlerFactory, ImplementedInventory, SidedInventory {
   private val inventory = DefaultedList.ofSize(INV_SIZE, ItemStack.EMPTY)
 
   /** Set of computers that are attached as a peripheral to the printer, so they may receive print state events. */
@@ -107,6 +109,17 @@ class PrinterBlockEntity(
     INK_SLOT -> stack.isOf(ModItems.inkCartridge)
     else -> false
   }
+
+  override fun getAvailableSlots(side: Direction): IntArray = when(side) {
+    Direction.DOWN -> downSideSlots
+    else -> otherSideSlots
+  }
+
+  override fun canInsert(slot: Int, stack: ItemStack, dir: Direction?) =
+    isValid(slot, stack)
+
+  override fun canExtract(slot: Int, stack: ItemStack, dir: Direction) =
+    !isValid(slot, stack) // Allow extracting output items from any direction
 
   private fun chameliumValue(stack: ItemStack): Int {
     if (stack.isOf(ModItems.chamelium)) {
@@ -295,6 +308,9 @@ class PrinterBlockEntity(
   companion object {
     const val maxChamelium = 256000
     const val maxInk = 100000
+
+    val downSideSlots = intArrayOf(OUTPUT_SLOT, INK_SLOT) // allow extracting output prints and empty ink cartridges
+    val otherSideSlots = intArrayOf(CHAMELIUM_SLOT, INK_SLOT)
 
     val chameliumValue: Int = config.get("printer.chamelium_value")
     val inkValue: Int = config.get("printer.ink_value")
