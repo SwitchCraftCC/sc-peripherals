@@ -1,8 +1,10 @@
 # sc-peripherals
 
+<!-- modrinth_exclude.start -->
 [![Modrinth Downloads](https://img.shields.io/modrinth/dt/sc-peripherals)](https://modrinth.com/mod/sc-peripherals/)
 
 [![Download on Modrinth](https://i.imgur.com/hbYUrTZ.png)](https://modrinth.com/mod/sc-peripherals/)
+<!-- modrinth_exclude.end -->
 
 Fabric 1.19 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
 The main feature currently is 3D Printers in the style of 
