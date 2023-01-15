@@ -3,7 +3,7 @@ local startColor = term.getTextColor()
 local function printUsage()
   local programName = arg[0] or fs.getName(shell.getRunningProgram())
   print("Usage: ")
-  print(programName .. " <file>.3dj [count]")
+  print(programName .. " <file.3dj or url> [count]")
   print(programName .. " stop")
 end
 
@@ -40,10 +40,11 @@ end
 local count = 1
 if #args == 2 then
   count = tonumber(args[2])
-  if not count then
+  if not count or math.floor(count) < 1 then
     printUsage()
     return
   end
+  count = math.floor(count)
 end
 
 -- Load the 3dj file
@@ -54,20 +55,25 @@ if filename:match(".3dm$") then
 end
 
 local function load3djFile(name)
-  name = shell.resolve(name)
-  if not fs.exists(name) then
-    -- Try to find a .3dj file if the user didn't specify the extension
-    if not filename:match(".3dj$") then
-      local newName = name .. ".3dj"
-      if fs.exists(newName) then
-        return load3djFile(newName)
+  local f
+  if http and name:match("^https?://") then
+    print("Downloading...")
+    f = http.get{ url = name, binary = true }
+  else
+    name = shell.resolve(name)
+    if not fs.exists(name) then
+      -- Try to find a .3dj file if the user didn't specify the extension
+      if not filename:match(".3dj$") then
+        local newName = name .. ".3dj"
+        if fs.exists(newName) then
+          return load3djFile(newName)
+        end
       end
+      error("File not found: " .. name, 0)
     end
-
-    error("File not found: " .. name, 0)
+    f = fs.open(name, "r")
   end
-
-  local f = fs.open(name, "r")
+  
   if not f then
     error("Could not open " .. name, 0)
   end
