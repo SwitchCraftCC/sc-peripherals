@@ -29,7 +29,7 @@ data class PrintData(
 ) {
   var label: String? = initialLabel
     set(value) {
-      field = value?.takeIf { it.length <= MAX_LABEL_LENGTH }
+      field = value?.takeIf { it.isValidLabel() }
       labelText = field?.let { Text.of(it) }
     }
 
@@ -65,8 +65,8 @@ data class PrintData(
 
   fun toNbt(): NbtCompound {
     val nbt = NbtCompound()
-    nbt.putOptString("label", label?.take(MAX_LABEL_LENGTH))
-    nbt.putOptString("tooltip", tooltip?.take(MAX_TOOLTIP_LENGTH))
+    nbt.putOptString("label", label?.takeIf { it.isValidLabel() })
+    nbt.putOptString("tooltip", tooltip?.takeIf { it.isValidTooltip() })
     nbt.putBoolean("isButton", isButton)
     nbt.putBoolean("collideWhenOn", collideWhenOn)
     nbt.putBoolean("collideWhenOff", collideWhenOff)
@@ -83,7 +83,7 @@ data class PrintData(
     val noclipCostMultiplier: Int = config.get("printer.noclip_cost_multiplier")
 
     fun fromNbt(nbt: NbtCompound) = PrintData(
-      initialLabel = nbt.optString("label"),
+      initialLabel = nbt.optString("label")?.takeIf { it.isValidLabel() },
       tooltip = nbt.optString("tooltip"),
       isButton = nbt.getBoolean("isButton"),
       collideWhenOn = nbt.getBoolean("collideWhenOn"),
@@ -99,5 +99,8 @@ data class PrintData(
       getList(key, COMPOUND)
         .map { Shape.fromNbt(it as NbtCompound) }
         .toCollection(Shapes())
+
+    private fun String?.isValidLabel() = this?.length in 1..MAX_LABEL_LENGTH
+    private fun String?.isValidTooltip() = this?.length in 1..MAX_TOOLTIP_LENGTH
   }
 }
