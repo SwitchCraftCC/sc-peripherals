@@ -18,7 +18,8 @@ class PrintRecipe(
   private val outputItem = ItemStack(ModItems.print)
 
   private val print = ofItems(ModItems.print)
-  private val glowstone = ofItems(GLOWSTONE_DUST)
+  private val glowstoneDust = ofItems(GLOWSTONE_DUST)
+  private val glowstoneBlock = ofItems(GLOWSTONE)
   private val beaconBlocks = ofItems(IRON_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, EMERALD_BLOCK)
 
   private fun items(inv: CraftingInventory): RecipeItems? {
@@ -33,7 +34,8 @@ class PrintRecipe(
           if (items.print != null) return null // Prevent item wastage with multiple prints
           items.print = stack
         }
-        glowstone.test(stack) -> items.glowstone++
+        glowstoneDust.test(stack) -> items.lightIncrease++
+        glowstoneBlock.test(stack) -> items.lightIncrease+= 4 // Glowstone blocks are approximately "worth" 4 glowstone dust
         beaconBlocks.test(stack) -> {
           if (items.beaconBlock != null) return null // Prevent item wastage with multiple beacon blocks
           items.beaconBlock = stack
@@ -43,7 +45,7 @@ class PrintRecipe(
     }
 
     // Don't allow crafting if there's nothing valid to craft
-    if (items.print == null || (items.glowstone <= 0 && items.beaconBlock == null)) {
+    if (items.print == null || (items.lightIncrease <= 0 && items.beaconBlock == null)) {
       return null
     }
 
@@ -54,7 +56,7 @@ class PrintRecipe(
     }
 
     // Don't allow crafting if the user would be wasting glowstone
-    if (items.glowstone > 0 && items.glowstone + data.lightLevel > 15) {
+    if (items.lightIncrease > 0 && items.lightIncrease + data.lightLevel > 15) {
       return null
     }
 
@@ -74,7 +76,7 @@ class PrintRecipe(
 
     // Get a fresh PrintData instance from the copy to mutate it
     val data = PrintItem.printData(result) ?: return ItemStack.EMPTY
-    data.lightLevel = (data.lightLevel + items.glowstone).coerceIn(0, 15)
+    data.lightLevel = (data.lightLevel + items.lightIncrease).coerceIn(0, 15)
     if (items.beaconBlock != null) data.isBeaconBlock = true
 
     val nbt = result.nbt ?: return ItemStack.EMPTY
@@ -90,7 +92,7 @@ class PrintRecipe(
 
   data class RecipeItems(
     var print: ItemStack? = null,
-    var glowstone: Int = 0,
+    var lightIncrease: Int = 0,
     var beaconBlock: ItemStack? = null
   )
 
