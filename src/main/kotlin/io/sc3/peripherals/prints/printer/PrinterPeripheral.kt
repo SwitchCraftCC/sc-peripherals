@@ -1,5 +1,6 @@
 package io.sc3.peripherals.prints.printer
 
+import dan200.computercraft.api.lua.IArguments
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
 import dan200.computercraft.api.lua.LuaValues.*
@@ -7,14 +8,13 @@ import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.lua.MethodResult.of
 import dan200.computercraft.api.peripheral.IComputerAccess
 import dan200.computercraft.api.peripheral.IPeripheral
-import net.minecraft.util.Identifier
 import io.sc3.library.ext.intBox
 import io.sc3.peripherals.config.ScPeripheralsConfig.config
-import io.sc3.peripherals.prints.MAX_LABEL_LENGTH
-import io.sc3.peripherals.prints.MAX_TOOLTIP_LENGTH
 import io.sc3.peripherals.prints.PrintData
 import io.sc3.peripherals.prints.Shape
 import io.sc3.peripherals.util.getTableInt
+import net.minecraft.util.Identifier
+import org.squiddev.cobalt.LuaString
 import java.util.*
 
 class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
@@ -30,8 +30,8 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   fun getLabel(): String? = be.data.label
 
   @LuaFunction(mainThread = true)
-  fun setLabel(label: Optional<String>) {
-    be.data.label = label.map { it.take(MAX_LABEL_LENGTH) }.orElse(null)
+  fun setLabel(args: IArguments) {
+    be.data.label = args.optUtf8String(0)?.let { PrintData.sanitiseLabel(it) }
     be.dataUpdated()
   }
 
@@ -39,8 +39,8 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   fun getTooltip(): String? = be.data.tooltip
 
   @LuaFunction(mainThread = true)
-  fun setTooltip(tooltip: Optional<String>) {
-    be.data.tooltip = tooltip.map { it.take(MAX_TOOLTIP_LENGTH) }.orElse(null)
+  fun setTooltip(args: IArguments) {
+    be.data.tooltip = args.optUtf8String(0)?.let { PrintData.sanitiseTooltip(it) }
     be.dataUpdated()
   }
 
@@ -187,6 +187,13 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
     fun sendPrintCompleteEvent(be: PrinterBlockEntity) {
       val remaining = be.printCount
       be.computers.forEach { it.queueEvent(printCompleteEvent, remaining) }
+    }
+
+    private fun IArguments.optUtf8String(index: Int): String? {
+      val buf = optBytes(index).orElse(null) ?: return null
+      val bytes = ByteArray(buf.capacity().coerceAtMost(1024))
+      buf.get(bytes)
+      return LuaString.decodeAsUtf8(bytes, 0, bytes.size)
     }
   }
 }

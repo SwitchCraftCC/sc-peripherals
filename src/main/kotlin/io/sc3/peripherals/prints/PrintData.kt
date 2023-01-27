@@ -4,6 +4,7 @@ import io.sc3.library.ext.optString
 import io.sc3.library.ext.putOptString
 import io.sc3.peripherals.config.ScPeripheralsConfig.config
 import net.fabricmc.fabric.api.util.NbtType.COMPOUND
+import net.minecraft.SharedConstants
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
 import net.minecraft.util.math.Direction
@@ -29,7 +30,7 @@ data class PrintData(
 ) {
   var label: String? = initialLabel
     set(value) {
-      field = value?.takeIf { it.isValidLabel() }
+      field = sanitiseLabel(value)
       labelText = field?.let { Text.of(it) }
     }
 
@@ -65,8 +66,8 @@ data class PrintData(
 
   fun toNbt(): NbtCompound {
     val nbt = NbtCompound()
-    nbt.putOptString("label", label?.takeIf { it.isValidLabel() })
-    nbt.putOptString("tooltip", tooltip?.takeIf { it.isValidTooltip() })
+    nbt.putOptString("label", sanitiseLabel(label))
+    nbt.putOptString("tooltip", sanitiseTooltip(tooltip))
     nbt.putBoolean("isButton", isButton)
     nbt.putBoolean("collideWhenOn", collideWhenOn)
     nbt.putBoolean("collideWhenOff", collideWhenOff)
@@ -83,8 +84,8 @@ data class PrintData(
     val noclipCostMultiplier: Int = config.get("printer.noclip_cost_multiplier")
 
     fun fromNbt(nbt: NbtCompound) = PrintData(
-      initialLabel = nbt.optString("label")?.takeIf { it.isValidLabel() },
-      tooltip = nbt.optString("tooltip"),
+      initialLabel = nbt.optString("label")?.takeIf { isValidLabel(it) }, // Cheaper than sanitiseLabel
+      tooltip = nbt.optString("tooltip")?.takeIf { isValidTooltip(it) },
       isButton = nbt.getBoolean("isButton"),
       collideWhenOn = nbt.getBoolean("collideWhenOn"),
       collideWhenOff = nbt.getBoolean("collideWhenOff"),
@@ -100,7 +101,17 @@ data class PrintData(
         .map { Shape.fromNbt(it as NbtCompound) }
         .toCollection(Shapes())
 
-    private fun String?.isValidLabel() = this?.length in 1..MAX_LABEL_LENGTH
-    private fun String?.isValidTooltip() = this?.length in 1..MAX_TOOLTIP_LENGTH
+    fun isValidLabel(s: String?) = s?.length in 1..MAX_LABEL_LENGTH
+    fun isValidTooltip(s: String?) = s?.length in 1..MAX_TOOLTIP_LENGTH
+
+    fun sanitiseLabel(s: String?) = s?.takeIf { isValidLabel(it) }
+      ?.let { stripInvalidChars(it) }
+    fun sanitiseTooltip(s: String?) = s?.takeIf { isValidTooltip(it) }
+      ?.let { stripInvalidChars(it, true) }
+
+    /** Strip invalid characters, but allow the section sign. If sc-networking is installed, this will also strip
+     * private-use font characters, but let's allow the Krist symbol (U+E000) */
+    private fun stripInvalidChars(s: String, allowNewlines: Boolean = false) =
+      s.filter { SharedConstants.isValidChar(it) || it == '§' || it == '\uE000' || (allowNewlines && it == '\n') }
   }
 }
