@@ -14,7 +14,7 @@ import io.sc3.peripherals.prints.PrintData
 import io.sc3.peripherals.prints.Shape
 import io.sc3.peripherals.util.getTableInt
 import net.minecraft.util.Identifier
-import org.squiddev.cobalt.LuaString
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
@@ -191,9 +191,7 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
 
     private fun IArguments.optUtf8String(index: Int): String? {
       val buf = optBytes(index).orElse(null) ?: return null
-      val bytes = ByteArray(buf.capacity().coerceAtMost(1024))
-      buf.get(bytes)
-      return LuaString.decodeAsUtf8(bytes, 0, bytes.size)
+      return StandardCharsets.UTF_8.decode(buf).toString()
     }
   }
 }
