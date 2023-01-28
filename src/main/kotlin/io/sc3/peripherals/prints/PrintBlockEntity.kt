@@ -1,5 +1,8 @@
 package io.sc3.peripherals.prints
 
+import io.sc3.library.ext.*
+import io.sc3.peripherals.Registration.ModBlockEntities.print
+import io.sc3.peripherals.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.nbt.NbtCompound
@@ -11,9 +14,6 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
-import io.sc3.library.ext.*
-import io.sc3.peripherals.Registration.ModBlockEntities.print
-import io.sc3.peripherals.util.*
 
 class PrintBlockEntity(
   pos: BlockPos,

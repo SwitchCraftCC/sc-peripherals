@@ -47,5 +47,29 @@ class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
     fun create(data: PrintData): ItemStack = ItemStack(ModItems.print).apply {
       orCreateNbt.put("data", data.toNbt())
     }
+
+    @JvmStatic
+    fun hasCustomName(stack: ItemStack) =
+      printData(stack)?.labelText != null
+
+    @JvmStatic
+    fun getCustomName(stack: ItemStack): Text =
+      stack.item.getName(stack)
+
+    @JvmStatic
+    fun setCustomName(stack: ItemStack, name: Text?) {
+      val data = stack.getSubNbt("data") ?: return
+      if (name == null) {
+        data.remove("label") // TODO: Make NbtExt.putOptString remove the key if it is present
+      } else {
+        data.putString("label", PrintData.sanitiseLabel(name.string))
+      }
+    }
+
+    @JvmStatic
+    fun removeCustomName(stack: ItemStack) {
+      val data = stack.getSubNbt("data") ?: return
+      data.remove("label")
+    }
   }
 }
