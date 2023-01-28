@@ -59,10 +59,11 @@ class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
     @JvmStatic
     fun setCustomName(stack: ItemStack, name: Text?) {
       val data = stack.getSubNbt("data") ?: return
-      if (name == null) {
+      val newLabel = PrintData.sanitiseLabel(name?.string)
+      if (newLabel == null) {
         data.remove("label") // TODO: Make NbtExt.putOptString remove the key if it is present
       } else {
-        data.putString("label", PrintData.sanitiseLabel(name.string))
+        data.putString("label", newLabel)
       }
     }
 
