@@ -1,5 +1,9 @@
 package io.sc3.peripherals.prints.printer
 
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.Registration.ModScreens.printer
+import io.sc3.peripherals.util.PropertyDelegateGetter
+import io.sc3.peripherals.util.ValidatingSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
@@ -9,10 +13,6 @@ import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
-import io.sc3.peripherals.Registration.ModItems
-import io.sc3.peripherals.Registration.ModScreens.printer
-import io.sc3.peripherals.util.PropertyDelegateGetter
-import io.sc3.peripherals.util.ValidatingSlot
 
 const val CHAMELIUM_SLOT = 0
 const val INK_SLOT = 1
@@ -41,7 +41,6 @@ class PrinterScreenHandler(
   init {
     checkSize(inv, 3)
 
-    // TODO: Validating slots
     chameliumSlot = addSlot(ValidatingSlot(inv, CHAMELIUM_SLOT, 17, 17) {
       s -> s.isOf(ModItems.chamelium) || s.isOf(ModItems.print)
     })
@@ -66,18 +65,28 @@ class PrinterScreenHandler(
 
   override fun canUse(player: PlayerEntity) = inv.canPlayerUse(player)
 
-  override fun quickMove(player: PlayerEntity, index: Int): ItemStack {
-    val slot = slots[index]
+  override fun quickMove(player: PlayerEntity, slotIndex: Int): ItemStack {
+    val slot = slots[slotIndex]
     if (!slot.hasStack()) return ItemStack.EMPTY
 
-    val existing = slot.stack.copy()
+    val existing = slot.stack
     val result = existing.copy()
-    if (index < INV_SIZE) {
+    if (slotIndex < INV_SIZE) {
       // One of our own slots, insert into the player's inventory
       if (!insertItem(existing, INV_SIZE, INV_SIZE + 36, true)) return ItemStack.EMPTY
+      slot.onQuickTransfer(existing, result)
     } else {
       // One of the player's inventory slots, insert into the printer inventory
-      if (!insertItem(existing, 0, INV_SIZE, false)) return ItemStack.EMPTY
+      if (existing.isOf(ModItems.chamelium)) {
+        // Don't allow shift-clicking 3D prints into the chamelium slot, to prevent accidental print recycling.
+        // TODO: Is allowing them to be shift-clicked more desirable?
+        if (!insertItem(existing, CHAMELIUM_SLOT, CHAMELIUM_SLOT + 1, false)) return ItemStack.EMPTY
+      } else if (existing.isOf(ModItems.inkCartridge)) {
+        if (!insertItem(existing, INK_SLOT, INK_SLOT + 1, false)) return ItemStack.EMPTY
+      } else {
+        // Don't allow shift-clicking into the output slot.
+        return ItemStack.EMPTY
+      }
     }
 
     if (existing.isEmpty) {
