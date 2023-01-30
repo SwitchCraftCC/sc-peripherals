@@ -15,6 +15,6 @@ class BlockTagProvider(
 ) : FabricTagProvider<Block>(out, RegistryKeys.BLOCK, future) {
   override fun configure(arg: RegistryWrapper.WrapperLookup) {
     getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
-      .add(ModBlocks.print, ModBlocks.printer)
+      .add(ModBlocks.print, ModBlocks.printer, ModBlocks.posterPrinter)
   }
 }

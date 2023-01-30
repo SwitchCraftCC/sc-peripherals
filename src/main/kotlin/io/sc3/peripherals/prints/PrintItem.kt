@@ -5,6 +5,7 @@ import io.sc3.peripherals.Registration.ModBlocks
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.ScPeripherals.modId
+import io.sc3.peripherals.posters.PosterPrintData
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack

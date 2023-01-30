@@ -23,6 +23,10 @@ import io.sc3.peripherals.item.ChameliumItem
 import io.sc3.peripherals.item.EmptyInkCartridgeItem
 import io.sc3.peripherals.item.InkCartridgeItem
 import io.sc3.peripherals.item.TextureAnalyzerItem
+import io.sc3.peripherals.posters.PosterItem
+import io.sc3.peripherals.posters.printer.PosterPrinterBlock
+import io.sc3.peripherals.posters.printer.PosterPrinterBlockEntity
+import io.sc3.peripherals.posters.printer.PosterPrinterScreenHandler
 import io.sc3.peripherals.prints.PrintBlock
 import io.sc3.peripherals.prints.PrintBlockEntity
 import io.sc3.peripherals.prints.PrintItem
@@ -35,14 +39,19 @@ object Registration {
 
   internal fun init() {
     // Similar to how CC behaves - touch each static class to force the static initializers to run.
-    listOf(ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer)
+    listOf(
+      ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer,
+      ModBlocks.posterPrinter, ModItems.posterPrinter, ModBlockEntities.posterPrinter, ModScreens.posterPrinter
+    )
 
     RecipeHandlers.registerSerializers()
 
     PeripheralLookup.get().registerForBlockEntity({ be, _ -> be.peripheral }, ModBlockEntities.printer)
+    PeripheralLookup.get().registerForBlockEntity({ be, _ -> be.peripheral }, ModBlockEntities.posterPrinter)
   }
 
   object ModBlocks {
+    val posterPrinter = rBlock("poster_printer", PosterPrinterBlock(settings()))
     val printer = rBlock("printer", PrinterBlock(settings()))
     val print = rBlock("print", PrintBlock(settings()
       .nonOpaque()
@@ -58,7 +67,9 @@ object Registration {
 
   object ModItems {
     val printer = ofBlock(ModBlocks.printer, ::BlockItem)
+    val posterPrinter = ofBlock(ModBlocks.posterPrinter, ::BlockItem)
     val print = rItem("print", PrintItem(Item.Settings()), addItem = false)
+    val poster = rItem("poster", PosterItem(Item.Settings()), addItem = false)
 
     val chamelium = rItem("chamelium", ChameliumItem(settings()))
     val inkCartridge = rItem("ink_cartridge", InkCartridgeItem(settings().maxCount(1)))
@@ -80,6 +91,7 @@ object Registration {
   }
 
   object ModBlockEntities {
+    val posterPrinter: BlockEntityType<PosterPrinterBlockEntity> = ofBlock(ModBlocks.posterPrinter, "poster_printer", ::PosterPrinterBlockEntity)
     val printer: BlockEntityType<PrinterBlockEntity> = ofBlock(ModBlocks.printer, "printer", ::PrinterBlockEntity)
     val print: BlockEntityType<PrintBlockEntity> = ofBlock(ModBlocks.print, "print", ::PrintBlockEntity)
 
@@ -92,5 +104,6 @@ object Registration {
 
   object ModScreens {
     val printer = register(SCREEN_HANDLER, ModId("printer"), ScreenHandlerType(::PrinterScreenHandler))
+    val posterPrinter = register(SCREEN_HANDLER, ModId("poster_printer"), ScreenHandlerType(::PosterPrinterScreenHandler))
   }
 }

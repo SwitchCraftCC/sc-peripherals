@@ -18,6 +18,8 @@ object ScPeripheralsConfig {
     spec.define("printer.custom_redstone_cost", 300)
     spec.define("printer.noclip_cost_multiplier", 2)
     spec.define("printer.recycle_value_multiplier", 0.75)
+
+    spec.define("poster_printer.ink_cost", 5000)
   }
 
   internal val config by lazy {
