@@ -3,25 +3,23 @@ package io.sc3.peripherals.client.item
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.posters.PosterItem
+import io.sc3.peripherals.posters.PosterItem.Companion.getPosterId
+import io.sc3.peripherals.posters.PosterItem.Companion.getPosterState
 import io.sc3.peripherals.posters.PosterState
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.block.MapColor
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumer
 import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.item.HeldItemRenderer
 import net.minecraft.client.texture.NativeImageBackedTexture
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.decoration.ItemFrameEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.math.RotationAxis
+import net.minecraft.world.World
 import org.joml.Matrix4f
-import java.util.function.BiFunction
 
 @Environment(EnvType.CLIENT)
 object PosterRenderer : AutoCloseable {
@@ -63,17 +61,10 @@ object PosterRenderer : AutoCloseable {
     getPosterTexture(id, state).drawCropped(matrices, vertexConsumers, light, cropX, cropY, cropWidth, cropHeight)
   }
 
-  private fun getPosterTexture(id: String, state: PosterState): PosterTexture {
-    return posterTextures.compute(id,
-      BiFunction<String, PosterTexture?, PosterTexture?> { id2: String, texture: PosterTexture? ->
-        if (texture == null) {
-          return@BiFunction PosterTexture(id2, state)
-        } else {
-          texture.setState(state)
-          return@BiFunction texture
-        }
-      })!!
-  }
+  private fun getPosterTexture(id: String, state: PosterState): PosterTexture
+    = posterTextures
+        .computeIfAbsent(id) { PosterTexture(id, state) }
+        .also { it.setState(state) }
 
   fun clearStateTextures() {
     for (mapTexture in posterTextures.values) {
@@ -171,26 +162,27 @@ object PosterRenderer : AutoCloseable {
       needsUpdate = true
     }
 
-    fun getRenderColor(colorIndex: Int, brightness: MapColor.Brightness): Int {
+    private fun getRenderColor(colorIndex: Int): Int {
       return if (colorIndex === 0) {
         0
       } else {
         val color = state.palette.getOrNull(colorIndex) ?: return 0
-        val i = brightness.brightness
-        val j: Int = (color shr 16 and 0xFF) * i / 255
-        val k: Int = (color shr 8 and 0xFF) * i / 255
-        val l: Int = (color and 0xFF) * i / 255
-        -0x1000000 or (l shl 16) or (k shl 8) or j
+        val r: Int = color shr 16 and 0xFF
+        val g: Int = color shr 8 and 0xFF
+        val b: Int = color and 0xFF
+        -0x1000000 or (b shl 16) or (g shl 8) or r
       }
     }
 
     private fun updateTexture() {
-      for (i in 0..127) {
-        for (j in 0..127) {
-          val k = j + i * 128
-          texture.image!!.setColor(j, i, getRenderColor(state.colors[k].toInt(), MapColor.Brightness.NORMAL))
+      val image = texture.image ?: return
+      for (y in 0..127) {
+        for (x in 0..127) {
+          val idx = x + y * 128
+          image.setColor(x, y, getRenderColor(state.colors[idx].toInt()))
         }
       }
+
       texture.upload()
     }
 
@@ -241,5 +233,17 @@ object PosterRenderer : AutoCloseable {
     vertexConsumer.vertex(matrix4f, x + width, y + height, z).color(255, 255, 255, 255).texture((x + uvOffsetX + width) / size, (y + uvOffsetY + height) / size).light(light).next()
     vertexConsumer.vertex(matrix4f, x + width, y, z).color(255, 255, 255, 255).texture((x + uvOffsetX + width) / size, (y + uvOffsetY) / size).light(light).next()
     vertexConsumer.vertex(matrix4f, x, y, z).color(255, 255, 255, 255).texture((x + uvOffsetX) / size, (y + uvOffsetY) / size).light(light).next()
+  }
+
+  @JvmStatic
+  fun renderFirstPersonMap(matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, swingProgress: Int, stack: ItemStack, world: World?) {
+    val posterId = getPosterId(stack) ?: return
+
+    drawBackground(matrices, vertexConsumers, swingProgress)
+
+    val posterState = getPosterState(posterId, world)
+    if (posterState != null) {
+      draw(matrices, vertexConsumers, posterId, posterState, swingProgress)
+    }
   }
 }

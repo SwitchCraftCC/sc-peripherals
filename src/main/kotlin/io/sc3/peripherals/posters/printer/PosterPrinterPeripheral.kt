@@ -42,9 +42,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
   @LuaFunction
   fun setPaletteColor(index: Int, red: Int, green: Int, blue: Int) {
-    if (index < 1 || index > 64) {
-      throw LuaException("Invalid palette index")
-    }
+    if (index !in 1..64) throw LuaException("Invalid palette index")
     be.data.posterId = null
     be.data.palette[index - 1] = (red shl 16) or (green shl 8) or blue
     be.dataUpdated()
@@ -53,8 +51,9 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
   @LuaFunction
   fun setPixel(x: Int, y: Int, color: Int) {
     if (x !in 1..128 || y !in 1..128) throw LuaException("Invalid pixel coordinates")
+    if (color !in 1..64) throw LuaException("Invalid color index")
     be.data.posterId = null
-    be.data.colors[(x-1) + (y-1) * 128] = color
+    be.data.colors[(x-1) + (y-1) * 128] = color.toByte()
     be.dataUpdated()
   }
 

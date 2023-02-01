@@ -1,16 +1,22 @@
 package io.sc3.peripherals.posters
 
 import io.sc3.library.networking.ScLibraryPacket
+import io.sc3.peripherals.Registration.ModItems.poster
+import io.sc3.peripherals.posters.PosterItem.Companion.getPosterId
+import io.sc3.peripherals.posters.PosterItem.Companion.getPosterState
+import net.minecraft.entity.decoration.ItemFrameEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.world.PersistentState
+import net.minecraft.world.World
 import org.slf4j.LoggerFactory
 import java.io.File
 
 class PosterState : PersistentState() {
   var colors = ByteArray(16384)
-  var palette = getDefaultPalette().toIntArray() // Default to map colors
+  var palette = getDefaultPalette() // Default to map colors
 
   override fun save(file: File) {
     file.parentFile.mkdirs()
@@ -65,6 +71,28 @@ class PosterState : PersistentState() {
       }
 
       return posterState
+    }
+
+    @JvmStatic
+    fun tickEntityTracker(entity: ItemFrameEntity, world: ServerWorld) {
+      val itemStack = entity.heldItemStack
+
+      if (itemStack.item === poster) {
+        val id = getPosterId(itemStack) ?: return
+        val posterState = getPosterState(id, world)
+        if (posterState != null) {
+
+          // TODO: Don't send to players who can't see the poster
+          for (serverPlayerEntity in world.players) {
+            posterState.update(serverPlayerEntity)
+            val packet = posterState.getPlayerUpdatePacket(id, serverPlayerEntity)
+            if (packet != null) {
+              serverPlayerEntity.networkHandler.sendPacket(packet.toS2CPacket())
+            }
+          }
+          posterState.pruneTrackers(itemStack)
+        }
+      }
     }
   }
 

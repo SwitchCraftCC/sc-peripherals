@@ -2,8 +2,6 @@ package io.sc3.peripherals.mixin;
 
 import io.sc3.peripherals.Registration;
 import io.sc3.peripherals.client.item.PosterRenderer;
-import io.sc3.peripherals.posters.PosterItem;
-import io.sc3.peripherals.posters.PosterState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -42,20 +40,9 @@ public abstract class HeldItemRendererMixin {
   private void renderFirstPersonMap(
     MatrixStack matrices, VertexConsumerProvider vertexConsumers, int swingProgress, ItemStack stack, CallbackInfo ci
   ) {
-    // Render the poster
     if (stack.isOf(Registration.ModItems.INSTANCE.getPoster())) {
-      String posterId = PosterItem.Companion.getPosterId(stack);
-      if (posterId == null) return;
-
-      PosterRenderer.INSTANCE.drawBackground(matrices, vertexConsumers, swingProgress);
-
-      PosterState posterState = PosterItem.Companion.getPosterState(posterId, this.getClient().world);
-      if (posterState != null) {
-        PosterRenderer.INSTANCE.draw(matrices, vertexConsumers, posterId, posterState, swingProgress);
-      }
-
+      PosterRenderer.renderFirstPersonMap(matrices, vertexConsumers, swingProgress, stack, this.getClient().world);
       ci.cancel();
     }
   }
-
 }

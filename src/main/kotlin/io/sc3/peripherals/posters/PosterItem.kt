@@ -76,9 +76,9 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
 
     if (context.isAdvanced) {
       if (id != null) {
-        tooltip.add(Text.translatable("sc-peripherals.poster.id", id.take(8)).formatted(Formatting.GRAY))
+        tooltip.add(Text.translatable("${translationKey}.id", id.take(8)).formatted(Formatting.GRAY))
       } else {
-        tooltip.add(Text.translatable("sc-peripherals.poster.unknown").formatted(Formatting.GRAY))
+        tooltip.add(Text.translatable("${translationKey}.unknown").formatted(Formatting.GRAY))
       }
     }
   }
@@ -128,18 +128,22 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
 
     fun create(world: World, data: PosterPrintData): ItemStack {
       val itemStack = ItemStack(ModItems.poster)
-      if (data.posterId != null) {
-        setPosterId(itemStack, data.posterId!!, data)
-      } else {
-        createPosterState(itemStack, world, data)
+      data.posterId.let { id ->
+        if (id != null) {
+          setPosterId(itemStack, id, data)
+        } else {
+          createPosterState(itemStack, world, data)
+        }
       }
 
       return itemStack
     }
 
     private fun setPosterId(stack: ItemStack, id: String, data: PosterPrintData) {
-      stack.orCreateNbt.putString(POSTER_KEY, id)
-      stack.nbt!!.copyFrom(data.toItemNbt())
+      with (stack.orCreateNbt) {
+        putString(POSTER_KEY, id)
+        copyFrom(data.toItemNbt())
+      }
     }
 
     private fun createPosterState(
@@ -152,7 +156,7 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
       return state
     }
 
-    fun allocatePosterId(
+    private fun allocatePosterId(
       world: World, data: PosterPrintData
     ): Pair<String, PosterState> {
       val posterState = PosterState().also {
@@ -193,6 +197,9 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
         }
 
         disambiguation += 1
+        if (disambiguation > 128) {
+          throw IllegalStateException("Likely infinite loop allocating poster ID, this should never happen!")
+        }
       }
     }
 

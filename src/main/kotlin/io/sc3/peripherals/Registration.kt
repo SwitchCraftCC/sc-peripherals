@@ -40,8 +40,7 @@ object Registration {
   internal fun init() {
     // Similar to how CC behaves - touch each static class to force the static initializers to run.
     listOf(
-      ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer,
-      ModBlocks.posterPrinter, ModItems.posterPrinter, ModBlockEntities.posterPrinter, ModScreens.posterPrinter
+      ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer
     )
 
     RecipeHandlers.registerSerializers()
@@ -51,12 +50,13 @@ object Registration {
   }
 
   object ModBlocks {
-    val posterPrinter = rBlock("poster_printer", PosterPrinterBlock(settings()))
     val printer = rBlock("printer", PrinterBlock(settings()))
     val print = rBlock("print", PrintBlock(settings()
       .nonOpaque()
       .dynamicBounds()
       .luminance { it.get(PrintBlock.luminance) }))
+
+    val posterPrinter = rBlock("poster_printer", PosterPrinterBlock(settings()))
 
     val chamelium = rBlock("chamelium", ChameliumBlock(settings()))
 
@@ -67,8 +67,9 @@ object Registration {
 
   object ModItems {
     val printer = ofBlock(ModBlocks.printer, ::BlockItem)
-    val posterPrinter = ofBlock(ModBlocks.posterPrinter, ::BlockItem)
     val print = rItem("print", PrintItem(Item.Settings()), addItem = false)
+
+    val posterPrinter = ofBlock(ModBlocks.posterPrinter, ::BlockItem)
     val poster = rItem("poster", PosterItem(Item.Settings()), addItem = false)
 
     val chamelium = rItem("chamelium", ChameliumItem(settings()))
@@ -91,9 +92,10 @@ object Registration {
   }
 
   object ModBlockEntities {
-    val posterPrinter: BlockEntityType<PosterPrinterBlockEntity> = ofBlock(ModBlocks.posterPrinter, "poster_printer", ::PosterPrinterBlockEntity)
     val printer: BlockEntityType<PrinterBlockEntity> = ofBlock(ModBlocks.printer, "printer", ::PrinterBlockEntity)
     val print: BlockEntityType<PrintBlockEntity> = ofBlock(ModBlocks.print, "print", ::PrintBlockEntity)
+
+    val posterPrinter: BlockEntityType<PosterPrinterBlockEntity> = ofBlock(ModBlocks.posterPrinter, "poster_printer", ::PosterPrinterBlockEntity)
 
     private fun <T : BlockEntity> ofBlock(block: Block, name: String,
                                           factory: (BlockPos, BlockState) -> T): BlockEntityType<T> {

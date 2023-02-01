@@ -52,7 +52,7 @@ class PosterPrinterBlockEntity(
   var animationStartTime: Long = 0
 
   var data: PosterPrintData = PosterPrintData(
-    null, null, MutableList(128*128) { 0 }
+    null, null, ByteArray(128*128) { 0 }
   )
   var printing = false
     set(value) {
