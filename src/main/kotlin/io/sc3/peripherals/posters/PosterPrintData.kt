@@ -37,20 +37,15 @@ data class PosterPrintData(
     return (posterInkCost*(pixels / 16384.0)).roundToInt().coerceAtLeast(pixels.sign)
   }
 
-  fun toNbt(): NbtCompound {
-    val nbt = toItemNbt()
-    nbt.putByteArray("colors", colors)
-    nbt.putIntArray("palette", palette)
-    return nbt
+  fun toNbt() = toItemNbt().apply {
+    putByteArray("colors", colors)
+    putIntArray("palette", palette)
   }
 
-  fun toItemNbt(): NbtCompound {
-    val nbt = NbtCompound()
-    nbt.putOptString("label", label?.takeIf { it.isValidLabel() })
-    nbt.putOptString("tooltip", tooltip?.takeIf { it.isValidTooltip() })
-    nbt.putOptString(POSTER_KEY, posterId)
-
-    return nbt
+  fun toItemNbt() = NbtCompound().apply {
+    putOptString("label", label?.takeIf { it.isValidLabel() })
+    putOptString("tooltip", tooltip?.takeIf { it.isValidTooltip() })
+    putOptString(POSTER_KEY, posterId)
   }
 
   override fun equals(other: Any?): Boolean {

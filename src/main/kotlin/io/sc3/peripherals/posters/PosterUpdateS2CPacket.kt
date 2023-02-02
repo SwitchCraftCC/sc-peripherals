@@ -3,7 +3,6 @@ package io.sc3.peripherals.posters
 import io.sc3.library.networking.ScLibraryPacket
 import io.sc3.peripherals.ScPeripherals
 import io.sc3.peripherals.client.item.PosterRenderer
-import io.sc3.peripherals.posters.PosterState.Companion.logger
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
@@ -22,30 +21,34 @@ data class PosterUpdateS2CPacket(
 
     val id = ScPeripherals.ModId("poster_update")
 
-    fun fromBytes(buf: PacketByteBuf) = PosterUpdateS2CPacket(
-      posterId = buf.readString(),
-      updateData = PosterState.UpdateData(
-        width=buf.readUnsignedByte().toInt(),
-        height=buf.readUnsignedByte().toInt(),
-        startX=buf.readUnsignedByte().toInt(),
-        startZ=buf.readUnsignedByte().toInt(),
-        colors=buf.readByteArray(),
-        palette=buf.readIntArray()
+    fun fromBytes(buf: PacketByteBuf) = buf.run {
+      PosterUpdateS2CPacket(
+        posterId = readString(),
+        updateData = PosterState.UpdateData(
+          width = readUnsignedByte().toInt(),
+          height = readUnsignedByte().toInt(),
+          startX = readUnsignedByte().toInt(),
+          startZ = readUnsignedByte().toInt(),
+          colors = readByteArray(),
+          palette = readIntArray()
+        )
       )
-    )
+    }
   }
 
   override fun toBytes(buf: PacketByteBuf) {
-    buf.writeString(posterId)
-    if (updateData != null) {
-      buf.writeByte(updateData.width)
-      buf.writeByte(updateData.height)
-      buf.writeByte(updateData.startX)
-      buf.writeByte(updateData.startZ)
-      buf.writeByteArray(updateData.colors)
-      buf.writeIntArray(updateData.palette)
-    } else {
-      buf.writeByte(0)
+    with(buf) {
+      writeString(posterId)
+      if (updateData != null) {
+        writeByte(updateData.width)
+        writeByte(updateData.height)
+        writeByte(updateData.startX)
+        writeByte(updateData.startZ)
+        writeByteArray(updateData.colors)
+        writeIntArray(updateData.palette)
+      } else {
+        writeByte(0)
+      }
     }
   }
 

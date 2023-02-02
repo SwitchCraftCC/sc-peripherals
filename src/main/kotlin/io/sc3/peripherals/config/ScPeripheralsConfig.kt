@@ -19,6 +19,8 @@ object ScPeripheralsConfig {
     spec.define("printer.noclip_cost_multiplier", 2)
     spec.define("printer.recycle_value_multiplier", 0.75)
 
+    spec.define("poster_printer.print_ticks", 100)
+
     spec.define("poster_printer.ink_cost", 5000)
   }
 

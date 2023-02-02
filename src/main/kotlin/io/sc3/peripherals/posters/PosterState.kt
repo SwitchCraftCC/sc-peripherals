@@ -57,8 +57,6 @@ class PosterState : PersistentState() {
   }
 
   companion object {
-    val logger = LoggerFactory.getLogger(this::class.java)
-
     fun fromNbt(nbt: NbtCompound): PosterState? {
       val posterState = PosterState()
       val colorArray = nbt.getByteArray("colors")
@@ -96,10 +94,9 @@ class PosterState : PersistentState() {
     }
   }
 
-  override fun writeNbt(nbt: NbtCompound): NbtCompound {
-    nbt.putByteArray("colors", colors)
-    nbt.putIntArray("palette", palette)
-    return nbt
+  override fun writeNbt(nbt: NbtCompound) = nbt.apply {
+    putByteArray("colors", colors)
+    putIntArray("palette", palette)
   }
 
   override fun equals(other: Any?): Boolean {

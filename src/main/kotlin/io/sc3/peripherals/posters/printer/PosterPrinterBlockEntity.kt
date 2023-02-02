@@ -43,8 +43,6 @@ class PosterPrinterBlockEntity(
 ) : BaseBlockEntity(posterPrinter, pos, state), NamedScreenHandlerFactory, ImplementedInventory, SidedInventory {
   private val inventory = DefaultedList.ofSize(INV_SIZE, ItemStack.EMPTY)
 
-  val log = LoggerFactory.getLogger("ScPeripherals/PosterPrinterBlockEntity")!!
-
   /** Set of computers that are attached as a peripheral to the printer, so they may receive print state events. */
   val computers: MutableSet<IComputerAccess> = Collections.newSetFromMap(ConcurrentHashMap())
 
@@ -70,7 +68,7 @@ class PosterPrinterBlockEntity(
   var ink = 0
   var printProgress = 0
   // This property is synced from the server's config to the client
-  var maxPrintProgress: Int = config.getOrElse("printer.print_ticks", 100)
+  var maxPrintProgress: Int = config.getOrElse("poster_printer.print_ticks", 100)
 
   private var inksDirty = false
   private var outputDirty = false

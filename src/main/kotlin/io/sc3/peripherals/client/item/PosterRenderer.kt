@@ -2,7 +2,6 @@ package io.sc3.peripherals.client.item
 
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.ScPeripherals.ModId
-import io.sc3.peripherals.posters.PosterItem
 import io.sc3.peripherals.posters.PosterItem.Companion.getPosterId
 import io.sc3.peripherals.posters.PosterItem.Companion.getPosterState
 import io.sc3.peripherals.posters.PosterState
@@ -26,13 +25,9 @@ object PosterRenderer : AutoCloseable {
   val POSTER_BACKGROUND_RES = ModId("textures/item/poster_background.png")
   val POSTER_BACKGROUND = RenderLayer.getText(POSTER_BACKGROUND_RES)
 
-//  val MAP_ICONS_RENDER_LAYER = RenderLayer.getText(MAP_ICONS_TEXTURE)
-//  private const val DEFAULT_IMAGE_WIDTH = 128
-//  private const val DEFAULT_IMAGE_HEIGHT = 128
-
   private val textureManager get() = MinecraftClient.getInstance().textureManager
 
-  private val posterTextures = mutableMapOf<String, PosterTexture>() // : Int2ObjectMap<PosterTexture> = Int2ObjectOpenHashMap()
+  private val posterTextures = mutableMapOf<String, PosterTexture>()
   fun updateTexture(id: String, state: PosterState) {
     getPosterTexture(id, state).setNeedsUpdate()
   }
@@ -89,8 +84,8 @@ object PosterRenderer : AutoCloseable {
     light: Int
   ): Boolean {
     if (itemStack.isOf(ModItems.poster)) {
-      val posterId = PosterItem.getPosterId(itemStack) ?: return false
-      val posterState = PosterItem.getPosterState(posterId, itemFrameEntity.world) ?: return false
+      val posterId = getPosterId(itemStack) ?: return false
+      val posterState = getPosterState(posterId, itemFrameEntity.world) ?: return false
 
       // Ensure we can't do sideways rotation
       val j = itemFrameEntity.rotation % 4 * 2
@@ -98,20 +93,19 @@ object PosterRenderer : AutoCloseable {
       matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(j.toFloat() * 360.0f / 8.0f))
 
       matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180.0f))
-      val h = 0.0078125f
-      matrixStack.scale(0.0078125f, 0.0078125f, 0.0078125f)
+      matrixStack.scale(1f/128f, 1f/128f, 1f/128f)
       matrixStack.translate(-64.0f, -64.0f, 0.0f)
 
       matrixStack.translate(0.0f, 0.0f, -1.0f)
 
-      val k: Int = getLight(itemFrameEntity, 15728850, light)
+      val evaluatedLight = getLight(itemFrameEntity, 15728850, light)
 
       draw(
         matrixStack,
         vertexConsumerProvider,
         posterId,
         posterState,
-        k
+        evaluatedLight
       )
 
       return true
@@ -163,7 +157,7 @@ object PosterRenderer : AutoCloseable {
     }
 
     private fun getRenderColor(colorIndex: Int): Int {
-      return if (colorIndex === 0) {
+      return if (colorIndex == 0) {
         0
       } else {
         val color = state.palette.getOrNull(colorIndex) ?: return 0

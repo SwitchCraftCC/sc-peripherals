@@ -17,15 +17,19 @@ data class PosterPrinterInkPacket(
   companion object {
     val id = ModId("poster_printer_ink")
 
-    fun fromBytes(buf: PacketByteBuf) = PosterPrinterInkPacket(
-      pos = buf.readBlockPos(),
-      ink = buf.readInt()
-    )
+    fun fromBytes(buf: PacketByteBuf) = buf.run {
+      PosterPrinterInkPacket(
+        pos = readBlockPos(),
+        ink = readInt()
+      )
+    }
   }
 
   override fun toBytes(buf: PacketByteBuf) {
-    buf.writeBlockPos(pos)
-    buf.writeInt(ink)
+    with(buf) {
+      writeBlockPos(pos)
+      writeInt(ink)
+    }
   }
 
   override fun onClientReceive(client: MinecraftClient, handler: ClientPlayNetworkHandler,
