@@ -47,6 +47,24 @@ object PrinterRecipes : RecipeHandler {
       .hasComputer()
       .offerTo(exporter)
 
+    ShapedRecipeJsonBuilder.create(RecipeCategory.MISC, ModItems.posterPrinter)
+      .pattern("SNS")
+      .pattern("IDI")
+      .pattern("QCQ")
+      .input('I', ConventionalItemTags.IRON_INGOTS)
+      .input('Q', Items.QUARTZ_BLOCK)
+      .input('N', Items.NETHER_STAR)
+      .input('S', Items.STICK)
+      .input('D', Items.DIAMOND_BLOCK)
+      .input(
+        'C', DefaultCustomIngredients.nbt(
+          ItemStack(Registries.ITEM.get(Identifier(ComputerCraftAPI.MOD_ID, "computer_advanced"))),
+          true
+        )
+      )
+      .hasComputer()
+      .offerTo(exporter)
+
     // 3D prints (glowstone, beacon blocks)
     BetterComplexRecipeJsonBuilder(ModItems.print, PrintRecipe.recipeSerializer)
       .criterion("has_printer", inventoryChange(ModItems.printer))
