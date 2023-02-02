@@ -40,22 +40,71 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
     be.dataUpdated()
   }
 
-  @LuaFunction
+  @LuaFunction(mainThread = true)
   fun setPaletteColor(index: Int, red: Int, green: Int, blue: Int) {
     if (index !in 1..64) throw LuaException("Invalid palette index")
-    be.data.posterId = null
+    be.data.posterId = null // mutative operation, so we need to invalidate the poster
     be.data.palette[index - 1] = (red shl 16) or (green shl 8) or blue
     be.dataUpdated()
   }
 
-  @LuaFunction
+  @LuaFunction(mainThread = true)
   fun setPixel(x: Int, y: Int, color: Int) {
     if (x !in 1..128 || y !in 1..128) throw LuaException("Invalid pixel coordinates")
     if (color !in 1..64) throw LuaException("Invalid color index")
-    be.data.posterId = null
+    be.data.posterId = null // mutative operation, so we need to invalidate the poster
     be.data.colors[(x-1) + (y-1) * 128] = color.toByte()
     be.dataUpdated()
   }
+
+  @LuaFunction(mainThread = true)
+  fun blitPixels(x: Int, y: Int, pixelMap: Map<*, *>) {
+    if (x !in 1..128 || y !in 1..128) throw LuaException("Invalid pixel coordinates")
+
+    val pixels = luaTableToList(pixelMap) { (it as? Number ?: throw LuaException("Expected number")).toByte() }
+    if (pixels.size > 128 * 128) throw LuaException("Too many pixels")
+    be.data.posterId = null // mutative operation, so we need to invalidate the poster
+
+    for (i in pixels.indices) {
+      val color = pixels[i]
+      if (color !in 1..64) throw LuaException("Invalid color index")
+
+      val index = (x-1) + (y-1) * 128 + i
+      if (index >= 128 * 128) throw LuaException("Too many pixels")
+      be.data.colors[index] = color
+    }
+
+    be.dataUpdated()
+  }
+
+  @LuaFunction(mainThread = true)
+  fun blitPalette(paletteMap: Map<*, *>) {
+    val palette = luaTableToList(paletteMap) { (it as? Number ?: throw LuaException("Expected number")).toInt() }
+    if (palette.size > 64) throw LuaException("Too many palette colors")
+    be.data.posterId = null // mutative operation, so we need to invalidate the poster
+
+    for (i in palette.indices) {
+      val color = palette[i]
+      if (color !in 0..0xFFFFFF) throw LuaException("Invalid color")
+
+      be.data.palette[i] = color
+    }
+
+    be.dataUpdated()
+  }
+
+  private inline fun <reified T: Number> luaTableToList(table: Map<*, *>, crossinline transform: (Any) -> T): List<T>
+    = table.run {
+        ArrayList<T>(size).also {
+          for (i in 1..size) {
+            val key = i.toDouble() // Lua numbers are doubles
+            if (key !in keys) break
+
+            val color = get(key) ?: throw IllegalStateException("Missing key $key")
+            it.add(transform(color))
+          }
+        }
+      }
 
   @LuaFunction(mainThread = true)
   fun commit(count: Int): Boolean {
@@ -90,8 +139,8 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
   override fun equals(other: IPeripheral?): Boolean = this == other
 
   companion object {
-    private const val printStatusEvent = "3d_printer_state" // args: status:string
-    private const val printCompleteEvent = "3d_printer_complete" // args: remaining:number
+    private const val printStatusEvent = "poster_printer_state" // args: status:string
+    private const val printCompleteEvent = "poster_printer_complete" // args: remaining:number
 
     fun printerStatus(be: PosterPrinterBlockEntity): Pair<String, Any> {
       return if (be.printing || be.printProgress > 0) Pair("busy", be.printProgress)

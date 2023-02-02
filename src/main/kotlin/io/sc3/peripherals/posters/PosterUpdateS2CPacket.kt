@@ -3,21 +3,23 @@ package io.sc3.peripherals.posters
 import io.sc3.library.networking.ScLibraryPacket
 import io.sc3.peripherals.ScPeripherals
 import io.sc3.peripherals.client.item.PosterRenderer
+import io.sc3.peripherals.posters.PosterState.Companion.logger
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 data class PosterUpdateS2CPacket(
   val posterId: String,
   private val updateData: PosterState.UpdateData?
 ) : ScLibraryPacket() {
-  val logger = LoggerFactory.getLogger(PosterUpdateS2CPacket::class.java)
-
   override val id = PosterUpdateS2CPacket.id
 
   companion object {
+    val logger: Logger = LoggerFactory.getLogger(PosterUpdateS2CPacket::class.java)
+
     val id = ScPeripherals.ModId("poster_update")
 
     fun fromBytes(buf: PacketByteBuf) = PosterUpdateS2CPacket(

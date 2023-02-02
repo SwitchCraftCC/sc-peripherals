@@ -41,7 +41,6 @@ class PosterPrinterScreenHandler(
   init {
     checkSize(inv, 3)
 
-    // TODO: Validating slots
     paperSlot = addSlot(ValidatingSlot(inv, PAPER_SLOT, 62, 35) { s -> s.isOf(Items.PAPER) })
     inkSlot = addSlot(ValidatingSlot(inv, INK_SLOT, 17, 53) { s -> s.isOf(ModItems.inkCartridge) })
     outputSlot = addSlot(ValidatingSlot(inv, OUTPUT_SLOT, 116, 35) { false })

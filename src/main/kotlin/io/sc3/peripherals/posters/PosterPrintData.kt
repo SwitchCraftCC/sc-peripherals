@@ -19,7 +19,7 @@ fun getDefaultPalette() = MapColorAccessor.getColors().map { it?.color ?: MapCol
 data class PosterPrintData(
   private val initialLabel: String? = null,
   var tooltip: String? = null,
-  val colors: ByteArray = ByteArray(128 * 128) { 0 },
+  val colors: ByteArray = ByteArray(128 * 128),
   var palette: IntArray = getDefaultPalette(),
   var posterId: String? = null,
 ) {
@@ -48,7 +48,7 @@ data class PosterPrintData(
     val nbt = NbtCompound()
     nbt.putOptString("label", label?.takeIf { it.isValidLabel() })
     nbt.putOptString("tooltip", tooltip?.takeIf { it.isValidTooltip() })
-    posterId?.let { nbt.putString(POSTER_KEY, it) }
+    nbt.putOptString(POSTER_KEY, posterId)
 
     return nbt
   }
@@ -83,9 +83,9 @@ data class PosterPrintData(
     fun fromNbt(nbt: NbtCompound) = PosterPrintData(
       initialLabel = nbt.optString("label")?.takeIf { it.isValidLabel() },
       tooltip = nbt.optString("tooltip"),
-      colors = nbt.getByteArray("colors").takeIf { it.size == 16384 } ?: ByteArray(128 * 128) { 0 },
+      colors = nbt.getByteArray("colors").takeIf { it.size == 16384 } ?: ByteArray(128 * 128),
       palette = nbt.getIntArray("palette").takeIf { it.size == 64 } ?: getDefaultPalette(),
-      posterId = nbt.getString(POSTER_KEY).ifEmpty { null },
+      posterId = nbt.optString(POSTER_KEY)?.ifEmpty { null },
     )
 
     private fun String?.isValidLabel() = this?.length in 1..MAX_LABEL_LENGTH
