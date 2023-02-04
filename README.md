@@ -7,8 +7,9 @@
 <!-- modrinth_exclude.end -->
 
 Fabric 1.19 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
-The main feature currently is 3D Printers in the style of 
-[OpenComputers](https://github.com/MightyPirates/OpenComputers).
+It adds a 3D printer in the style of 
+[OpenComputers](https://github.com/MightyPirates/OpenComputers), and a poster printer that prints custom images to
+display in item frames.
 
 View the documentation at [docs.sc3.io](https://docs.sc3.io/whats-new/sc-peripherals.html).
 
