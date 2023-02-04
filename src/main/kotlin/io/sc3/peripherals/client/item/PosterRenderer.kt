@@ -231,10 +231,9 @@ object PosterRenderer : AutoCloseable {
 
   @JvmStatic
   fun renderFirstPersonMap(matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, swingProgress: Int, stack: ItemStack, world: World?) {
-    val posterId = getPosterId(stack) ?: return
-
     drawBackground(matrices, vertexConsumers, swingProgress)
 
+    val posterId = getPosterId(stack) ?: return
     val posterState = getPosterState(posterId, world)
     if (posterState != null) {
       draw(matrices, vertexConsumers, posterId, posterState, swingProgress)
