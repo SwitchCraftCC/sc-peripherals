@@ -6,9 +6,14 @@
   "mixins": [
     "BeaconBlockEntityMixin",
     "ItemStackMixin",
+    "EntityTrackerEntryMixin",
+    "ItemFrameEntityMixin",
+    "MapColorAccessor",
     "ServerPlayerEntityScreenHandlerSyncHandlerMixin"
   ],
   "client": [
+    "HeldItemRendererMixin",
+    "ItemFrameEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

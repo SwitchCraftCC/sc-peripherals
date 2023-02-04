@@ -25,3 +25,10 @@ noclip_cost_multiplier = 2
 # printed model. The multiplier is applied to the original material cost. 1 is
 # a full refund, 0 disables refunding completely.
 recycle_value_multiplier = 0.75
+
+[poster_printer]
+# The amount of time, in ticks, it takes for the printer to print a single item.
+print_ticks = 100
+# The amount of ink a single poster will use when printed using all 128x128 pixels.
+# A poster that uses less pixels will use proportionally less ink.
+ink_cost = 5000

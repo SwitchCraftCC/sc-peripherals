@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "sc-peripherals:block/poster_printer",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "sc-peripherals:block/poster_printer"
+    },
+    "facing=south": {
+      "model": "sc-peripherals:block/poster_printer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sc-peripherals:block/poster_printer",
+      "y": 270
+    }
+  }
+}

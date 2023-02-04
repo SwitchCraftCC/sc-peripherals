@@ -138,6 +138,8 @@ tasks {
   }
 
   loom {
+    accessWidenerPath.set(file("src/main/resources/sc-peripherals.accesswidener"))
+
     sourceSets {
       main {
         resources {
@@ -150,6 +152,7 @@ tasks {
     runs {
       configureEach {
         property("fabric.debug.disableModShuffle")
+//        vmArgs("-XX:+AllowEnhancedClassRedefinition")
       }
       create("datagen") {
         client()

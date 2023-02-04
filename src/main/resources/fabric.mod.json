@@ -53,7 +53,7 @@
   "mixins": [
     "sc-peripherals.mixins.json"
   ],
-
+  "accessWidener": "sc-peripherals.accesswidener",
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",

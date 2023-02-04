@@ -1,13 +1,23 @@
-package io.sc3.peripherals.prints.printer
+package io.sc3.peripherals.posters.printer
 
+import io.sc3.library.WaterloggableBlock
+import io.sc3.library.WaterloggableBlock.Companion.waterlogged
+import io.sc3.library.ext.rotateTowards
+import io.sc3.library.ext.toDiv16VoxelShape
+import io.sc3.library.ext.toMul16
+import io.sc3.peripherals.Registration.ModBlockEntities.posterPrinter
+import io.sc3.peripherals.util.BaseBlockWithEntity
 import net.minecraft.block.Block
+import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityTicker
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.state.StateManager
+import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.ActionResult
@@ -17,19 +27,29 @@ import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
+import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import io.sc3.library.WaterloggableBlock
-import io.sc3.library.WaterloggableBlock.Companion.waterlogged
-import io.sc3.peripherals.Registration.ModBlockEntities.printer
-import io.sc3.peripherals.util.BaseBlockWithEntity
 
-class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
+class PosterPrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {
     defaultState = defaultState
       .with(facing, Direction.NORTH)
       .with(waterlogged, false)
+      .with(printing, false)
+      .with(hasPaper, false)
   }
+
+  override fun getOutlineShape(
+    state: BlockState?,
+    world: BlockView?,
+    pos: BlockPos?,
+    context: ShapeContext?
+  ): VoxelShape = voxelShapes[state?.get(facing) ?: Direction.NORTH]!!
+
+  override fun getRenderType(state: BlockState?) = BlockRenderType.ENTITYBLOCK_ANIMATED
 
   override fun onUse(state: BlockState, world: World, pos: BlockPos, player: PlayerEntity, hand: Hand,
                      hit: BlockHitResult): ActionResult {
@@ -42,19 +62,22 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
   }
 
   override fun createBlockEntity(pos: BlockPos, state: BlockState) =
-    PrinterBlockEntity(pos, state)
+    PosterPrinterBlockEntity(pos, state)
 
   override fun <T : BlockEntity?> getTicker(
     world: World,
     state: BlockState,
     type: BlockEntityType<T>
   ): BlockEntityTicker<T>? {
-    if (world.isClient) return null
-    return checkType(type, printer, PrinterBlockEntity.Companion::onTick)
+    return if (world.isClient) {
+      checkType(type, posterPrinter, PosterPrinterBlockEntity.Companion::onClientTick)
+    } else {
+      checkType(type, posterPrinter, PosterPrinterBlockEntity.Companion::onTick)
+    }
   }
 
   override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
-    builder.add(facing, waterlogged)
+    builder.add(facing, waterlogged, printing, hasPaper)
   }
 
   override fun mirror(state: BlockState, mirror: BlockMirror) =
@@ -66,6 +89,8 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
   override fun getPlacementState(ctx: ItemPlacementContext) = defaultState
     .with(facing, ctx.playerFacing.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
+    .with(printing, false)
+    .with(hasPaper, false)
 
   // Waterlogging
   override fun getFluidState(state: BlockState) = fluidState(state)
@@ -77,5 +102,28 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
 
   companion object {
     val facing: DirectionProperty = Properties.HORIZONTAL_FACING
+    val printing: BooleanProperty = BooleanProperty.of("printing")
+    val hasPaper: BooleanProperty = BooleanProperty.of("has_paper")
+
+    private val cuboids = listOf(
+      VoxelShapes.cuboid(0.0, 0.0, 0.25, 1.0, 0.125, 1.0),
+      VoxelShapes.cuboid(0.125, 0.0625, 0.0, 0.875, 0.125, 0.25),
+      VoxelShapes.cuboid(0.0, 0.125, 0.5625, 1.0, 0.625, 1.0),
+      VoxelShapes.cuboid(0.0, 0.125, 0.4375, 0.125, 0.25, 0.5625),
+      VoxelShapes.cuboid(0.875, 0.125, 0.4375, 1.0, 0.25, 0.5625),
+      VoxelShapes.cuboid(0.0, 0.25, 0.4375, 1.0, 0.5, 0.5625),
+      VoxelShapes.cuboid(0.125, 0.625, 0.9375, 0.875, 1.0, 1.0),
+    )
+
+    private val voxelShapes = listOf(
+      Direction.NORTH,
+      Direction.EAST,
+      Direction.SOUTH,
+      Direction.WEST
+    ).associateWith(::makeShapesForDirection)
+
+    private fun makeShapesForDirection(direction: Direction): VoxelShape = cuboids
+      .map { it.boundingBox.toMul16().rotateTowards(direction).toDiv16VoxelShape() }
+      .reduce { acc, shape -> VoxelShapes.union(acc, shape) }
   }
 }

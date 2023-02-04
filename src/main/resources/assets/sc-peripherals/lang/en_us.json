@@ -4,6 +4,9 @@
   "block.sc-peripherals.printer": "3D Printer",
   "block.sc-peripherals.printer.desc": "Prints custom 3D models from a computer.",
 
+  "block.sc-peripherals.poster_printer": "Wide Format Printer",
+  "block.sc-peripherals.poster_printer.desc": "Prints custom posters from a computer.",
+
   "gui.sc-peripherals.printer.title": "3D Printer",
   "gui.sc-peripherals.printer.chamelium": "Chamelium: %d/%d",
   "gui.sc-peripherals.printer.ink": "Ink: %d/%d",
@@ -19,6 +22,9 @@
   "item.sc-peripherals.texture_analyzer.title": "Textures for %s (click to copy):",
   "item.sc-peripherals.texture_analyzer.copy": "Click to copy to clipboard",
   "item.sc-peripherals.texture_analyzer.no_textures": "No textures found for %s - some custom models are not yet supported, sorry!",
+  "item.sc-peripherals.poster": "Poster",
+  "item.sc-peripherals.poster.unknown": "Unknown Poster",
+  "item.sc-peripherals.poster.id": "Id #%s",
 
   "block.sc-peripherals.print": "3D Print",
   "block.sc-peripherals.print.beacon_base": "Works as a beacon base.",

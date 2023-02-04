@@ -13,6 +13,7 @@ class ModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
     gen.registerSimpleCubeAll(ModBlocks.chamelium)
     gen.registerSimpleState(ModBlocks.print)
     gen.registerNorthDefaultHorizontalRotation(ModBlocks.printer)
+    gen.registerNorthDefaultHorizontalRotation(ModBlocks.posterPrinter)
   }
 
   override fun generateItemModels(gen: ItemModelGenerator) {
@@ -20,5 +21,6 @@ class ModelProvider(out: FabricDataOutput) : FabricModelProvider(out) {
     gen.register(ModItems.inkCartridge, GENERATED)
     gen.register(ModItems.emptyInkCartridge, GENERATED)
     gen.register(ModItems.textureAnalyzer, GENERATED)
+    gen.register(ModItems.poster, GENERATED)
   }
 }
