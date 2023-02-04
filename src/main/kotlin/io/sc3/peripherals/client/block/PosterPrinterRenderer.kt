@@ -22,6 +22,8 @@ import net.minecraft.util.math.RotationAxis
 import org.joml.Matrix3f
 import org.joml.Matrix4f
 
+private const val ROLLER_OFFSET_TICKS = 9 // 45 degrees
+
 object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
   private val texture = ModId("textures/entity/poster_printer.png")
   private val layer = RenderLayer.getEntityCutout(texture)
@@ -141,6 +143,7 @@ object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
   ) {
     val facing = entity.cachedState.get(PosterPrinterBlock.facing)
     val isPrinting = entity.cachedState.get(PosterPrinterBlock.printing)
+    val animationTicks = entity.animationTicks
 
     matrices.push()
 
@@ -148,9 +151,8 @@ object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
     matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180-facing.opposite.asRotation()))
     matrices.translate(-0.5, -0.5, -0.5)
 
-    if (isPrinting) {
-      roller.pitch = (System.currentTimeMillis() % 3600 / 10f) / 180f * -Math.PI.toFloat()
-    }
+    val animationProgress = (animationTicks + ROLLER_OFFSET_TICKS) + (if (isPrinting) tickDelta else 0.0f)
+    roller.pitch = (animationProgress * 5) / 180f * -Math.PI.toFloat()
 
     val consumer = vertexConsumers.getBuffer(layer)
     base.render(matrices, consumer, light, overlay)

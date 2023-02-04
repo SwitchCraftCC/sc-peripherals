@@ -2,7 +2,9 @@ package io.sc3.peripherals.posters.printer
 
 import io.sc3.library.WaterloggableBlock
 import io.sc3.library.WaterloggableBlock.Companion.waterlogged
-import io.sc3.library.ext.*
+import io.sc3.library.ext.rotateTowards
+import io.sc3.library.ext.toDiv16VoxelShape
+import io.sc3.library.ext.toMul16
 import io.sc3.peripherals.Registration.ModBlockEntities.posterPrinter
 import io.sc3.peripherals.util.BaseBlockWithEntity
 import net.minecraft.block.Block
@@ -67,8 +69,11 @@ class PosterPrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Wa
     state: BlockState,
     type: BlockEntityType<T>
   ): BlockEntityTicker<T>? {
-    if (world.isClient) return null
-    return checkType(type, posterPrinter, PosterPrinterBlockEntity.Companion::onTick)
+    return if (world.isClient) {
+      checkType(type, posterPrinter, PosterPrinterBlockEntity.Companion::onClientTick)
+    } else {
+      checkType(type, posterPrinter, PosterPrinterBlockEntity.Companion::onTick)
+    }
   }
 
   override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {

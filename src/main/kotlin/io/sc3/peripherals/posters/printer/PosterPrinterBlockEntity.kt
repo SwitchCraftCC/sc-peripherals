@@ -33,7 +33,6 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
-import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -48,6 +47,7 @@ class PosterPrinterBlockEntity(
 
   var animatingPosterId: String? = null
   var animationStartTime: Long = 0
+  var animationTicks: Long = 0
 
   var data: PosterPrintData = PosterPrintData(
     null, null, ByteArray(128*128)
@@ -329,6 +329,10 @@ class PosterPrinterBlockEntity(
 
     fun onTick(world: World, pos: BlockPos, state: BlockState, be: PosterPrinterBlockEntity) {
       be.onTick(world)
+    }
+
+    fun onClientTick(world: World, pos: BlockPos, state: BlockState, be: PosterPrinterBlockEntity) {
+      if (be.cachedState.get(PosterPrinterBlock.printing)) be.animationTicks++
     }
   }
 }
