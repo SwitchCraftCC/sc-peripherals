@@ -86,7 +86,7 @@ object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
 
     val posterId = entity.animatingPosterId ?: return
     val world = entity.world ?: return
-    val animationTime = (world.time + tickDelta) - entity.animationStartTime
+    val animationTime = (world.time - entity.animationStartTime) + tickDelta
     val progress = (animationTime / entity.maxPrintProgress).coerceIn(0f, 1f)
     if (progress >= 1f) {
       val overshoot = world.time - (entity.animationStartTime + entity.maxPrintProgress)
