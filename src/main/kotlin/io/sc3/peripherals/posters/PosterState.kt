@@ -42,21 +42,27 @@ class PosterState : PersistentState() {
   }
 
   fun update(player: PlayerEntity) {
-    if (!this.updateTrackersByPlayer.containsKey(player)) {
-      val playerUpdateTracker: PosterState.PlayerUpdateTracker = this.PlayerUpdateTracker(player)
-      this.updateTrackersByPlayer[player] = playerUpdateTracker
+    synchronized(updateTrackersByPlayer) {
+      if (!this.updateTrackersByPlayer.containsKey(player)) {
+        val playerUpdateTracker: PosterState.PlayerUpdateTracker = this.PlayerUpdateTracker(player)
+        this.updateTrackersByPlayer[player] = playerUpdateTracker
+      }
     }
   }
 
   fun pruneTrackers(stack: ItemStack) {
-    for (tracker in updateTrackersByPlayer.values) {
-      if (tracker.player.isRemoved || !(tracker.player.inventory.contains(stack) || stack.isInFrame)) {
-        this.updateTrackersByPlayer.remove(tracker.player)
+    synchronized(updateTrackersByPlayer) {
+      for (tracker in updateTrackersByPlayer.values) {
+        if (tracker.player.isRemoved || !(tracker.player.inventory.contains(stack) || stack.isInFrame)) {
+          this.updateTrackersByPlayer.remove(tracker.player)
+        }
       }
     }
   }
 
   companion object {
+    private val logger = LoggerFactory.getLogger(PosterState::class.java)
+
     fun fromNbt(nbt: NbtCompound): PosterState? {
       val posterState = PosterState()
       val colorArray = nbt.getByteArray("colors")
@@ -73,23 +79,27 @@ class PosterState : PersistentState() {
 
     @JvmStatic
     fun tickEntityTracker(entity: ItemFrameEntity, world: ServerWorld) {
-      val itemStack = entity.heldItemStack
+      try {
+        val itemStack = entity.heldItemStack
 
-      if (itemStack.item === poster) {
-        val id = getPosterId(itemStack) ?: return
-        val posterState = getPosterState(id, world)
-        if (posterState != null) {
+        if (itemStack.item === poster) {
+          val id = getPosterId(itemStack) ?: return
+          val posterState = getPosterState(id, world)
+          if (posterState != null) {
 
-          // TODO: Don't send to players who can't see the poster
-          for (serverPlayerEntity in world.players) {
-            posterState.update(serverPlayerEntity)
-            val packet = posterState.getPlayerUpdatePacket(id, serverPlayerEntity)
-            if (packet != null) {
-              serverPlayerEntity.networkHandler.sendPacket(packet.toS2CPacket())
+            // TODO: Don't send to players who can't see the poster
+            for (serverPlayerEntity in world.players) {
+              posterState.update(serverPlayerEntity)
+              val packet = posterState.getPlayerUpdatePacket(id, serverPlayerEntity)
+              if (packet != null) {
+                serverPlayerEntity.networkHandler.sendPacket(packet.toS2CPacket())
+              }
             }
+            posterState.pruneTrackers(itemStack)
           }
-          posterState.pruneTrackers(itemStack)
         }
+      } catch (e: Exception) {
+        logger.error("Error ticking entity tracker", e)
       }
     }
   }

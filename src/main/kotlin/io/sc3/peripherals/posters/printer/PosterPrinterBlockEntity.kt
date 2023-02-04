@@ -9,6 +9,9 @@ import io.sc3.peripherals.config.ScPeripheralsConfig.config
 import io.sc3.peripherals.posters.PosterItem
 import io.sc3.peripherals.posters.PosterItem.Companion.POSTER_KEY
 import io.sc3.peripherals.posters.PosterPrintData
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.downSideSlots
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
+import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.otherSideSlots
 import io.sc3.peripherals.util.BaseBlockEntity
 import io.sc3.peripherals.util.ImplementedInventory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -35,6 +38,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
+import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
@@ -145,43 +149,47 @@ class PosterPrinterBlockEntity(
   }
 
   fun onTick(world: World) {
-    if (world.isClient) return
+    try {
+      if (world.isClient) return
 
-    tickInputSlot()
-    tickOutputSlot(world)
+      tickInputSlot()
+      tickOutputSlot(world)
 
-    if (inksDirty || outputDirty || dataDirty) {
-      markDirty()
-    }
+      if (inksDirty || outputDirty || dataDirty) {
+        markDirty()
+      }
 
-    if (outputDirty || world.time % 20 == 0L) {
-      PosterItem.getPosterId(getStack(OUTPUT_SLOT))?.let { sendPosterState(it, world) }
-    }
+      if (outputDirty || world.time % 20 == 0L) {
+        PosterItem.getPosterId(getStack(OUTPUT_SLOT))?.let { sendPosterState(it, world) }
+      }
 
-    // Send ink update packets to any tracking entities
-    if (inksDirty) {
-      sendToAllTracking(world.getWorldChunk(pos), PosterPrinterInkPacket(pos, ink))
-      inksDirty = false
-    }
+      // Send ink update packets to any tracking entities
+      if (inksDirty) {
+        sendToAllTracking(world.getWorldChunk(pos), PosterPrinterInkPacket(pos, ink))
+        inksDirty = false
+      }
 
-    if (outputDirty) {
-      outputDirty = false
-    }
+      if (outputDirty) {
+        outputDirty = false
+      }
 
-    // Send data update packets to any tracking entities
-    if (dataDirty) {
+      // Send data update packets to any tracking entities
+      if (dataDirty) {
 //      sendToAllTracking(world.getWorldChunk(pos), PrinterDataPacket(pos, data))
-      dataDirty = false
-    }
+        dataDirty = false
+      }
 
-    val activelyPrinting = !outputStack.isEmpty
-    if (activelyPrinting != cachedState.get(PosterPrinterBlock.printing)) {
-      world.setBlockState(pos, cachedState.with(PosterPrinterBlock.printing, activelyPrinting))
-    }
+      val activelyPrinting = !outputStack.isEmpty
+      if (activelyPrinting != cachedState.get(PosterPrinterBlock.printing)) {
+        world.setBlockState(pos, cachedState.with(PosterPrinterBlock.printing, activelyPrinting))
+      }
 
-    val hasPaper = !getStack(PAPER_SLOT).isEmpty
-    if (hasPaper != cachedState.get(PosterPrinterBlock.hasPaper)) {
-      world.setBlockState(pos, cachedState.with(PosterPrinterBlock.hasPaper, hasPaper))
+      val hasPaper = !getStack(PAPER_SLOT).isEmpty
+      if (hasPaper != cachedState.get(PosterPrinterBlock.hasPaper)) {
+        world.setBlockState(pos, cachedState.with(PosterPrinterBlock.hasPaper, hasPaper))
+      }
+    } catch (e: Exception) {
+      logger.error("Error in poster printer tick", e)
     }
   }
 
@@ -330,6 +338,8 @@ class PosterPrinterBlockEntity(
   val peripheral by lazy { PosterPrinterPeripheral(this) }
 
   companion object {
+    private val logger = LoggerFactory.getLogger(PosterPrinterBlockEntity::class.java)
+
     const val maxInk = 100000
 
     val downSideSlots = intArrayOf(OUTPUT_SLOT, INK_SLOT) // allow extracting output prints and empty ink cartridges

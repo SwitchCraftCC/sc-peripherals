@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.client.item.PosterRenderer
 import io.sc3.peripherals.client.item.PosterRenderer.POSTER_BACKGROUND_RES
+import io.sc3.peripherals.posters.PosterUpdateS2CPacket.Companion.logger
 import io.sc3.peripherals.util.BaseNetworkSyncedItem
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.MinecraftClient
@@ -28,6 +29,7 @@ import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
+import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.security.MessageDigest
@@ -45,13 +47,17 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
   }
 
   override fun inventoryTick(stack: ItemStack, world: World, entity: Entity?, slot: Int, selected: Boolean) {
-    if (!world.isClient) {
-      val mapState = getOrCreatePosterState(stack, world)
-      if (mapState != null) {
-        if (entity is PlayerEntity) {
-          mapState.update(entity)
+    try {
+      if (!world.isClient) {
+        val mapState = getOrCreatePosterState(stack, world)
+        if (mapState != null) {
+          if (entity is PlayerEntity) {
+            mapState.update(entity)
+          }
         }
       }
+    } catch (e: Exception) {
+      logger.error("Error while ticking poster item", e)
     }
   }
 
@@ -111,6 +117,8 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
   }
 
   companion object {
+    private val logger = LoggerFactory.getLogger(PosterItem::class.java)
+
     const val POSTER_KEY = "poster"
 
     fun getPosterName(posterId: String) = "posters/${posterId.take(2)}/$posterId"
