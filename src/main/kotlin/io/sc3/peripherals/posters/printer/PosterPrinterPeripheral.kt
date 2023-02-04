@@ -40,7 +40,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
     be.dataUpdated()
   }
 
-  @LuaFunction(mainThread = true)
+  @LuaFunction(value = ["setPaletteColor", "setPaletteColour"], mainThread = true)
   fun setPaletteColor(index: Int, red: Int, green: Int, blue: Int) {
     if (index !in 1..64) throw LuaException("Invalid palette index")
     be.data.posterId = null // mutative operation, so we need to invalidate the poster
