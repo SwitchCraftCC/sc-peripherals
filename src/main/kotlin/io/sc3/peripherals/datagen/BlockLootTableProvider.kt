@@ -21,6 +21,8 @@ class BlockLootTableProvider(out: FabricDataOutput) : FabricBlockLootTableProvid
             .with(DynamicEntry.builder(PrintBlock.dropId))
         )
       )
-    );
+    )
+
+    addDrop(ModBlocks.posterPrinter)
   }
 }
