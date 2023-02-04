@@ -42,18 +42,18 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
   @LuaFunction(value = ["setPaletteColor", "setPaletteColour"], mainThread = true)
   fun setPaletteColor(index: Int, red: Int, green: Int, blue: Int) {
-    if (index !in 1..64) throw LuaException("Invalid palette index")
+    if (index !in 1..63) throw LuaException("Palette index $index out of range [1, 63]" + if (index == 0) " (0 is reserved for transparent)" else "")
     be.data.posterId = null // mutative operation, so we need to invalidate the poster
-    be.data.palette[index - 1] = (red shl 16) or (green shl 8) or blue
+    be.data.palette[index] = (red shl 16) or (green shl 8) or blue
     be.dataUpdated()
   }
 
   @LuaFunction(mainThread = true)
   fun setPixel(x: Int, y: Int, color: Int) {
     if (x !in 1..128 || y !in 1..128) throw LuaException("Invalid pixel coordinates")
-    if (color !in 1..64) throw LuaException("Invalid color index")
+    if (color !in 0..63) throw LuaException("Color index $color out of range [0, 63]")
     be.data.posterId = null // mutative operation, so we need to invalidate the poster
-    be.data.colors[(x-1) + (y-1) * 128] = (color - 1).toByte()
+    be.data.colors[(x-1) + (y-1) * 128] = color.toByte()
     be.dataUpdated()
   }
 
@@ -67,7 +67,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
     for (i in pixels.indices) {
       val color = pixels[i]
-      if (color !in 1..64) throw LuaException("Invalid color index")
+      if (color !in 0..63) throw LuaException("Color index $color out of range [0, 63]")
 
       val index = (x-1) + (y-1) * 128 + i
       if (index >= 128 * 128) throw LuaException("Too many pixels")
@@ -80,14 +80,14 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
   @LuaFunction(mainThread = true)
   fun blitPalette(paletteMap: Map<*, *>) {
     val palette = luaTableToList(paletteMap) { (it as? Number ?: throw LuaException("Expected number")).toInt() }
-    if (palette.size > 64) throw LuaException("Too many palette colors")
+    if (palette.size > 63) throw LuaException("Too many palette colors (max 63, got ${palette.size})")
     be.data.posterId = null // mutative operation, so we need to invalidate the poster
 
     for (i in palette.indices) {
       val color = palette[i]
       if (color !in 0..0xFFFFFF) throw LuaException("Invalid color")
 
-      be.data.palette[i] = color
+      be.data.palette[i + 1] = color // non-transparent palette indices start at 1
     }
 
     be.dataUpdated()
@@ -144,7 +144,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
     fun printerStatus(be: PosterPrinterBlockEntity): Pair<String, Any> {
       return if (be.printing || be.printProgress > 0) Pair("busy", be.printProgress)
-      else Pair("idle", true)
+      else Pair("idle", be.canPrint())
     }
 
     fun sendPrintStatusEvent(be: PosterPrinterBlockEntity) {

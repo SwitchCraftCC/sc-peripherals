@@ -132,6 +132,18 @@ class PosterPrinterBlockEntity(
     return current.isEmpty || (current.isItemEqual(output) && ItemStack.areNbtEqual(current, output))
   }
 
+  fun canPrint(): Boolean {
+    if (outputStack.isEmpty && canMergeOutput()) {
+      val cost = data.computeCosts()
+      val paperStack = getStack(PAPER_SLOT)
+      if (ink >= cost && paperStack.count >= 1) {
+        return true
+      }
+    }
+
+    return false
+  }
+
   fun onTick(world: World) {
     if (world.isClient) return
 
@@ -206,34 +218,26 @@ class PosterPrinterBlockEntity(
 
   private fun tickOutputSlot(world: World) {
     // Printing logic
-    if (printing && outputStack.isEmpty && canMergeOutput()) {
+    if (printing && canPrint()) {
       val cost = data.computeCosts()
-      if (cost != null) {
-        val paperStack = getStack(PAPER_SLOT)
-        if (ink >= cost && paperStack.count >= 1) {
-          // Start printing a single item and consume the inks
-          ink -= cost
-          inksDirty = true
-          paperStack.decrement(1)
+      val paperStack = getStack(PAPER_SLOT)
 
-          printCount--
-          outputStack = PosterItem.create(world, data)
-          val posterId = outputStack.nbt!!.getString(POSTER_KEY)
-          data.posterId = posterId // Allow merging with the output stack
-          if (printCount < 1) printing = false
+      // Start printing a single item and consume the inks
+      ink -= cost
+      inksDirty = true
+      paperStack.decrement(1)
 
-          // Send animation packet to all tracking entities
-          sendToAllTracking(world.getWorldChunk(pos), PosterPrinterStartPrintPacket(pos, posterId))
-          sendPosterState(posterId, world) // Make sure clients can render the poster during the print animation
+      printCount--
+      outputStack = PosterItem.create(world, data)
+      val posterId = outputStack.nbt!!.getString(POSTER_KEY)
+      data.posterId = posterId // Allow merging with the output stack
+      if (printCount < 1) printing = false
 
-          outputDirty = true
-        }
-      } else {
-        printing = false
-        outputDirty = true
-        data = PosterPrintData()
-        dataUpdated()
-      }
+      // Send animation packet to all tracking entities
+      sendToAllTracking(world.getWorldChunk(pos), PosterPrinterStartPrintPacket(pos, posterId))
+      sendPosterState(posterId, world) // Make sure clients can render the poster during the print animation
+
+      outputDirty = true
     }
 
     if (!outputStack.isEmpty) {
