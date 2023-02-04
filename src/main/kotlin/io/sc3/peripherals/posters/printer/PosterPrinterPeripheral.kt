@@ -53,7 +53,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
     if (x !in 1..128 || y !in 1..128) throw LuaException("Invalid pixel coordinates")
     if (color !in 1..64) throw LuaException("Invalid color index")
     be.data.posterId = null // mutative operation, so we need to invalidate the poster
-    be.data.colors[(x-1) + (y-1) * 128] = color.toByte()
+    be.data.colors[(x-1) + (y-1) * 128] = (color - 1).toByte()
     be.dataUpdated()
   }
 
@@ -71,7 +71,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
       val index = (x-1) + (y-1) * 128 + i
       if (index >= 128 * 128) throw LuaException("Too many pixels")
-      be.data.colors[index] = color
+      be.data.colors[index] = (color - 1).toByte()
     }
 
     be.dataUpdated()
