@@ -52,10 +52,8 @@ class PosterState : PersistentState() {
 
   fun pruneTrackers(stack: ItemStack) {
     synchronized(updateTrackersByPlayer) {
-      for (tracker in updateTrackersByPlayer.values) {
-        if (tracker.player.isRemoved || !(tracker.player.inventory.contains(stack) || stack.isInFrame)) {
-          this.updateTrackersByPlayer.remove(tracker.player)
-        }
+      updateTrackersByPlayer.values.removeIf {
+        it.player.isRemoved || !(it.player.inventory.contains(stack) || stack.isInFrame)
       }
     }
   }
