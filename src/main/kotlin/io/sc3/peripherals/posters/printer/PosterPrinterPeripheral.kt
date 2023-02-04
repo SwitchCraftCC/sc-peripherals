@@ -71,7 +71,7 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
 
       val index = (x-1) + (y-1) * 128 + i
       if (index >= 128 * 128) throw LuaException("Too many pixels")
-      be.data.colors[index] = (color - 1).toByte()
+      be.data.colors[index] = color
     }
 
     be.dataUpdated()
