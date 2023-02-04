@@ -1,19 +1,21 @@
 package io.sc3.peripherals.posters.printer
 
+import io.sc3.peripherals.Registration.ModItems
+import io.sc3.peripherals.Registration.ModScreens.posterPrinter
+import io.sc3.peripherals.util.PropertyDelegateGetter
+import io.sc3.peripherals.util.ValidatingSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ArrayPropertyDelegate
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.slot.Slot
-import io.sc3.peripherals.Registration.ModItems
-import io.sc3.peripherals.Registration.ModScreens.posterPrinter
-import io.sc3.peripherals.util.PropertyDelegateGetter
-import io.sc3.peripherals.util.ValidatingSlot
-import net.minecraft.item.Items
+import net.minecraft.util.math.BlockPos
 
 const val PAPER_SLOT = 0
 const val INK_SLOT = 1
@@ -25,6 +27,7 @@ class PosterPrinterScreenHandler(
   syncId: Int,
   playerInv: PlayerInventory,
   private val inv: Inventory,
+  val pos: BlockPos,
   propertyDelegate: PropertyDelegate
 ) : ScreenHandler(posterPrinter, syncId) {
   private val paperSlot: Slot
@@ -35,8 +38,10 @@ class PosterPrinterScreenHandler(
   val printProgress by PropertyDelegateGetter(propertyDelegate, 2)
   val maxPrintProgress by PropertyDelegateGetter(propertyDelegate, 3)
 
-  constructor(syncId: Int, playerInv: PlayerInventory) :
-    this(syncId, playerInv, SimpleInventory(3), ArrayPropertyDelegate(4))
+  val be by lazy { playerInv.player.world.getBlockEntity(pos) as? PosterPrinterBlockEntity }
+
+  constructor(syncId: Int, playerInv: PlayerInventory, buf: PacketByteBuf) :
+    this(syncId, playerInv, SimpleInventory(3), buf.readBlockPos(), ArrayPropertyDelegate(4))
 
   init {
     checkSize(inv, 3)

@@ -1,21 +1,6 @@
 package io.sc3.peripherals
 
 import dan200.computercraft.api.peripheral.PeripheralLookup
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
-import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
-import net.minecraft.block.AbstractBlock
-import net.minecraft.block.Block
-import net.minecraft.block.BlockState
-import net.minecraft.block.Material.STONE
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries.*
-import net.minecraft.registry.Registry.register
-import net.minecraft.screen.ScreenHandlerType
-import net.minecraft.util.math.BlockPos
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.block.ChameliumBlock
 import io.sc3.peripherals.datagen.recipes.handlers.RecipeHandlers
@@ -33,6 +18,22 @@ import io.sc3.peripherals.prints.PrintItem
 import io.sc3.peripherals.prints.printer.PrinterBlock
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity
 import io.sc3.peripherals.prints.printer.PrinterScreenHandler
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
+import net.fabricmc.fabric.api.`object`.builder.v1.block.entity.FabricBlockEntityTypeBuilder
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
+import net.minecraft.block.AbstractBlock
+import net.minecraft.block.Block
+import net.minecraft.block.BlockState
+import net.minecraft.block.Material.STONE
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.item.BlockItem
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries.*
+import net.minecraft.registry.Registry.register
+import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.util.math.BlockPos
 
 object Registration {
   private val items = mutableListOf<Item>()
@@ -106,6 +107,7 @@ object Registration {
 
   object ModScreens {
     val printer = register(SCREEN_HANDLER, ModId("printer"), ScreenHandlerType(::PrinterScreenHandler))
-    val posterPrinter = register(SCREEN_HANDLER, ModId("poster_printer"), ScreenHandlerType(::PosterPrinterScreenHandler))
+    val posterPrinter = register(SCREEN_HANDLER, ModId("poster_printer"),
+      ExtendedScreenHandlerType(::PosterPrinterScreenHandler))
   }
 }

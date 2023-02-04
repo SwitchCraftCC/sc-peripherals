@@ -11,6 +11,7 @@ import io.sc3.peripherals.posters.PosterItem.Companion.POSTER_KEY
 import io.sc3.peripherals.posters.PosterPrintData
 import io.sc3.peripherals.util.BaseBlockEntity
 import io.sc3.peripherals.util.ImplementedInventory
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.entity.player.PlayerEntity
@@ -21,11 +22,12 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.Packet
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.listener.ClientPlayPacketListener
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
-import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerChunkManager
 import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
@@ -39,7 +41,7 @@ import java.util.concurrent.ConcurrentHashMap
 class PosterPrinterBlockEntity(
   pos: BlockPos,
   state: BlockState
-) : BaseBlockEntity(posterPrinter, pos, state), NamedScreenHandlerFactory, ImplementedInventory, SidedInventory {
+) : BaseBlockEntity(posterPrinter, pos, state), ExtendedScreenHandlerFactory, ImplementedInventory, SidedInventory {
   private val inventory = DefaultedList.ofSize(INV_SIZE, ItemStack.EMPTY)
 
   /** Set of computers that are attached as a peripheral to the printer, so they may receive print state events. */
@@ -258,7 +260,11 @@ class PosterPrinterBlockEntity(
   }
 
   override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler =
-    PosterPrinterScreenHandler(syncId, inv, this, propertyDelegate)
+    PosterPrinterScreenHandler(syncId, inv, this, pos, propertyDelegate)
+
+  override fun writeScreenOpeningData(player: ServerPlayerEntity, buf: PacketByteBuf) {
+    buf.writeBlockPos(pos)
+  }
 
   override fun getDisplayName(): Text = Text.translatable(cachedState.block.translationKey)
 

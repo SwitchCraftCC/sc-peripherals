@@ -44,7 +44,7 @@ class PosterPrinterScreen(
   override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
     renderBackground(matrices)
 
-    inkBar.progress = handler.ink
+    inkBar.progress = handler.be?.ink ?: 0
 
     super.render(matrices, mouseX, mouseY, delta)
     drawMouseoverTooltip(matrices, mouseX, mouseY)
