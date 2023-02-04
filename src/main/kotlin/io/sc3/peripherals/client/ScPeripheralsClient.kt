@@ -1,14 +1,6 @@
 package io.sc3.peripherals.client
 
 import io.sc3.library.ext.ItemFrameEvents
-import net.fabricmc.api.ClientModInitializer
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
-import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
-import net.fabricmc.fabric.api.client.model.ModelResourceProvider
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
-import net.minecraft.client.gui.screen.ingame.HandledScreens
-import net.minecraft.client.render.RenderLayer
-import org.slf4j.LoggerFactory
 import io.sc3.library.networking.registerClientReceiver
 import io.sc3.peripherals.Registration
 import io.sc3.peripherals.client.block.PosterPrinterRenderer
@@ -18,6 +10,7 @@ import io.sc3.peripherals.client.block.PrinterRenderer
 import io.sc3.peripherals.client.gui.PosterPrinterScreen
 import io.sc3.peripherals.client.gui.PrinterScreen
 import io.sc3.peripherals.client.item.PosterRenderer
+import io.sc3.peripherals.posters.PosterItem
 import io.sc3.peripherals.posters.PosterUpdateS2CPacket
 import io.sc3.peripherals.posters.printer.PosterPrinterInkPacket
 import io.sc3.peripherals.posters.printer.PosterPrinterStartPrintPacket
@@ -26,6 +19,14 @@ import io.sc3.peripherals.prints.PrintItem
 import io.sc3.peripherals.prints.printer.PrinterDataPacket
 import io.sc3.peripherals.prints.printer.PrinterInkPacket
 import io.sc3.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket
+import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
+import net.fabricmc.fabric.api.client.model.ModelResourceProvider
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
+import net.minecraft.client.gui.screen.ingame.HandledScreens
+import net.minecraft.client.render.RenderLayer
+import org.slf4j.LoggerFactory
 
 object ScPeripheralsClient : ClientModInitializer {
   val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!
@@ -60,5 +61,7 @@ object ScPeripheralsClient : ClientModInitializer {
 
     // Clear 3D print cache on resource reload
     PrintBakedModel.init()
+
+    PosterItem.clientInit()
   }
 }

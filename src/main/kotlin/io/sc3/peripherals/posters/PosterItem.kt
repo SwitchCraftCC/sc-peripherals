@@ -34,17 +34,6 @@ import java.security.MessageDigest
 import java.util.*
 
 class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings) {
-
-  init {
-    TooltipComponentCallback.EVENT.register {
-      if (it is PosterTooltipData) {
-        PosterTooltipComponent(it.stack, MinecraftClient.getInstance().world)
-      } else {
-        null
-      }
-    }
-  }
-
   data class PosterTooltipData(val stack: ItemStack): TooltipData
 
   override fun getTooltipData(stack: ItemStack): Optional<TooltipData> = Optional.of(PosterTooltipData(stack))
@@ -125,6 +114,16 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
     const val POSTER_KEY = "poster"
 
     fun getPosterName(posterId: String) = "posters/${posterId.take(2)}/$posterId"
+
+    internal fun clientInit() {
+      TooltipComponentCallback.EVENT.register {
+        if (it is PosterTooltipData) {
+          PosterTooltipComponent(it.stack, MinecraftClient.getInstance().world)
+        } else {
+          null
+        }
+      }
+    }
 
     fun create(world: World, data: PosterPrintData): ItemStack {
       val itemStack = ItemStack(ModItems.poster)
