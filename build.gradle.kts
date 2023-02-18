@@ -28,6 +28,7 @@ val ccMcVersion: String by project
 val ccTargetVersion: String by project
 
 val cache2kVersion: String by project
+val prometheusVersion: String by project
 
 val nightConfigVersion: String by project
 val clothConfigVersion: String by project
@@ -107,6 +108,9 @@ dependencies {
 
   implementation(include("org.cache2k", "cache2k-api", cache2kVersion))
   implementation(include("org.cache2k", "cache2k-core", cache2kVersion))
+  implementation(include("io.prometheus", "simpleclient", prometheusVersion))
+  implementation(include("io.prometheus", "simpleclient_hotspot", prometheusVersion))
+  implementation(include("io.prometheus", "simpleclient_httpserver", prometheusVersion))
 }
 
 tasks {

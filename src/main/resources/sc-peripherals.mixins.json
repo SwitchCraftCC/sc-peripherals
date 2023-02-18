@@ -6,7 +6,6 @@
   "mixins": [
     "BeaconBlockEntityMixin",
     "ItemStackMixin",
-    "EntityTrackerEntryMixin",
     "ItemFrameEntityMixin",
     "MapColorAccessor",
     "ServerPlayerEntityScreenHandlerSyncHandlerMixin"

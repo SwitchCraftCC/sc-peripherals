@@ -10,10 +10,12 @@ import io.sc3.peripherals.client.block.PrinterRenderer
 import io.sc3.peripherals.client.gui.PosterPrinterScreen
 import io.sc3.peripherals.client.gui.PrinterScreen
 import io.sc3.peripherals.client.item.PosterRenderer
+import io.sc3.peripherals.config.ScPeripheralsClientConfig
 import io.sc3.peripherals.posters.PosterItem
 import io.sc3.peripherals.posters.PosterUpdateS2CPacket
 import io.sc3.peripherals.posters.printer.PosterPrinterInkPacket
 import io.sc3.peripherals.posters.printer.PosterPrinterStartPrintPacket
+import io.sc3.peripherals.posters.tickPosterRequests
 import io.sc3.peripherals.prints.PrintBlock
 import io.sc3.peripherals.prints.PrintItem
 import io.sc3.peripherals.prints.printer.PrinterDataPacket
@@ -21,6 +23,7 @@ import io.sc3.peripherals.prints.printer.PrinterInkPacket
 import io.sc3.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry
@@ -33,6 +36,9 @@ object ScPeripheralsClient : ClientModInitializer {
 
   override fun onInitializeClient() {
     log.info("sc-peripherals client initializing")
+
+    // Initialize the default config file if it does not yet exist
+    ScPeripheralsClientConfig.config.load()
 
     BlockEntityRendererRegistry.register(Registration.ModBlockEntities.printer) { PrinterRenderer }
     BlockEntityRendererRegistry.register(Registration.ModBlockEntities.posterPrinter) { PosterPrinterRenderer }
@@ -63,5 +69,7 @@ object ScPeripheralsClient : ClientModInitializer {
     PrintBakedModel.init()
 
     PosterItem.clientInit()
+
+    ClientTickEvents.START_WORLD_TICK.register(::tickPosterRequests)
   }
 }

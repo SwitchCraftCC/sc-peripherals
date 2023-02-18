@@ -4,8 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.client.item.PosterRenderer
 import io.sc3.peripherals.client.item.PosterRenderer.POSTER_BACKGROUND_RES
-import io.sc3.peripherals.posters.PosterUpdateS2CPacket.Companion.logger
-import io.sc3.peripherals.util.BaseNetworkSyncedItem
+import io.sc3.peripherals.util.BaseItem
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
@@ -19,13 +18,10 @@ import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.item.ItemRenderer
 import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.entity.Entity
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
 import net.minecraft.nbt.NbtIo
-import net.minecraft.network.Packet
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
@@ -35,31 +31,10 @@ import java.io.DataOutputStream
 import java.security.MessageDigest
 import java.util.*
 
-class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings) {
+class PosterItem(settings: Settings) : BaseItem("poster", settings) {
   data class PosterTooltipData(val stack: ItemStack): TooltipData
 
   override fun getTooltipData(stack: ItemStack): Optional<TooltipData> = Optional.of(PosterTooltipData(stack))
-
-  override fun createSyncPacket(stack: ItemStack?, world: World?, player: PlayerEntity?): Packet<*>? {
-    val id = getPosterId(stack) ?: return null
-    val posterState = getPosterState(id, world)
-    return posterState?.getPlayerUpdatePacket(id, player)?.toS2CPacket()
-  }
-
-  override fun inventoryTick(stack: ItemStack, world: World, entity: Entity?, slot: Int, selected: Boolean) {
-    try {
-      if (!world.isClient) {
-        val mapState = getOrCreatePosterState(stack, world)
-        if (mapState != null) {
-          if (entity is PlayerEntity) {
-            mapState.update(entity)
-          }
-        }
-      }
-    } catch (e: Exception) {
-      logger.error("Error while ticking poster item", e)
-    }
-  }
 
   override fun getName(stack: ItemStack): Text = printData(stack)?.labelText ?: super.getName(stack)
 
@@ -117,11 +92,11 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
   }
 
   companion object {
-    private val logger = LoggerFactory.getLogger(PosterItem::class.java)
-
     const val POSTER_KEY = "poster"
 
     fun getPosterName(posterId: String) = "posters/${posterId.take(2)}/$posterId"
+
+    fun getIdFromName(posterName: String) = posterName.substringAfterLast('/')
 
     internal fun clientInit() {
       TooltipComponentCallback.EVENT.register {
@@ -169,7 +144,7 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
       val posterState = PosterState().also {
         for (x in 0 until 128) {
           for (y in 0 until 128) {
-            it.setColor(x, y, data.colors[x + y * 128].toByte())
+            it.setColor(x, y, data.colors[x + y * 128])
           }
         }
 
@@ -218,11 +193,6 @@ class PosterItem(settings: Settings) : BaseNetworkSyncedItem("poster", settings)
 
     fun getPosterState(id: String?, world: World?): PosterState? {
       return if (id == null) null else world?.getPosterState(getPosterName(id))
-    }
-
-    fun getOrCreatePosterState(poster: ItemStack?, world: World?): PosterState? {
-      val posterId = getPosterId(poster)
-      return getPosterState(posterId, world)
     }
 
     fun printData(stack: ItemStack): PosterPrintData?

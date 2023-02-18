@@ -48,6 +48,9 @@
         "adapter": "kotlin",
         "value": "io.sc3.peripherals.datagen.ScPeripheralsDatagen"
       }
+    ],
+    "modmenu": [
+      "io.sc3.peripherals.config.ModMenu"
     ]
   },
   "mixins": [

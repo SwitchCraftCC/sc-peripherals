@@ -9,9 +9,6 @@ import io.sc3.peripherals.config.ScPeripheralsConfig.config
 import io.sc3.peripherals.posters.PosterItem
 import io.sc3.peripherals.posters.PosterItem.Companion.POSTER_KEY
 import io.sc3.peripherals.posters.PosterPrintData
-import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.downSideSlots
-import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
-import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.otherSideSlots
 import io.sc3.peripherals.util.BaseBlockEntity
 import io.sc3.peripherals.util.ImplementedInventory
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
@@ -31,7 +28,6 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerChunkManager
 import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.collection.DefaultedList
@@ -159,10 +155,6 @@ class PosterPrinterBlockEntity(
         markDirty()
       }
 
-      if (outputDirty || world.time % 20 == 0L) {
-        PosterItem.getPosterId(getStack(OUTPUT_SLOT))?.let { sendPosterState(it, world) }
-      }
-
       // Send ink update packets to any tracking entities
       if (inksDirty) {
         sendToAllTracking(world.getWorldChunk(pos), PosterPrinterInkPacket(pos, ink))
@@ -190,21 +182,6 @@ class PosterPrinterBlockEntity(
       }
     } catch (e: Exception) {
       logger.error("Error in poster printer tick", e)
-    }
-  }
-
-  private fun sendPosterState(posterId: String, world: World) {
-    val state = PosterItem.getPosterState(posterId, world)
-    if (state != null) {
-      val chunk = world.getWorldChunk(pos)
-      val storage = (chunk.world.chunkManager as ServerChunkManager).threadedAnvilChunkStorage
-      storage.getPlayersWatchingChunk(chunk.pos, false).forEach {
-        state.update(it)
-        val packet = state.getPlayerUpdatePacket(posterId, it)
-        if (packet != null) {
-          it.networkHandler.sendPacket(packet.toS2CPacket())
-        }
-      }
     }
   }
 
@@ -243,7 +220,6 @@ class PosterPrinterBlockEntity(
 
       // Send animation packet to all tracking entities
       sendToAllTracking(world.getWorldChunk(pos), PosterPrinterStartPrintPacket(pos, posterId))
-      sendPosterState(posterId, world) // Make sure clients can render the poster during the print animation
 
       outputDirty = true
     }
