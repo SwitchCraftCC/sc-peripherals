@@ -4,8 +4,6 @@ import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
 import io.sc3.peripherals.config.ScPeripheralsConfig
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
-import net.minecraft.server.MinecraftServer
 
 object ScPeripherals : ModInitializer {
   internal val log = LoggerFactory.getLogger("ScPeripherals")!!
@@ -18,6 +16,8 @@ object ScPeripherals : ModInitializer {
 
     // Initialize the default config file if it does not yet exist
     ScPeripheralsConfig.config.load()
+
+    ScPeripheralsPrometheus.init()
 
     Registration.init()
   }

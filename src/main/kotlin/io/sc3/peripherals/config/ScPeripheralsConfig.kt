@@ -22,6 +22,9 @@ object ScPeripheralsConfig {
     spec.define("poster_printer.print_ticks", 100)
 
     spec.define("poster_printer.ink_cost", 5000)
+
+    spec.define("prometheus.enabled", false)
+    spec.define("prometheus.port", 9090)
   }
 
   internal val config by lazy {

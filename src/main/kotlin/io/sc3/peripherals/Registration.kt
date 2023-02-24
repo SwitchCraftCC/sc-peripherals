@@ -1,6 +1,7 @@
 package io.sc3.peripherals
 
 import dan200.computercraft.api.peripheral.PeripheralLookup
+import io.sc3.library.networking.registerServerReceiver
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.block.ChameliumBlock
 import io.sc3.peripherals.datagen.recipes.handlers.RecipeHandlers
@@ -9,6 +10,7 @@ import io.sc3.peripherals.item.EmptyInkCartridgeItem
 import io.sc3.peripherals.item.InkCartridgeItem
 import io.sc3.peripherals.item.TextureAnalyzerItem
 import io.sc3.peripherals.posters.PosterItem
+import io.sc3.peripherals.posters.PosterRequestC2SPacket
 import io.sc3.peripherals.posters.printer.PosterPrinterBlock
 import io.sc3.peripherals.posters.printer.PosterPrinterBlockEntity
 import io.sc3.peripherals.posters.printer.PosterPrinterScreenHandler
@@ -48,6 +50,8 @@ object Registration {
 
     PeripheralLookup.get().registerForBlockEntity({ be, _ -> be.peripheral }, ModBlockEntities.printer)
     PeripheralLookup.get().registerForBlockEntity({ be, _ -> be.peripheral }, ModBlockEntities.posterPrinter)
+
+    registerServerReceiver(PosterRequestC2SPacket.id, PosterRequestC2SPacket::fromBytes)
   }
 
   object ModBlocks {
