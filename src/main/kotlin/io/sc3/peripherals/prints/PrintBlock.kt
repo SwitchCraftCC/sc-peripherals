@@ -78,8 +78,8 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
   }
 
   override fun getDroppedStacks(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
-    val be = builder.get(LootContextParameters.BLOCK_ENTITY)
-    if(be is PrintBlockEntity) {
+    val be = builder.getNullable(LootContextParameters.BLOCK_ENTITY)
+    if (be is PrintBlockEntity) {
       builder.putDrop(dropId) { _, consumer -> consumer.accept(PrintItem.fromBlockEntity(be)) }
     }
 
