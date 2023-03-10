@@ -1,5 +1,9 @@
 package io.sc3.peripherals.prints.printer
 
+import io.sc3.library.WaterloggableBlock
+import io.sc3.library.WaterloggableBlock.Companion.waterlogged
+import io.sc3.peripherals.Registration.ModBlockEntities.printer
+import io.sc3.peripherals.util.BaseBlockWithEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
@@ -19,10 +23,6 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import io.sc3.library.WaterloggableBlock
-import io.sc3.library.WaterloggableBlock.Companion.waterlogged
-import io.sc3.peripherals.Registration.ModBlockEntities.printer
-import io.sc3.peripherals.util.BaseBlockWithEntity
 
 class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), WaterloggableBlock {
   init {
@@ -64,7 +64,7 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
     state.with(facing, rotation.rotate(state.get(facing)))
 
   override fun getPlacementState(ctx: ItemPlacementContext) = defaultState
-    .with(facing, ctx.playerFacing.opposite)
+    .with(facing, ctx.playerLookDirection.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
 
   // Waterlogging

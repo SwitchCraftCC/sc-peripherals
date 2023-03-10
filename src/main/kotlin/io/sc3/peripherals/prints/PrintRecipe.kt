@@ -1,5 +1,6 @@
 package io.sc3.peripherals.prints
 
+import io.sc3.peripherals.Registration.ModItems
 import net.minecraft.inventory.CraftingInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items.*
@@ -7,9 +8,9 @@ import net.minecraft.recipe.Ingredient.ofItems
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
-import io.sc3.peripherals.Registration.ModItems
 
 class PrintRecipe(
   id: Identifier,
@@ -65,7 +66,7 @@ class PrintRecipe(
 
   override fun matches(inv: CraftingInventory, world: World) = items(inv) != null
 
-  override fun craft(inv: CraftingInventory): ItemStack {
+  override fun craft(inv: CraftingInventory, manager: DynamicRegistryManager): ItemStack {
     // Validate the crafting inputs and calculate what needs to be modified. Refuse to craft if any resources will be
     // wasted.
     val items = items(inv) ?: return ItemStack.EMPTY
@@ -87,7 +88,7 @@ class PrintRecipe(
 
   override fun fits(width: Int, height: Int) = width * height >= 2
   override fun getSerializer() = recipeSerializer
-  override fun getOutput() = outputItem
+  override fun getOutput(manager: DynamicRegistryManager) = outputItem
   override fun isIgnoredInRecipeBook() = true
 
   data class RecipeItems(

@@ -15,7 +15,7 @@ export function App(): JSX.Element {
 
     <Paragraph className="mb-3">
       Texture names will automatically be converted for vanilla textures from
-      their 1.12.2 names to their equivalent 1.19.3 names. The texture
+      their 1.12.2 names to their equivalent 1.19.4 names. The texture
       name <Code>opencomputers:blocks/white</Code> will also be converted
       to <Code>sc-peripherals:block/white</Code>.
     </Paragraph>

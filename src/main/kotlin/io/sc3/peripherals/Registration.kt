@@ -34,6 +34,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries.*
 import net.minecraft.registry.Registry.register
+import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.math.BlockPos
 
@@ -85,7 +86,7 @@ object Registration {
     init {
       FabricItemGroup.builder(ModId("main"))
         .icon { ItemStack(printer) }
-        .entries { _, entries, _ -> items.forEach(entries::add) }
+        .entries { _, entries -> items.forEach(entries::add) }
         .build()
     }
 
@@ -110,7 +111,8 @@ object Registration {
   }
 
   object ModScreens {
-    val printer = register(SCREEN_HANDLER, ModId("printer"), ScreenHandlerType(::PrinterScreenHandler))
+    val printer = register(SCREEN_HANDLER, ModId("printer"),
+      ScreenHandlerType(::PrinterScreenHandler, FeatureFlags.VANILLA_FEATURES))
     val posterPrinter = register(SCREEN_HANDLER, ModId("poster_printer"),
       ExtendedScreenHandlerType(::PosterPrinterScreenHandler))
   }

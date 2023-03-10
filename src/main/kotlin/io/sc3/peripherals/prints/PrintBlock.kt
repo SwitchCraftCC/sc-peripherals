@@ -60,7 +60,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     state.with(facing, rotation.rotate(state.get(facing)))
 
   override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState
-    .with(facing, ctx.playerFacing.opposite)
+    .with(facing, ctx.playerLookDirection.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
     .with(luminance, placementLuminance(ctx))
 
@@ -105,7 +105,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
   }
 
   override fun isShapeFullCube(state: BlockState, world: BlockView, pos: BlockPos) = false
-  override fun isTranslucent(state: BlockState, world: BlockView, pos: BlockPos) = true
+  override fun isTransparent(state: BlockState, world: BlockView, pos: BlockPos) = true
   // override fun isSideInvisible(state: BlockState, stateFrom: BlockState, direction: Direction) = false // TODO
 
   // Toggling

@@ -1,20 +1,20 @@
 package io.sc3.peripherals.client.block
 
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.VertexConsumer
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.block.entity.BlockEntityRenderer
-import net.minecraft.client.render.model.json.ModelTransformation.Mode
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.util.math.RotationAxis
-import org.joml.Matrix3f
-import org.joml.Matrix4f
 import io.sc3.peripherals.client.gui.PrinterScreen.Companion.tex
 import io.sc3.peripherals.prints.printer.PrinterBlock
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.RenderLayer
+import net.minecraft.client.render.VertexConsumer
+import net.minecraft.client.render.VertexConsumerProvider
+import net.minecraft.client.render.block.entity.BlockEntityRenderer
+import net.minecraft.client.render.model.json.ModelTransformationMode
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.util.math.RotationAxis
+import org.joml.Matrix3f
+import org.joml.Matrix4f
 
 object PrinterRenderer : BlockEntityRenderer<PrinterBlockEntity> {
   private val mc by lazy { MinecraftClient.getInstance() }
@@ -40,7 +40,8 @@ object PrinterRenderer : BlockEntityRenderer<PrinterBlockEntity> {
     matrices.scale(0.5f, 0.5f, 0.5f)
 
     val model = itemRenderer.getModel(stack, printer.world, null, 0)
-    itemRenderer.renderItem(stack, Mode.FIXED, false, matrices, vertexConsumers, light, overlay, model)
+    itemRenderer.renderItem(stack, ModelTransformationMode.FIXED, false, matrices, vertexConsumers, light, overlay,
+      model)
 
     matrices.pop()
   }

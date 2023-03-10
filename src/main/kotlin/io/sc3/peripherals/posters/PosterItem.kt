@@ -25,7 +25,6 @@ import net.minecraft.nbt.NbtIo
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
 import net.minecraft.world.World
-import org.slf4j.LoggerFactory
 import java.io.ByteArrayOutputStream
 import java.io.DataOutputStream
 import java.security.MessageDigest
@@ -59,8 +58,7 @@ class PosterItem(settings: Settings) : BaseItem("poster", settings) {
       tooltipX: Int,
       tooltipY: Int,
       matrices: MatrixStack,
-      itemRenderer: ItemRenderer,
-      something: Int
+      itemRenderer: ItemRenderer
     ) {
       val posterId = getPosterId(stack) ?: return
       val posterState = getPosterState(posterId, world) ?: return
