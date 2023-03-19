@@ -5,12 +5,13 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BeaconBlockEntityMixin",
-    "ItemStackMixin",
     "ItemFrameEntityMixin",
+    "ItemStackMixin",
     "MapColorAccessor",
     "ServerPlayerEntityScreenHandlerSyncHandlerMixin"
   ],
   "client": [
+    "HeadFeatureRendererMixin",
     "HeldItemRendererMixin",
     "ItemFrameEntityRendererMixin"
   ],
