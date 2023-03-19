@@ -52,7 +52,7 @@ object HeadFeatureRenderer {
       // poster scale
       matrices.scale(1f/128f, 1f/128f, 1f/128f)
 
-      PosterRenderer.draw(matrices, vertexConsumers, posterId, posterState, light)
+      PosterRenderer.draw(matrices, vertexConsumers, posterId, posterState, light, doubleSided = true)
       matrices.pop()
 
       return ActionResult.SUCCESS
