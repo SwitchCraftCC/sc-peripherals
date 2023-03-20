@@ -37,9 +37,10 @@ object PosterRenderer : AutoCloseable {
     vertexConsumers: VertexConsumerProvider,
     id: String,
     state: PosterState,
-    light: Int
+    light: Int,
+    doubleSided: Boolean = false
   ) {
-    getPosterTexture(id, state).draw(matrices, vertexConsumers, light)
+    getPosterTexture(id, state).draw(matrices, vertexConsumers, light, doubleSided)
   }
 
   fun drawCropped(
@@ -180,7 +181,7 @@ object PosterRenderer : AutoCloseable {
       texture.upload()
     }
 
-    fun draw(matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int) {
+    fun draw(matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, doubleSided: Boolean) {
       if (needsUpdate) {
         this.updateTexture()
         needsUpdate = false
@@ -192,6 +193,13 @@ object PosterRenderer : AutoCloseable {
       vertexConsumer.vertex(matrix4f, 128.0f, 128.0f, -0.01f).color(255, 255, 255, 255).texture(1.0f, 1.0f).light(light).next()
       vertexConsumer.vertex(matrix4f, 128.0f, 0.0f, -0.01f).color(255, 255, 255, 255).texture(1.0f, 0.0f).light(light).next()
       vertexConsumer.vertex(matrix4f, 0.0f, 0.0f, -0.01f).color(255, 255, 255, 255).texture(0.0f, 0.0f).light(light).next()
+
+      if (doubleSided) {
+        vertexConsumer.vertex(matrix4f, 0.0f, 0.0f, -0.01f).color(255, 255, 255, 255).texture(0.0f, 0.0f).light(light).next()
+        vertexConsumer.vertex(matrix4f, 128.0f, 0.0f, -0.01f).color(255, 255, 255, 255).texture(1.0f, 0.0f).light(light).next()
+        vertexConsumer.vertex(matrix4f, 128.0f, 128.0f, -0.01f).color(255, 255, 255, 255).texture(1.0f, 1.0f).light(light).next()
+        vertexConsumer.vertex(matrix4f, 0.0f, 128.0f, -0.01f).color(255, 255, 255, 255).texture(0.0f, 1.0f).light(light).next()
+      }
     }
 
     fun drawCropped(matrices: MatrixStack, vertexConsumers: VertexConsumerProvider, light: Int, x: Float, y: Float, width: Float, height: Float) {
