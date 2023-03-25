@@ -87,7 +87,7 @@ class PosterPrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Wa
     state.with(facing, rotation.rotate(state.get(facing)))
 
   override fun getPlacementState(ctx: ItemPlacementContext) = defaultState
-    .with(facing, ctx.playerLookDirection.opposite)
+    .with(facing, ctx.horizontalPlayerFacing.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
     .with(printing, false)
     .with(hasPaper, false)

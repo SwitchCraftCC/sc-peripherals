@@ -34,5 +34,6 @@
   ],
   "result": {
     "item": "sc-peripherals:texture_analyzer"
-  }
+  },
+  "show_notification": true
 }

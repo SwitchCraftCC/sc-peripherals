@@ -74,13 +74,6 @@ repositories {
   maven("https://maven.shedaniel.me") // Cloth Config, REI
   maven("https://dvs1.progwml6.com/files/maven/") // JEI
   maven("https://modmaven.dev/") // JEI
-
-  // forgeconfigapiport-fabric, dependency of CC: Tweaked
-  maven("https://raw.githubusercontent.com/Fuzss/modresources/main/maven/") {
-    content {
-      includeModule("fuzs.forgeconfigapiport", "forgeconfigapiport-fabric")
-    }
-  }
 }
 
 dependencies {
@@ -96,9 +89,11 @@ dependencies {
 
   modCompileOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric-api:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
+    exclude("fuzs.forgeconfigapiport", "forgeconfigapiport-fabric")
   }
   modRuntimeOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
+    exclude("fuzs.forgeconfigapiport", "forgeconfigapiport-fabric")
   }
 
   implementation(include("com.electronwill.night-config", "core", nightConfigVersion))

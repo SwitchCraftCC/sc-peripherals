@@ -32,5 +32,6 @@
   ],
   "result": {
     "item": "sc-peripherals:poster_printer"
-  }
+  },
+  "show_notification": true
 }

@@ -31,5 +31,6 @@
   ],
   "result": {
     "item": "sc-peripherals:ink_cartridge"
-  }
+  },
+  "show_notification": true
 }

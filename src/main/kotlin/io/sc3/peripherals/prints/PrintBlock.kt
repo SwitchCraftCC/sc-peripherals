@@ -60,7 +60,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     state.with(facing, rotation.rotate(state.get(facing)))
 
   override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState
-    .with(facing, ctx.playerLookDirection.opposite)
+    .with(facing, ctx.horizontalPlayerFacing.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
     .with(luminance, placementLuminance(ctx))
 

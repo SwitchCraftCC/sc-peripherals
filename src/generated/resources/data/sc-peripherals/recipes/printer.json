@@ -29,5 +29,6 @@
   ],
   "result": {
     "item": "sc-peripherals:printer"
-  }
+  },
+  "show_notification": true
 }

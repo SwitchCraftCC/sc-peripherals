@@ -1,15 +1,15 @@
-// 1.19.3	2023-02-04T12:49:20.3344646	SwitchCraft Peripherals/Recipes
+// 1.19.4	2023-03-23T16:27:21.7087081	SwitchCraft Peripherals/Recipes
+d91d26f33596d6fbb626728dcee867aeddb02a35 data\sc-peripherals\advancements\recipes\misc\printer.json
+97949b85f811a4792217064e8e50f7c99af4e2af data\sc-peripherals\recipes\chamelium.json
+f91ab7178cb901a2b78b8c08d14c60167be0aa4c data\sc-peripherals\recipes\ink_cartridge_refill.json
+b748550ae5ba7f5e6b0be71c695223fb5604dd2e data\sc-peripherals\recipes\poster_printer.json
+55f678de953b0c3db5e8b913de27a810f17ee631 data\sc-peripherals\recipes\ink_cartridge.json
+c37f59c82cb50920745cba0cf5d9fad28f3cad7c data\sc-peripherals\advancements\recipes\misc\print.json
+c2b83704b955e406a7ea56614a7ef190aac48c2b data\sc-peripherals\advancements\recipes\misc\ink_cartridge_refill.json
+241db93ac1a1faa6419d05b387349fe81568cfb5 data\sc-peripherals\recipes\texture_analyzer.json
+69b41d1c23f2be7a8063f5e6e6a2308a62cb646d data\sc-peripherals\recipes\print.json
+d13b151c55702720e1b8d45f41b75ad3d9b17a3b data\sc-peripherals\advancements\recipes\misc\texture_analyzer.json
+d2a81901c9817e0d6ec6c72a2067298000488d3f data\sc-peripherals\recipes\printer.json
 0acc23fbb738c25e93b4b500d66ff24520c03834 data\sc-peripherals\advancements\recipes\misc\chamelium.json
 ec1bbe9b3ea25d88877f7a0f25dfdb7a37f6b5e8 data\sc-peripherals\advancements\recipes\misc\poster_printer.json
-398a3d49171bed98ce828bc1d1fa5e452588c401 data\sc-peripherals\recipes\texture_analyzer.json
-c37f59c82cb50920745cba0cf5d9fad28f3cad7c data\sc-peripherals\advancements\recipes\misc\print.json
-c220c66ffc3455dcb6269216eb32ee31de8e9d64 data\sc-peripherals\recipes\printer.json
-c2b83704b955e406a7ea56614a7ef190aac48c2b data\sc-peripherals\advancements\recipes\misc\ink_cartridge_refill.json
-69b41d1c23f2be7a8063f5e6e6a2308a62cb646d data\sc-peripherals\recipes\print.json
-f91ab7178cb901a2b78b8c08d14c60167be0aa4c data\sc-peripherals\recipes\ink_cartridge_refill.json
 60491d443ce2651f9dffc4c2e1b51cf093c1cdbc data\sc-peripherals\advancements\recipes\misc\ink_cartridge.json
-d91d26f33596d6fbb626728dcee867aeddb02a35 data\sc-peripherals\advancements\recipes\misc\printer.json
-d13b151c55702720e1b8d45f41b75ad3d9b17a3b data\sc-peripherals\advancements\recipes\misc\texture_analyzer.json
-e9f697ee043a1a9e6969a9b7df27360cc619fb36 data\sc-peripherals\recipes\ink_cartridge.json
-f8b7cae21dc0283cb90e00a36bbebbbb47a73b90 data\sc-peripherals\recipes\poster_printer.json
-7e0054532f4db28bba4a95e08929f39de9f5a74d data\sc-peripherals\recipes\chamelium.json

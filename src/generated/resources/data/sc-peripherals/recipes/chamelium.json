@@ -23,5 +23,6 @@
   "result": {
     "count": 16,
     "item": "sc-peripherals:chamelium"
-  }
+  },
+  "show_notification": true
 }
