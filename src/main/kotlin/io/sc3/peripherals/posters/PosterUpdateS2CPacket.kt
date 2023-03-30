@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 data class PosterUpdateS2CPacket(
   val posterId: String,
@@ -17,8 +15,6 @@ data class PosterUpdateS2CPacket(
   override val id = PosterUpdateS2CPacket.id
 
   companion object {
-    val logger: Logger = LoggerFactory.getLogger(PosterUpdateS2CPacket::class.java)
-
     val id = ScPeripherals.ModId("poster_update")
 
     fun fromBytes(buf: PacketByteBuf) = buf.run {
@@ -67,9 +63,7 @@ data class PosterUpdateS2CPacket(
     client.submit {
       val name = PosterItem.getPosterName(posterId)
       var posterState: PosterState? = client.world?.getPosterState(name)
-      logger.info("Received poster update for $name: ${updateData?.colors}")
       if (posterState == null) {
-        logger.info("Creating new poster state for $name")
         posterState = PosterState()
         client.world?.putPosterState(name, posterState)
       }
