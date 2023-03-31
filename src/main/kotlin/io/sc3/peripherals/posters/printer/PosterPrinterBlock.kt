@@ -58,7 +58,7 @@ class PosterPrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Wa
       factory?.let { player.openHandledScreen(it) }
     }
 
-    return ActionResult.success(!world.isClient)
+    return ActionResult.success(world.isClient)
   }
 
   override fun createBlockEntity(pos: BlockPos, state: BlockState) =

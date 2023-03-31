@@ -38,7 +38,7 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
       factory?.let { player.openHandledScreen(it) }
     }
 
-    return ActionResult.success(!world.isClient)
+    return ActionResult.success(world.isClient)
   }
 
   override fun createBlockEntity(pos: BlockPos, state: BlockState) =
