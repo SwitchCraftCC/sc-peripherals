@@ -19,19 +19,19 @@ end
 -- Find a printer
 local printer = peripheral.find("poster_printer")
 if not printer then
-  error("No printer found.", 0)
+  error("No printer found", 0)
 end
 
 -- Validate arguments
-local tArgs = { ... }
-if #tArgs < 1 or #tArgs > 4
-or tArgs[1]:lower() == "help" then
+local args = { ... }
+if #args < 1 or #args > 4
+or args[1]:lower() == "help" then
   printUsage()
   return
 end
 
 -- Stop the printer by running `poster stop`
-if tArgs[1] == "stop" then
+if args[1] == "stop" then
   print("Stopping printer...")
   printer.stop()
   return
@@ -39,7 +39,7 @@ end
 
 local status = printer.status()
 if status == "busy" then
-  error("Printer is busy.", 0)
+  error("Printer is busy", 0)
 end
 
 -- Convert string to number and validate it.
@@ -52,124 +52,117 @@ local function getNum(str)
 end
 
 -- Get count.
-local nCount = 1
-if #tArgs > 1 then
-  nCount = getNum(tArgs[2])
-  if not nCount then
+local count = 1
+if #args > 1 then
+  count = getNum(args[2])
+  if not count then
     printUsage()
     return
   end
 end
 
 -- Get index, if given.
-local tIndex = { bAll = true, from = nil, to = nil }
-if #tArgs >= 3 then
-  local num1,num2 = getNum(tArgs[3]), getNum(tArgs[4])
+local index = { all = true, from = nil, to = nil }
+if #args >= 3 then
+  local num1, num2 = getNum(args[3]), getNum(args[4])
   if not num1 or not num2 then
     printUsage()
     return
   end
   
-  tIndex.from = math.min(num1,num2)
-  tIndex.to = math.max(num1,num2)
+  index.from = math.min(num1, num2)
+  index.to = math.max(num1, num2)
   
   -- Index, not interval
-  if not tIndex.to then
-    tIndex.to = tIndex.from
+  if not index.to then
+    index.to = index.from
   end
   
-  if tIndex.from then
-    tIndex.bAll = false
+  if index.from then
+    index.all = false
   end
 end
 
-local sFilename = tArgs[1]
+local filename = args[1]
 -- Loads from local file or Url
-local function loadPoster(sName)
+local function loadPoster(name)
   local stream
 
-  if http and sName:match("^https?://") then
+  if http and name:match("^https?://") then
     print("Downloading...")
-    stream = http.get{ url = sName, binary = true }
+    stream = http.get{ url = name, binary = true }
   else
     print("Loading...")
-    sName = shell.resolve(sName)
-    if not fs.exists(sName) then
-      -- Try to find a .2dj or .2dja file if the extension did not got specified 
-      if not sFilename:match(".2dj$") or not sFilename:match(".2dja$") then
-        for _,sEnd in ipairs({".2dj", ".2dja"}) do
-          local newName = sName..sEnd
-          if fs.exists(newName) then
-            return loadPoster(newName)
-          end
-        end
-      end
-      error(("File \'%s\' not found."):format(sName), 0)
+    name = shell.resolve(name)
+    if not fs.exists(name) then
+      error(("File \'%s\' not found"):format(name), 0)
     end
-    stream = fs.open(sName, "r")
+    stream = fs.open(name, "r")
   end
   
   if not stream then
-    error(("Could not open \'%s\'."):format(sName), 0)
+    error(("Could not open \'%s\'"):format(name), 0)
   end
 
   local data = stream.readAll()
   stream.close()
 
-  local data,err = textutils.unserialiseJSON(data)
+  local data, err = textutils.unserialiseJSON(data)
   if type(data) ~= "table" then
-    error(("\n\nCould not parse \'%s\': %s"):format(sName,err), 0)
+    error(("\n\nCould not parse \'%s\': %s"):format(name, err), 0)
   end
   return data
 end
 
 -- Check if given poster is valid
-local function validPoster(data)
+local function isValidPoster(data)
   if type(data.pixels) ~= "table" then
-    return true, "Table \'pixels\' does not exist."
+    return true, "Table \'pixels\' does not exist"
   elseif type(data.palette) ~= "table" then
-    return true, "Table \'palette\' does not exist."
+    return true, "Table \'palette\' does not exist"
   end
 
   return false
 end
 
-local tPosters = {}
-local data = loadPoster(sFilename)
+local posters = {}
+local data = loadPoster(filename)
 -- Add all needed pages to stack (.2dja)
 if type(data.pages) == "table" then
-  if tIndex.bAll then
-    tIndex.from = 1
-    tIndex.to = #data.pages
+  if index.all then
+    index.from = 1
+    index.to = #data.pages
+  elseif index.to > #data.pages then
+    error(("Index out of bounds (got %d, limit: %d)"):format(index.to, #data.pages), 0)
   end
 
-  for i=tIndex.from, tIndex.to do
+  for i=index.from, index.to do
     local poster = data.pages[i]
-    local bError, sMsg = validPoster(poster)
-    if bError then
-      error(("Could not load page %s: %s"):format(i, sMsg), 0)
+    local hasError, msg = isValidPoster(poster)
+    if hasError then
+      error(("Could not load page %d: \'%s\'"):format(i, msg), 0)
     end
 
-    table.insert(tPosters, poster)
+    table.insert(posters, poster)
   end
 else
   -- Add poster to stack x nCounter (.2dj)
-  local bError, sMsg = validPoster(data)
-  if bError then
-    error(("Could not load .2dj file: %s"):format(sMsg), 0)
+  local hasError, msg = isValidPoster(data)
+  if hasError then
+    error(("Could not load .2dj file: \'%s\'"):format(msg), 0)
   end
-  table.insert(tPosters, data)
+  table.insert(posters, data)
 end
 
 -- Setup colors
-local nHighlightColor = colors.lightGray
-local nErrColor = colors.gray
-local nGreenColor = colors.white
+local highlightColor = colors.lightGray
+local errColor = colors.gray
+local greenColor = colors.white
 
 if term.isColor() then
-  nHighlightColor = colors.yellow
-  nErrColor = colors.red
-  nGreenColor = colors.green
+  highlightColor = colors.yellow
+  errColor = colors.red
+  greenColor = colors.green
 end
 
 
@@ -184,56 +177,56 @@ local function commitPrint(data)
   printer.blitPalette(data.palette)
   printer.blitPixels(1, 1, data.pixels)
 
-  printer.commit(nCount)
+  printer.commit(count)
 end
 
 -- Start printing (Finally...)
-term.setTextColor(nHighlightColor)
+term.setTextColor(highlightColor)
 print("\nHold Ctrl+T to stop\n")
 
 term.setTextColor(colors.lightGray)
 print("Now printing:")
 
-local _,nY = term.getCursorPos()
-local nW,_ = term.getSize()
+local _, ypos = term.getCursorPos()
+local width, _ = term.getSize()
 
 -- Move everything up for enough space
-if nY > 16 then
+if ypos > 16 then
   term.scroll(4)
-  nY = 15
+  ypos = 15
 end
 
-local function printRow(sName, sValue, sOptional)
-  term.setTextColor(nHighlightColor)
-  term.write(sName)
+local function printRow(name, value, optional)
+  term.setTextColor(highlightColor)
+  term.write(name)
   term.setTextColor(colors.white)
-  term.write(sValue)
-  if sOptional then
+  term.write(value)
+  if optional then
     term.setTextColor(colors.lightGray)
-    term.write(sOptional)
+    term.write(optional)
   end
 end
 
 -- Loop to print all selected posters
-local nPrinted = 0
-local nMaxPages = #tPosters*nCount
-local bTerminated = false
+local printed = 0
+local maxPages = #posters*count
+local terminated = false
 
-for i,data in ipairs(tPosters) do
-  local nCur = 0
-  if bTerminated then break end
+for i, data in ipairs(posters) do
+  local cur = 0
+  if terminated then break end
   commitPrint(data)
   
-  term.setCursorPos(1,nY)
-  printRow("Name: ", (data.label or "???"):sub(1,nW-6))
+  term.setCursorPos(1, ypos)
+  printRow("Name: ", (data.label or "???"):sub(1, width-6))
   
-  term.setCursorPos(1,nY+1)
-  printRow("Status: ", (" %s%% : %s / %s "):format(0, nPrinted, nMaxPages), (" (x%s)       "):format(nCount))
+  term.setCursorPos(1, ypos+1)
+  printRow("Status: ", (" %d%% : %d / %d "):format(0, printed, maxPages), (" (x%d)       "):format(count))
 
 
-  local cur,max = printer.getInkLevel()
-  term.setCursorPos(1,nY+2)
-  printRow("Ink: ", (" %s%%   "):format(math.floor(100/max*cur)))
+  local cur, max = printer.getInkLevel()
+  term.setCursorPos(1, ypos+2)
+  printRow("Ink: ", (" %d%%   "):format(math.floor(100/max*cur)))
   
   -- Status and Ink level
   while true do
@@ -243,31 +236,31 @@ for i,data in ipairs(tPosters) do
       local progress = 100-(tonumber(p1) or 0)
       
       if progress >= 100 then
-        nPrinted = nPrinted+1
-        nCur = nCur+1
+        printed = printed+1
+        cur = cur+1
       end
 
-      term.setCursorPos(1,nY+1)
-      printRow("Status: ", (" %s%% : %s / %s "):format(progress, nPrinted, nMaxPages), (" (x%s)       "):format(nCount))
+      term.setCursorPos(1, ypos+1)
+      printRow("Status: ", (" %d%% : %d / %d "):format(progress, printed, maxPages), (" (x%d)       "):format(count))
       
-      if nCur >= nCount then
+      if cur >= count then
         break
       end
     elseif e == "terminate" then
       printer.stop()
-      bTerminated = true
+      terminated = true
       break
     end
   end
 end
 
 -- Print results
-term.setCursorPos(1, nY+3)
-if bTerminated then
-  term.setTextColor(nErrColor)
-  print(("Printed %s posters out of %s."):format(nPrinted+1, nMaxPages))
+term.setCursorPos(1, ypos+3)
+if terminated then
+  term.setTextColor(errColor)
+  print(("Printed %d poster out of %d."):format(printed+1, maxPages))
 else
-  term.setTextColor(nGreenColor)
-  print(("Printed %s posters!"):format(nPrinted))
+  term.setTextColor(greenColor)
+  print(("Printed %d poster!"):format(printed))
 end
 term.setTextColor(startTColor)
