@@ -210,10 +210,11 @@ end
 -- Loop to print all selected posters
 local printed = 0
 local maxPages = #posters*count
+local numDigits = math.floor(math.log10(maxPages))+1
 local terminated = false
 
 for i, data in ipairs(posters) do
-  local cur = 0
+  local currentPage = 0
   if terminated then break end
   commitPrint(data)
   
@@ -221,12 +222,12 @@ for i, data in ipairs(posters) do
   printRow("Name: ", (data.label or "???"):sub(1, width-6))
   
   term.setCursorPos(1, ypos+1)
-  printRow("Status: ", (" %d%% : %d / %d "):format(0, printed, maxPages), (" (x%d)       "):format(count))
+  printRow("Status: ", ("   0%% : %"..numDigits.."d / %"..numDigits.."d"):format(printed, maxPages), (" (x%d)       "):format(count))
 
 
   local cur, max = printer.getInkLevel()
   term.setCursorPos(1, ypos+2)
-  printRow("Ink: ", (" %d%%   "):format(math.floor(100/max*cur)))
+  printRow("Ink: ", (" %5.f%%   "):format(math.floor(100/max*cur)))
   
   -- Status and Ink level
   while true do
@@ -237,13 +238,12 @@ for i, data in ipairs(posters) do
       
       if progress >= 100 then
         printed = printed+1
-        cur = cur+1
+        currentPage = currentPage+1
       end
 
       term.setCursorPos(1, ypos+1)
-      printRow("Status: ", (" %d%% : %d / %d "):format(progress, printed, maxPages), (" (x%d)       "):format(count))
-      
-      if cur >= count then
+      printRow("Status: ", (" %3d%% : %"..numDigits.."d / %"..numDigits.."d "):format(progress, printed, maxPages), ("(x%d)       "):format(count))
+      if currentPage >= count then
         break
       end
     elseif e == "terminate" then
