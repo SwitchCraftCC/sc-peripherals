@@ -188,10 +188,10 @@ term.setTextColor(colors.lightGray)
 print("Now printing:")
 
 local _, ypos = term.getCursorPos()
-local width, _ = term.getSize()
+local width, height = term.getSize()
 
 -- Move everything up for enough space
-if ypos > 16 then
+if ypos > height-3 then
   term.scroll(4)
   ypos = 15
 end
@@ -222,12 +222,12 @@ for i, data in ipairs(posters) do
   printRow("Name: ", (data.label or "???"):sub(1, width-6))
   
   term.setCursorPos(1, ypos+1)
-  printRow("Status: ", ("   0%% : %"..numDigits.."d / %"..numDigits.."d"):format(printed, maxPages), (" (x%d)       "):format(count))
+  printRow("Status: ", ("  0%% : %"..numDigits.."d / %"..numDigits.."d"):format(printed, maxPages), (" (x%d)       "):format(count))
 
 
   local cur, max = printer.getInkLevel()
   term.setCursorPos(1, ypos+2)
-  printRow("Ink: ", (" %5.f%%   "):format(math.floor(100/max*cur)))
+  printRow("Ink: ", ("%3d%%   "):format(math.floor(100/max*cur)))
   
   -- Status and Ink level
   while true do
@@ -242,7 +242,7 @@ for i, data in ipairs(posters) do
       end
 
       term.setCursorPos(1, ypos+1)
-      printRow("Status: ", (" %3d%% : %"..numDigits.."d / %"..numDigits.."d "):format(progress, printed, maxPages), ("(x%d)       "):format(count))
+      printRow("Status: ", ("%3d%% : %"..numDigits.."d / %"..numDigits.."d "):format(progress, printed, maxPages), ("(x%d)       "):format(count))
       if currentPage >= count then
         break
       end
