@@ -1,5 +1,15 @@
 local startTColor = term.getTextColor()
 
+local highlightColor = colors.lightGray
+local errColor = colors.gray
+local greenColor = colors.white
+
+if term.isColor() then
+  highlightColor = colors.yellow
+  errColor = colors.red
+  greenColor = colors.green
+end
+
 local function printUsage()
   local programName = arg[0] or fs.getName(shell.getRunningProgram())
   
@@ -42,7 +52,7 @@ if status == "busy" then
   error("Printer is busy", 0)
 end
 
--- Convert string to number and validate it.
+-- Convert string to number and validate it
 local function getNum(str)
   local num = tonumber(str)
   if not num or math.floor(num) < 1 then
@@ -51,7 +61,7 @@ local function getNum(str)
   return math.floor(num)
 end
 
--- Get count.
+-- Get count
 local count = 1
 if #args > 1 then
   count = getNum(args[2])
@@ -61,26 +71,30 @@ if #args > 1 then
   end
 end
 
--- Get index, if given.
+-- Get index, if given
 local index = { all = true, from = nil, to = nil }
 if #args >= 3 then
   local num1, num2 = getNum(args[3]), getNum(args[4])
-  if not num1 or not num2 then
+  if num1 and num2 then
+    -- Interval
+    index.from = math.min(num1, num2)
+    index.to = math.max(num1, num2)
+  elseif #args > 3 then
+    -- Second argument is not acceptable
+    printUsage()
+    return
+  elseif num1 then
+    -- Index, not interval
+    index.from = num1
+    index.to = num1
+  else
+    -- First argument is not acceptable
     printUsage()
     return
   end
-  
-  index.from = math.min(num1, num2)
-  index.to = math.max(num1, num2)
-  
-  -- Index, not interval
-  if not index.to then
-    index.to = index.from
-  end
-  
-  if index.from then
-    index.all = false
-  end
+
+  -- Index or interval is given, therefore we do not want to print all pages
+  index.all = false
 end
 
 local filename = args[1]
@@ -95,7 +109,25 @@ local function loadPoster(name)
     print("Loading...")
     name = shell.resolve(name)
     if not fs.exists(name) then
-      error(("File \'%s\' not found"):format(name), 0)
+      -- Try to find a .2dj or .2dja file if the extension did not got specified 
+      if not filename:match(".2dj$") or not filename:match(".2dja$") then
+        local hits = 0
+        local newName
+
+        for _,sEnd in ipairs({".2dj", ".2dja"}) do
+          local otherName = name..sEnd
+          if fs.exists(otherName) then
+            newName = otherName
+            hits = hits+1
+          end
+        end
+        if hits == 1 then
+          return loadPoster(newName)
+        elseif hits > 1 then
+          error(("File extension for \'%s\' is not specified."):format(name), 0)
+        end
+      end
+      error(("File \'%s\' not found."):format(name), 0)
     end
     stream = fs.open(name, "r")
   end
@@ -154,19 +186,6 @@ else
   table.insert(posters, data)
 end
 
--- Setup colors
-local highlightColor = colors.lightGray
-local errColor = colors.gray
-local greenColor = colors.white
-
-if term.isColor() then
-  highlightColor = colors.yellow
-  errColor = colors.red
-  greenColor = colors.green
-end
-
-
-
 -- Print a given poster
 local function commitPrint(data)
   printer.reset()
@@ -219,7 +238,7 @@ for i, data in ipairs(posters) do
   commitPrint(data)
   
   term.setCursorPos(1, ypos)
-  printRow("Name: ", (data.label or "???"):sub(1, width-6))
+  printRow("Name: ", (data.label or "Untitled"):sub(1, width-6))
   
   term.setCursorPos(1, ypos+1)
   printRow("Status: ", ("  0%% : %"..numDigits.."d / %"..numDigits.."d"):format(printed, maxPages), (" (x%d)       "):format(count))
@@ -256,11 +275,13 @@ end
 
 -- Print results
 term.setCursorPos(1, ypos+3)
+local plural = (printed > 1) and "posters" or "poster"
 if terminated then
+  plural = (printed+1 > 1) and "posters" or "poster"
   term.setTextColor(errColor)
-  print(("Printed %d poster out of %d."):format(printed+1, maxPages))
+  print(("Printed %d %s out of %d."):format(printed+1, plural, maxPages))
 else
   term.setTextColor(greenColor)
-  print(("Printed %d poster!"):format(printed))
+  print(("Printed %d %s!"):format(printed, plural))
 end
 term.setTextColor(startTColor)
