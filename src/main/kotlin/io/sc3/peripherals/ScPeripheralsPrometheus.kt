@@ -14,16 +14,20 @@ object ScPeripheralsPrometheus {
   internal val registry = CollectorRegistry(true)
 
   fun init() {
-    ServerLifecycleEvents.SERVER_STARTING.register(ServerLifecycleEvents.ServerStarting {
+    ServerLifecycleEvents.SERVER_STARTING.register {
       if (ScPeripheralsConfig.config["prometheus.enabled"]) {
         log.info("Starting Prometheus server on port ${ScPeripheralsConfig.config.get<Int>("prometheus.port")}")
         prometheusServer = HTTPServer(InetSocketAddress(ScPeripheralsConfig.config["prometheus.port"]), registry, true)
       }
-    })
+    }
 
-    ServerLifecycleEvents.SERVER_STOPPING.register(ServerLifecycleEvents.ServerStopping {
-      log.info("Stopping Prometheus server")
-      prometheusServer?.close()?.also { prometheusServer = null }
-    })
+    ServerLifecycleEvents.SERVER_STOPPING.register {
+      try {
+        log.info("Stopping Prometheus server")
+        prometheusServer?.close()?.also { prometheusServer = null }
+      } catch (e: Exception) {
+        log.error("Failed to stop Prometheus server", e)
+      }
+    }
   }
 }
