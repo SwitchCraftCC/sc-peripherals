@@ -17,8 +17,8 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.packet.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.PropertyDelegate
@@ -142,7 +142,7 @@ class PrinterBlockEntity(
   fun canMergeOutput(): Boolean {
     val current = getStack(OUTPUT_SLOT)
     val output = PrintItem.create(data)
-    return current.isEmpty || (current.isItemEqual(output) && ItemStack.areNbtEqual(current, output))
+    return current.isEmpty || ItemStack.canCombine(current, output)
   }
 
   fun onTick(world: World) {

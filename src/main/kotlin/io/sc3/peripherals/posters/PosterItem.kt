@@ -8,16 +8,13 @@ import io.sc3.peripherals.util.BaseItem
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.font.TextRenderer
-import net.minecraft.client.gui.DrawableHelper
+import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.tooltip.TooltipComponent
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.client.item.TooltipData
 import net.minecraft.client.render.BufferBuilder
-import net.minecraft.client.render.GameRenderer
 import net.minecraft.client.render.Tessellator
 import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.render.item.ItemRenderer
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
@@ -57,14 +54,11 @@ class PosterItem(settings: Settings) : BaseItem("poster", settings) {
       textRenderer: TextRenderer,
       tooltipX: Int,
       tooltipY: Int,
-      matrices: MatrixStack,
-      itemRenderer: ItemRenderer
+      ctx: DrawContext
     ) {
       val posterId = getPosterId(stack) ?: return
       val posterState = getPosterState(posterId, world) ?: return
-      RenderSystem.setShader(GameRenderer::getPositionTexProgram)
-      RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-      RenderSystem.setShaderTexture(0, POSTER_BACKGROUND_RES)
+      val matrices = ctx.matrices
       val pad = 7
       val size = 135 + pad
       val scale = 0.5f
@@ -72,7 +66,7 @@ class PosterItem(settings: Settings) : BaseItem("poster", settings) {
       matrices.translate(tooltipX + 3.0, tooltipY + 3.0, 500.0)
       matrices.scale(scale, scale, 1f)
       RenderSystem.enableBlend()
-      DrawableHelper.drawTexture(matrices, -pad, -pad, 0f, 0f, size, size, size, size)
+      ctx.drawTexture(POSTER_BACKGROUND_RES, -pad, -pad, 0f, 0f, size, size, size, size)
       val buffer: BufferBuilder = Tessellator.getInstance().buffer
       val immediateBuffer = VertexConsumerProvider.immediate(buffer)
       PosterRenderer.draw(matrices, immediateBuffer, posterId, posterState, 240)

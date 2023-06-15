@@ -26,22 +26,31 @@ import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.Material.STONE
+import net.minecraft.block.MapColor
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.enums.Instrument
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries.*
 import net.minecraft.registry.Registry.register
+import net.minecraft.registry.RegistryKey
+import net.minecraft.registry.RegistryKeys
 import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.math.BlockPos
 
 object Registration {
   private val items = mutableListOf<Item>()
+  private val itemGroup = RegistryKey.of(RegistryKeys.ITEM_GROUP, ModId("main"))
 
   internal fun init() {
+    register(ITEM_GROUP, itemGroup, FabricItemGroup.builder()
+      .icon { ItemStack(ModItems.printer) }
+      .entries { _, entries -> items.forEach(entries::add) }
+      .build())
+
     // Similar to how CC behaves - touch each static class to force the static initializers to run.
     listOf(
       ModBlocks.printer, ModItems.printer, ModBlockEntities.printer, ModScreens.printer
@@ -68,7 +77,12 @@ object Registration {
 
     private fun <T : Block> rBlock(name: String, value: T): T =
       register(BLOCK, ModId(name), value)
-    private fun settings() = AbstractBlock.Settings.of(STONE).strength(2.0f).nonOpaque()
+
+    private fun settings() = AbstractBlock.Settings.create()
+      .mapColor(MapColor.STONE_GRAY)
+      .instrument(Instrument.BASEDRUM)
+      .strength(2.0f)
+      .nonOpaque()
   }
 
   object ModItems {
@@ -83,13 +97,6 @@ object Registration {
     val emptyInkCartridge = rItem("empty_ink_cartridge", EmptyInkCartridgeItem(settings().maxCount(1)))
     val textureAnalyzer = rItem("texture_analyzer", TextureAnalyzerItem(settings().maxCount(1)))
 
-    init {
-      FabricItemGroup.builder(ModId("main"))
-        .icon { ItemStack(printer) }
-        .entries { _, entries -> items.forEach(entries::add) }
-        .build()
-    }
-
     private fun <T : Item> rItem(name: String, value: T, addItem: Boolean = true): T =
       register(ITEM, ModId(name), value).also { items.takeIf { addItem }?.add(it) }
     private fun <B : Block, I : Item> ofBlock(parent: B, supplier: (B, Item.Settings) -> I): I =
@@ -98,10 +105,12 @@ object Registration {
   }
 
   object ModBlockEntities {
-    val printer: BlockEntityType<PrinterBlockEntity> = ofBlock(ModBlocks.printer, "printer", ::PrinterBlockEntity)
-    val print: BlockEntityType<PrintBlockEntity> = ofBlock(ModBlocks.print, "print", ::PrintBlockEntity)
-
-    val posterPrinter: BlockEntityType<PosterPrinterBlockEntity> = ofBlock(ModBlocks.posterPrinter, "poster_printer", ::PosterPrinterBlockEntity)
+    val printer: BlockEntityType<PrinterBlockEntity> =
+      ofBlock(ModBlocks.printer, "printer", ::PrinterBlockEntity)
+    val print: BlockEntityType<PrintBlockEntity> =
+      ofBlock(ModBlocks.print, "print", ::PrintBlockEntity)
+    val posterPrinter: BlockEntityType<PosterPrinterBlockEntity> =
+      ofBlock(ModBlocks.posterPrinter, "poster_printer", ::PosterPrinterBlockEntity)
 
     private fun <T : BlockEntity> ofBlock(block: Block, name: String,
                                           factory: (BlockPos, BlockState) -> T): BlockEntityType<T> {

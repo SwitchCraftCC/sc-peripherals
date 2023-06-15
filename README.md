@@ -6,7 +6,7 @@
 [![Download on Modrinth](https://i.imgur.com/hbYUrTZ.png)](https://modrinth.com/mod/sc-peripherals/)
 <!-- modrinth_exclude.end -->
 
-Fabric 1.19 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
+Fabric 1.20 [CC: Tweaked](https://github.com/cc-tweaked/cc-tweaked) peripheral mod for the SwitchCraft server. 
 It adds a 3D printer in the style of 
 [OpenComputers](https://github.com/MightyPirates/OpenComputers), and a Wide Format Printer that prints custom posters to
 display in item frames.

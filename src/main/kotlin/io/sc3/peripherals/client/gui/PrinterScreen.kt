@@ -1,16 +1,14 @@
 package io.sc3.peripherals.client.gui
 
-import com.mojang.blaze3d.systems.RenderSystem
-import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.render.GameRenderer
-import net.minecraft.client.util.math.MatrixStack
-import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.text.Text
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.ScPeripherals.modId
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxChamelium
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity.Companion.maxInk
 import io.sc3.peripherals.prints.printer.PrinterScreenHandler
+import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.gui.screen.ingame.HandledScreen
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.text.Text
 
 class PrinterScreen(
   handler: PrinterScreenHandler,
@@ -31,31 +29,27 @@ class PrinterScreen(
     bars = listOf(chameliumBar, inkBar)
   }
 
-  override fun drawBackground(matrices: MatrixStack, delta: Float, mouseX: Int, mouseY: Int) {
-    RenderSystem.setShader(GameRenderer::getPositionTexProgram)
-    RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f)
-    RenderSystem.setShaderTexture(0, tex)
-
+  override fun drawBackground(ctx: DrawContext, delta: Float, mouseX: Int, mouseY: Int) {
     // Background
-    drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight)
+    ctx.drawTexture(tex, x, y, 0, 0, backgroundWidth, backgroundHeight)
 
     // Print progress
     val maxProgress = handler.maxPrintProgress.toDouble().coerceAtLeast(1.0) // Avoid div0 if the server sets this to 0
     val progress = handler.printProgress.toDouble() / maxProgress * progressWidth
-    drawTexture(matrices, x + 106, y + 24, 0, 166, progress.toInt(), 38)
+    ctx.drawTexture(tex, x + 106, y + 24, 0, 166, progress.toInt(), 38)
   }
 
-  override fun render(matrices: MatrixStack, mouseX: Int, mouseY: Int, delta: Float) {
-    renderBackground(matrices)
+  override fun render(ctx: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+    renderBackground(ctx)
 
     chameliumBar.progress = handler.chamelium
     inkBar.progress = handler.ink
 
-    super.render(matrices, mouseX, mouseY, delta)
-    drawMouseoverTooltip(matrices, mouseX, mouseY)
+    super.render(ctx, mouseX, mouseY, delta)
+    drawMouseoverTooltip(ctx, mouseX, mouseY)
 
     bars.forEach { bar -> bar.tooltip(mouseX, mouseY)?.let {
-      renderTooltip(matrices, it, mouseX, mouseY )}
+      ctx.drawTooltip(textRenderer, it, mouseX, mouseY )}
     }
   }
 

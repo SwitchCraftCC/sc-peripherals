@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.context.LootContext
+import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.state.StateManager
@@ -77,10 +78,10 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     be.markDirty()
   }
 
-  override fun getDroppedStacks(state: BlockState, builder: LootContext.Builder): MutableList<ItemStack> {
-    val be = builder.getNullable(LootContextParameters.BLOCK_ENTITY)
+  override fun getDroppedStacks(state: BlockState, builder: LootContextParameterSet.Builder): MutableList<ItemStack> {
+    val be = builder.getOptional(LootContextParameters.BLOCK_ENTITY)
     if (be is PrintBlockEntity) {
-      builder.putDrop(dropId) { _, consumer -> consumer.accept(PrintItem.fromBlockEntity(be)) }
+      builder.addDynamicDrop(dropId) { consumer -> consumer.accept(PrintItem.fromBlockEntity(be)) }
     }
 
     return super.getDroppedStacks(state, builder)

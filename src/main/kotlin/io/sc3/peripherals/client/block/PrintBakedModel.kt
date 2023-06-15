@@ -1,5 +1,10 @@
 package io.sc3.peripherals.client.block
 
+import io.sc3.library.ext.faces
+import io.sc3.library.ext.rotateTowards
+import io.sc3.peripherals.Registration.ModBlockEntities
+import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.prints.*
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView.BAKE_LOCK_UV
@@ -29,11 +34,6 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.BlockRenderView
 import org.cache2k.Cache2kBuilder
-import io.sc3.library.ext.faces
-import io.sc3.library.ext.rotateTowards
-import io.sc3.peripherals.Registration.ModBlockEntities
-import io.sc3.peripherals.ScPeripherals.ModId
-import io.sc3.peripherals.prints.*
 import java.util.function.Supplier
 
 class PrintBakedModel(
@@ -81,7 +81,7 @@ class PrintBakedModel(
       }
 
       // Show the invalid model
-      ctx.fallbackConsumer().accept(missingModel)
+      ctx.bakedModelConsumer().accept(missingModel)
       return
     }
   }
@@ -122,11 +122,11 @@ class PrintBakedModel(
         .pos(1, face[1])
         .pos(2, face[2])
         .pos(3, face[3])
-        .spriteBake(0, sprite, BAKE_LOCK_UV)
-        .spriteColor(0, 0, tint)
-        .spriteColor(1, 0, tint)
-        .spriteColor(2, 0, tint)
-        .spriteColor(3, 0, tint)
+        .spriteBake(sprite, BAKE_LOCK_UV)
+        .color(0, tint)
+        .color(1, tint)
+        .color(2, tint)
+        .color(3, tint)
         .emit()
     }
   }

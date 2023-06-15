@@ -34,7 +34,8 @@ object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
     renderInkOverlay(matrices, entity, vertexConsumers, light, overlay)
   }
 
-  private fun renderPaperInTray(matrices: MatrixStack, entity: PosterPrinterBlockEntity, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
+  private fun renderPaperInTray(matrices: MatrixStack, entity: PosterPrinterBlockEntity,
+                                vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
     matrices.push()
 
     matrices.translate(0.5, 0.5, 0.5)
@@ -49,7 +50,8 @@ object PosterPrinterRenderer : BlockEntityRenderer<PosterPrinterBlockEntity> {
     matrices.pop()
   }
 
-  private fun renderResult(matrices: MatrixStack, entity: PosterPrinterBlockEntity, vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
+  private fun renderResult(matrices: MatrixStack, entity: PosterPrinterBlockEntity,
+                           vertexConsumers: VertexConsumerProvider, light: Int, overlay: Int) {
     val item = entity.getStack(OUTPUT_SLOT)
     if (item.isEmpty) return
 

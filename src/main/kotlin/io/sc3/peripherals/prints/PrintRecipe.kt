@@ -1,7 +1,7 @@
 package io.sc3.peripherals.prints
 
 import io.sc3.peripherals.Registration.ModItems
-import net.minecraft.inventory.CraftingInventory
+import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items.*
 import net.minecraft.recipe.Ingredient.ofItems
@@ -23,7 +23,7 @@ class PrintRecipe(
   private val glowstoneBlock = ofItems(GLOWSTONE)
   private val beaconBlocks = ofItems(IRON_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, EMERALD_BLOCK)
 
-  private fun items(inv: CraftingInventory): RecipeItems? {
+  private fun items(inv: RecipeInputInventory): RecipeItems? {
     val items = RecipeItems()
 
     for (i in 0 until inv.size()) {
@@ -64,16 +64,16 @@ class PrintRecipe(
     return items
   }
 
-  override fun matches(inv: CraftingInventory, world: World) = items(inv) != null
+  override fun matches(inv: RecipeInputInventory, world: World) =
+    items(inv) != null
 
-  override fun craft(inv: CraftingInventory, manager: DynamicRegistryManager): ItemStack {
+  override fun craft(inv: RecipeInputInventory, manager: DynamicRegistryManager): ItemStack {
     // Validate the crafting inputs and calculate what needs to be modified. Refuse to craft if any resources will be
     // wasted.
     val items = items(inv) ?: return ItemStack.EMPTY
     val print = items.print ?: return ItemStack.EMPTY
 
-    val result = print.copy()
-    result.count = 1
+    val result = print.copyWithCount(1)
 
     // Get a fresh PrintData instance from the copy to mutate it
     val data = PrintItem.printData(result) ?: return ItemStack.EMPTY

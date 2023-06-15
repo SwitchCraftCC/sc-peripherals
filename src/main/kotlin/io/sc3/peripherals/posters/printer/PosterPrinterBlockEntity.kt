@@ -21,9 +21,9 @@ import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.packet.Packet
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.screen.PropertyDelegate
 import net.minecraft.screen.ScreenHandler
@@ -128,8 +128,7 @@ class PosterPrinterBlockEntity(
   fun canMergeOutput(): Boolean {
     val current = getStack(OUTPUT_SLOT)
     val output = PosterItem.create(world ?: return false, data)
-
-    return current.isEmpty || (current.isItemEqual(output) && ItemStack.areNbtEqual(current, output))
+    return current.isEmpty || ItemStack.canCombine(current, output)
   }
 
   fun canPrint(): Boolean {
