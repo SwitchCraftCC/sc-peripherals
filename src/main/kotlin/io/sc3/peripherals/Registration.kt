@@ -3,6 +3,7 @@ package io.sc3.peripherals
 import dan200.computercraft.api.peripheral.PeripheralLookup
 import io.sc3.library.networking.registerServerReceiver
 import io.sc3.peripherals.ScPeripherals.ModId
+import io.sc3.peripherals.ScPeripherals.modId
 import io.sc3.peripherals.block.ChameliumBlock
 import io.sc3.peripherals.datagen.recipes.handlers.RecipeHandlers
 import io.sc3.peripherals.item.ChameliumItem
@@ -39,6 +40,7 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.resource.featuretoggle.FeatureFlags
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 
 object Registration {
@@ -47,6 +49,7 @@ object Registration {
 
   internal fun init() {
     register(ITEM_GROUP, itemGroup, FabricItemGroup.builder()
+      .displayName(Text.translatable("itemGroup.$modId.main"))
       .icon { ItemStack(ModItems.printer) }
       .entries { _, entries -> items.forEach(entries::add) }
       .build())

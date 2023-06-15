@@ -89,11 +89,9 @@ dependencies {
 
   modCompileOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric-api:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
-    exclude("fuzs.forgeconfigapiport", "forgeconfigapiport-fabric")
   }
   modRuntimeOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
-    exclude("fuzs.forgeconfigapiport", "forgeconfigapiport-fabric")
   }
 
   implementation(include("com.electronwill.night-config", "core", nightConfigVersion))
