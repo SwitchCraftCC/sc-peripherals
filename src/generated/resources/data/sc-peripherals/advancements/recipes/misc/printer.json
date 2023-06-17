@@ -39,5 +39,6 @@
     "recipes": [
       "sc-peripherals:printer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

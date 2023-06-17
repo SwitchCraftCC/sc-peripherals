@@ -43,5 +43,6 @@
     "recipes": [
       "sc-peripherals:print"
     ]
-  }
+  },
+  "sends_telemetry_event": true
 }

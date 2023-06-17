@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "C": {
+      "fabric:type": "fabric:nbt",
       "base": {
         "item": "computercraft:computer_advanced"
       },
-      "fabric:type": "fabric:nbt",
       "strict": true
     },
     "D": {

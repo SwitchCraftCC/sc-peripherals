@@ -30,5 +30,6 @@
     "recipes": [
       "sc-peripherals:ink_cartridge"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

@@ -39,5 +39,6 @@
     "recipes": [
       "sc-peripherals:poster_printer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

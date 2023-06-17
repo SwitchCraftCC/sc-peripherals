@@ -30,5 +30,6 @@
     "recipes": [
       "sc-peripherals:texture_analyzer"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
