@@ -72,6 +72,7 @@ object Registration {
     val print = rBlock("print", PrintBlock(settings()
       .nonOpaque()
       .dynamicBounds()
+      .solid()
       .luminance { it.get(PrintBlock.luminance) }))
 
     val posterPrinter = rBlock("poster_printer", PosterPrinterBlock(settings()))
