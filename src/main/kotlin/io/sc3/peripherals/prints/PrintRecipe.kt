@@ -22,6 +22,7 @@ class PrintRecipe(
   private val glowstoneDust = ofItems(GLOWSTONE_DUST)
   private val glowstoneBlock = ofItems(GLOWSTONE)
   private val beaconBlocks = ofItems(IRON_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, EMERALD_BLOCK)
+  private val honeyBlock = ofItems(HONEY_BLOCK)
 
   private fun items(inv: RecipeInputInventory): RecipeItems? {
     val items = RecipeItems()
@@ -41,18 +42,25 @@ class PrintRecipe(
           if (items.beaconBlock != null) return null // Prevent item wastage with multiple beacon blocks
           items.beaconBlock = stack
         }
+        honeyBlock.test(stack) -> {
+          if (items.honeyBlock != null) return null // Prevent item wastage with multiple honey blocks
+          items.honeyBlock = stack
+        }
         else -> return null
       }
     }
 
     // Don't allow crafting if there's nothing valid to craft
-    if (items.print == null || (items.lightIncrease <= 0 && items.beaconBlock == null)) {
+    if (items.print == null || (items.lightIncrease <= 0 && items.beaconBlock == null && items.honeyBlock == null)) {
       return null
     }
 
-    // Don't allow crafting if the user would be wasting beacon blocks
+    // Don't allow crafting if the user would be wasting beacon or honey blocks
     val data = PrintItem.printData(items.print!!) ?: return null
     if (data.isBeaconBlock && items.beaconBlock != null) {
+      return null
+    }
+    if (data.isQuiet && items.honeyBlock != null) {
       return null
     }
 
@@ -79,6 +87,7 @@ class PrintRecipe(
     val data = PrintItem.printData(result) ?: return ItemStack.EMPTY
     data.lightLevel = (data.lightLevel + items.lightIncrease).coerceIn(0, 15)
     if (items.beaconBlock != null) data.isBeaconBlock = true
+    if (items.honeyBlock != null) data.isQuiet = true
 
     val nbt = result.nbt ?: return ItemStack.EMPTY
     nbt.put("data", data.toNbt())
@@ -94,7 +103,8 @@ class PrintRecipe(
   data class RecipeItems(
     var print: ItemStack? = null,
     var lightIncrease: Int = 0,
-    var beaconBlock: ItemStack? = null
+    var beaconBlock: ItemStack? = null,
+    var honeyBlock: ItemStack? = null
   )
 
   companion object {

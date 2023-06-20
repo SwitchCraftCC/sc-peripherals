@@ -28,6 +28,7 @@
 
   "block.sc-peripherals.print": "3D Print",
   "block.sc-peripherals.print.beacon_base": "Works as a beacon base.",
+  "block.sc-peripherals.print.quiet": "Silent when toggling state.",
   "block.sc-peripherals.print.redstone_level": "Redstone output: %d",
   "block.sc-peripherals.print.light_level": "Light emitted: %d"
 }
