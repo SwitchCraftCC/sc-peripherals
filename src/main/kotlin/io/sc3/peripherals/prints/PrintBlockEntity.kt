@@ -6,8 +6,8 @@ import io.sc3.peripherals.util.BaseBlockEntity
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.packet.Packet
 import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
@@ -19,7 +19,12 @@ class PrintBlockEntity(
   pos: BlockPos,
   state: BlockState
 ) : BaseBlockEntity(print, pos, state) {
+  private var dataDirty = false
   var data: PrintData? = null
+    set(value) {
+      field = value
+      dataDirty = true
+    }
 
   val on
     get() = with(cachedState) { if (isAir) false else get(PrintBlock.on) }
@@ -107,6 +112,11 @@ class PrintBlockEntity(
 
   override fun toInitialChunkDataNbt(): NbtCompound = createNbt()
 
-  override fun toUpdatePacket(): Packet<ClientPlayPacketListener> =
-    BlockEntityUpdateS2CPacket.create(this) // TODO: Only need to send `state` here
+  override fun toUpdatePacket(): Packet<ClientPlayPacketListener>? =
+    if (dataDirty) {
+      dataDirty = false
+      BlockEntityUpdateS2CPacket.create(this)
+    } else {
+      null
+    }
 }
