@@ -66,7 +66,7 @@ class PosterItem(settings: Settings) : BaseItem("poster", settings) {
       matrices.translate(tooltipX + 3.0, tooltipY + 3.0, 500.0)
       matrices.scale(scale, scale, 1f)
       RenderSystem.enableBlend()
-      ctx.drawTexture(POSTER_BACKGROUND_RES, -pad, -pad, 0f, 0f, size, size, size, size)
+      ctx.drawTexture(POSTER_BACKGROUND_RES, -pad, -pad, -1, 0f, 0f, size, size, size, size)
       val buffer: BufferBuilder = Tessellator.getInstance().buffer
       val immediateBuffer = VertexConsumerProvider.immediate(buffer)
       PosterRenderer.draw(matrices, immediateBuffer, posterId, posterState, 240)
