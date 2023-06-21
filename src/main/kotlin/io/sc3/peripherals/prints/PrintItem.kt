@@ -30,6 +30,7 @@ class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
     }
 
     if (data.isBeaconBlock) line("beacon_base")
+    if (data.isQuiet) line("quiet")
     if (data.redstoneLevel > 0) line("redstone_level", data.redstoneLevel)
     if (data.lightLevel > 0) line("light_level", data.lightLevel)
   }

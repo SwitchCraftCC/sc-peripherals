@@ -58,7 +58,9 @@ class PrintBlockEntity(
     val block = cachedState.block as? PrintBlock ?: return
 
     world.setBlockState(pos, cachedState.with(PrintBlock.on, !on), Block.NOTIFY_ALL)
-    world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
+    if (data?.isQuiet != false) {
+      world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
+    }
     world.updateNeighborsAlways(pos, block)
 
     // If we're in button mode, turn off after 20 ticks

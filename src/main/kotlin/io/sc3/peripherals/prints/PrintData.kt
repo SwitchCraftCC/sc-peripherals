@@ -24,6 +24,7 @@ data class PrintData(
   var lightLevel: Int = 0,
   var redstoneLevel: Int = 0,
   var isBeaconBlock: Boolean = false,
+  var isQuiet: Boolean = false,
 
   val shapesOff: Shapes = Shapes(),
   val shapesOn: Shapes = Shapes(),
@@ -74,6 +75,7 @@ data class PrintData(
     nbt.putInt("lightLevel", lightLevel)
     nbt.putInt("redstoneLevel", redstoneLevel)
     nbt.putBoolean("isBeaconBlock", isBeaconBlock)
+    nbt.putBoolean("isQuiet", isQuiet)
     nbt.put("shapesOff", shapesOff.toNbt())
     nbt.put("shapesOn", shapesOn.toNbt())
     return nbt
@@ -92,6 +94,7 @@ data class PrintData(
       lightLevel = nbt.getInt("lightLevel"),
       redstoneLevel = nbt.getInt("redstoneLevel"),
       isBeaconBlock = nbt.getBoolean("isBeaconBlock"),
+      isQuiet = nbt.getBoolean("isQuiet"),
       shapesOff = nbt.getShapeSet("shapesOff"),
       shapesOn = nbt.getShapeSet("shapesOn"),
     )
