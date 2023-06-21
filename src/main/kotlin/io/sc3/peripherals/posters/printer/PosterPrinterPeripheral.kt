@@ -15,6 +15,7 @@ import java.util.*
 
 class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
   override fun getType() = "poster_printer"
+  override fun getTarget() = be
 
   @LuaFunction(mainThread = true)
   fun reset() {
