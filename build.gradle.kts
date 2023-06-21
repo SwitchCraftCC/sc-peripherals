@@ -87,10 +87,8 @@ dependencies {
 
   modImplementation(include("io.sc3", "sc-library", scLibraryVersion))
 
-  modCompileOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric-api:$ccVersion") {
-    exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
-  }
-  modRuntimeOnly("cc.tweaked:cc-tweaked-$ccMcVersion-fabric:$ccVersion") {
+  // CC: Tweaked
+  modApi("cc.tweaked:cc-tweaked-$ccMcVersion-fabric:$ccVersion") {
     exclude("net.fabricmc.fabric-api", "fabric-gametest-api-v1")
   }
 

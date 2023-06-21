@@ -2,7 +2,6 @@ package io.sc3.peripherals.posters.printer
 
 import dan200.computercraft.api.lua.LuaException
 import dan200.computercraft.api.lua.LuaFunction
-import dan200.computercraft.api.lua.LuaValues.*
 import dan200.computercraft.api.lua.MethodResult
 import dan200.computercraft.api.lua.MethodResult.of
 import dan200.computercraft.api.peripheral.IComputerAccess
@@ -11,9 +10,10 @@ import io.sc3.peripherals.posters.PosterPrintData
 import io.sc3.peripherals.prints.MAX_LABEL_LENGTH
 import io.sc3.peripherals.prints.MAX_TOOLTIP_LENGTH
 import io.sc3.peripherals.prints.printer.PrinterBlockEntity
+import io.sc3.peripherals.util.InventoryPeripheral
 import java.util.*
 
-class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
+class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : InventoryPeripheral(be) {
   override fun getType() = "poster_printer"
   override fun getTarget() = be
 
@@ -126,7 +126,8 @@ class PosterPrinterPeripheral(val be: PosterPrinterBlockEntity) : IPeripheral {
   }
   
   @LuaFunction(mainThread = true)
-  fun getInkLevel() = of(be.ink, PrinterBlockEntity.maxInk)
+  fun getInkLevel(): MethodResult =
+    of(be.ink, PrinterBlockEntity.maxInk)
 
   override fun attach(computer: IComputerAccess) {
     be.computers.add(computer)

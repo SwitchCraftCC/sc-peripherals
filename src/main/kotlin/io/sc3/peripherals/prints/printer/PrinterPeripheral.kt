@@ -12,12 +12,13 @@ import io.sc3.library.ext.intBox
 import io.sc3.peripherals.config.ScPeripheralsConfig.config
 import io.sc3.peripherals.prints.PrintData
 import io.sc3.peripherals.prints.Shape
+import io.sc3.peripherals.util.InventoryPeripheral
 import io.sc3.peripherals.util.getTableInt
 import net.minecraft.util.Identifier
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
+class PrinterPeripheral(val be: PrinterBlockEntity) : InventoryPeripheral(be) {
   override fun getType() = "3d_printer"
   override fun getTarget() = be
 
@@ -151,10 +152,12 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   }
 
   @LuaFunction(mainThread = true)
-  fun getChameliumLevel() = of(be.chamelium, PrinterBlockEntity.maxChamelium)
+  fun getChameliumLevel(): MethodResult =
+    of(be.chamelium, PrinterBlockEntity.maxChamelium)
   
   @LuaFunction(mainThread = true)
-  fun getInkLevel() = of(be.ink, PrinterBlockEntity.maxInk)
+  fun getInkLevel(): MethodResult =
+    of(be.ink, PrinterBlockEntity.maxInk)
 
   override fun attach(computer: IComputerAccess) {
     be.computers.add(computer)
