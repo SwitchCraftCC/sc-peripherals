@@ -58,7 +58,7 @@ class PrintBlockEntity(
     val block = cachedState.block as? PrintBlock ?: return
 
     world.setBlockState(pos, cachedState.with(PrintBlock.on, !on), Block.NOTIFY_ALL)
-    if (data?.isQuiet != false) {
+    if (data?.isQuiet != true) {
       world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
     }
     world.updateNeighborsAlways(pos, block)
