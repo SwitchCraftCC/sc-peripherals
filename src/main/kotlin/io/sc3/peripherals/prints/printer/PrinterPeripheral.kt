@@ -19,6 +19,7 @@ import java.util.*
 
 class PrinterPeripheral(val be: PrinterBlockEntity) : IPeripheral {
   override fun getType() = "3d_printer"
+  override fun getTarget() = be
 
   @LuaFunction(mainThread = true)
   fun reset() {
