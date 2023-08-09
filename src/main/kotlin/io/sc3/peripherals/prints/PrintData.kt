@@ -20,6 +20,8 @@ data class PrintData(
   var isButton: Boolean = false,
   var collideWhenOn: Boolean = true,
   var collideWhenOff: Boolean = true,
+  var lightWhenOn: Boolean = true,
+  var lightWhenOff: Boolean = true,
 
   var lightLevel: Int = 0,
   var redstoneLevel: Int = 0,
@@ -72,6 +74,8 @@ data class PrintData(
     nbt.putBoolean("isButton", isButton)
     nbt.putBoolean("collideWhenOn", collideWhenOn)
     nbt.putBoolean("collideWhenOff", collideWhenOff)
+    nbt.putBoolean("lightWhenOn", lightWhenOn)
+    nbt.putBoolean("lightWhenOff", lightWhenOff)
     nbt.putInt("lightLevel", lightLevel)
     nbt.putInt("redstoneLevel", redstoneLevel)
     nbt.putBoolean("isBeaconBlock", isBeaconBlock)
@@ -91,6 +95,8 @@ data class PrintData(
       isButton = nbt.getBoolean("isButton"),
       collideWhenOn = nbt.getBoolean("collideWhenOn"),
       collideWhenOff = nbt.getBoolean("collideWhenOff"),
+      lightWhenOn = nbt.getBoolean("lightWhenOn"),
+      lightWhenOff = nbt.getBoolean("lightWhenOff"),
       lightLevel = nbt.getInt("lightLevel"),
       redstoneLevel = nbt.getInt("redstoneLevel"),
       isBeaconBlock = nbt.getBoolean("isBeaconBlock"),
