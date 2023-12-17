@@ -17,28 +17,32 @@ abstract class InventoryPeripheral(private val inv: Inventory) : IPeripheral {
 
   @LuaFunction(mainThread = true)
   fun list(): MutableMap<Int, MutableMap<String, *>> =
-    InventoryMethods.list(wrapped)
+    inventory.list(wrapped)
 
   @LuaFunction(mainThread = true)
   fun getItemDetail(slot: Int): MutableMap<String, *>? =
-    InventoryMethods.getItemDetail(wrapped, slot)
+    inventory.getItemDetail(wrapped, slot)
 
   @LuaFunction(mainThread = true)
   fun getItemLimit(slot: Int): Long =
-    InventoryMethods.getItemLimit(wrapped, slot)
+    inventory.getItemLimit(wrapped, slot)
 
   @LuaFunction(mainThread = true)
   fun pushItems(computer: IComputerAccess, toName: String, fromSlot: Int,
                 limit: Optional<Int>, toSlot: Optional<Int>) =
-    InventoryMethods.pushItems(wrapped, computer, toName, fromSlot, limit, toSlot)
+    inventory.pushItems(wrapped, computer, toName, fromSlot, limit, toSlot)
 
   @LuaFunction(mainThread = true)
   fun pullItems(computer: IComputerAccess, fromName: String, fromSlot: Int,
                 limit: Optional<Int>, toSlot: Optional<Int>) =
-    InventoryMethods.pullItems(wrapped, computer, fromName, fromSlot, limit, toSlot)
+    inventory.pullItems(wrapped, computer, fromName, fromSlot, limit, toSlot)
 
   @Suppress("UnstableApiUsage")
   private val wrapped: StorageWrapper
     // TODO: Can we just create a wrapper once instead of recreating it each time it's needed?
     get() = StorageWrapper(InventoryStorage.of(inv, null))
+
+  companion object {
+    private val inventory = InventoryMethods()
+  }
 }
