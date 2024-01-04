@@ -11,7 +11,7 @@ It adds a 3D printer in the style of
 [OpenComputers](https://github.com/MightyPirates/OpenComputers), and a Wide Format Printer that prints custom posters to
 display in item frames.
 
-View the documentation at [docs.sc3.io](https://docs.sc3.io/whats-new/sc-peripherals.html).
+View the documentation at [docs.sc3.io](https://docs.sc3.io/features/sc-peripherals.html).
 
 ![sc-peripherals](img/header.png)
 
