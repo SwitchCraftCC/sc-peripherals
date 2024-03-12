@@ -1,6 +1,9 @@
 package io.sc3.peripherals.prints
 
-import io.sc3.library.ext.*
+import io.sc3.library.ext.optCompound
+import io.sc3.library.ext.rotateTowards
+import io.sc3.library.ext.unitBox
+import io.sc3.library.ext.volume
 import io.sc3.peripherals.Registration.ModBlockEntities.print
 import io.sc3.peripherals.util.BaseBlockEntity
 import net.minecraft.block.Block
@@ -20,7 +23,7 @@ class PrintBlockEntity(
   state: BlockState
 ) : BaseBlockEntity(print, pos, state) {
   private var dataDirty = false
-  var data: PrintData? = null
+  var data: PrintData = PrintData()
     set(value) {
       field = value
       dataDirty = true
@@ -32,20 +35,15 @@ class PrintBlockEntity(
     get() = with(cachedState) { if (isAir) Direction.NORTH else get(PrintBlock.facing) }
 
   val canTurnOn
-    get() = data?.shapesOn?.isNotEmpty() ?: false
+    get() = data.shapesOn.isNotEmpty()
   val shapes
-    get() = data?.let { if (on) it.shapesOn else it.shapesOff }
+    get() = if (on) data.shapesOn else data.shapesOff
 
   val collide
-    get() = data?.let { if (on) it.collideWhenOn else it.collideWhenOff }
-
-  private val lightWhenOn
-    get() = data?.lightWhenOn ?: true
-  private val lightWhenOff
-    get() = data?.lightWhenOff ?: true
+    get() = if (on) data.collideWhenOn else data.collideWhenOff
 
   private val emitsRedstone
-    get() = (data?.redstoneLevel ?: 0) > 0
+    get() = data.redstoneLevel > 0
   private val emitsRedstoneWhenOff
     get() = emitsRedstone && !canTurnOn
   private val emitsRedstoneWhenOn
@@ -62,45 +60,28 @@ class PrintBlockEntity(
     val world = world ?: return
     val block = cachedState.block as? PrintBlock ?: return
 
-    val hasLight = if (on) lightWhenOn else lightWhenOff
-    val luminance = if (hasLight) data?.lightLevel ?: 0 else 0
+    val hasLight = if (on) data.lightWhenOn else data.lightWhenOff
+    val luminance = if (hasLight) data.lightLevel else 0
 
     val newState = cachedState
       .with(PrintBlock.on, !on)
       .with(PrintBlock.luminance, luminance)
     world.setBlockState(pos, newState, Block.NOTIFY_ALL)
 
-    if (data?.isQuiet != true) {
+    if (!data.isQuiet) {
       world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
     }
     world.updateNeighborsAlways(pos, block)
 
     // If we're in button mode, turn off after 20 ticks
-    if (on && data?.isButton == true) {
+    if (on && data.isButton) {
       world.scheduleBlockTick(pos, block, block.toggleTicks)
     }
   }
 
-  // TODO: This is no longer needed - Minecraft does this calculation natively?
-  fun isSideSolid(side: Direction) =
-    shapes?.filter { it.texture != null }?.forEach {
-      val bounds = it.bounds.rotateTowards(facing)
-      val fullX = bounds.minX == 0.0 && bounds.maxX == 1.0
-      val fullY = bounds.minY == 0.0 && bounds.maxY == 1.0
-      val fullZ = bounds.minZ == 0.0 && bounds.maxZ == 1.0
-      return when (side) {
-        Direction.DOWN -> bounds.minY == 0.0 && fullX && fullZ
-        Direction.UP -> bounds.maxY == 1.0 && fullX && fullZ
-        Direction.NORTH -> bounds.minZ == 0.0 && fullX && fullY
-        Direction.SOUTH -> bounds.maxZ == 1.0 && fullX && fullY
-        Direction.WEST -> bounds.minX == 0.0 && fullY && fullZ
-        Direction.EAST -> bounds.maxX == 1.0 && fullY && fullZ
-      }
-    } ?: false
-
   fun redstoneOutput(): Int {
     val emitting = if (on) emitsRedstoneWhenOn else emitsRedstoneWhenOff
-    return if (emitting) data?.redstoneLevel ?: 0 else 0
+    return if (emitting) data.redstoneLevel else 0
   }
 
   fun updateRedstoneInput() {
@@ -121,7 +102,7 @@ class PrintBlockEntity(
 
   override fun writeNbt(nbt: NbtCompound) {
     super.writeNbt(nbt)
-    nbt.putNullableCompound("data", data?.toNbt())
+    nbt.put("data", data.toNbt())
   }
 
   override fun toInitialChunkDataNbt(): NbtCompound = createNbt()

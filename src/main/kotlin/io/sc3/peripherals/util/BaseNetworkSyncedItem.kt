@@ -1,13 +1,12 @@
 package io.sc3.peripherals.util
 
-import net.minecraft.client.item.TooltipContext
-import net.minecraft.item.Item
-import net.minecraft.item.ItemStack
-import net.minecraft.text.Text
-import net.minecraft.world.World
 import io.sc3.library.Tooltips.addDescLines
 import io.sc3.peripherals.ScPeripherals.modId
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.item.ItemStack
 import net.minecraft.item.NetworkSyncedItem
+import net.minecraft.text.Text
+import net.minecraft.world.World
 
 abstract class BaseNetworkSyncedItem(
   private val itemName: String,

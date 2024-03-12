@@ -132,7 +132,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     if (!stack.isOf(ModItems.print)) return 0
 
     val data = PrintItem.printData(ctx.stack)
-    return if (data?.lightWhenOff == true) data.lightLevel else 0
+    return if (data.lightWhenOff) data.lightLevel else 0
   }
 
   // Redstone

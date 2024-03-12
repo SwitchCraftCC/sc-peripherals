@@ -47,7 +47,7 @@ class PrintBakedModel(
   override fun emitBlockQuads(blockView: BlockRenderView, state: BlockState, pos: BlockPos,
                               randomSupplier: Supplier<Random>, ctx: RenderContext) {
     val be = blockView.getBlockEntity(pos, ModBlockEntities.print).orElse(null) ?: return // TODO: Return missingModel?
-    val shapes = be.shapes ?: return // Get the shapes for the current state (on/off)
+    val shapes = be.shapes // Get the shapes for the current state (on/off)
     val shapesFacing = ShapesFacing(shapes, be.facing)
 
     val mesh = meshCache.computeIfAbsent(shapesFacing) {
@@ -66,7 +66,7 @@ class PrintBakedModel(
     try {
       // Allow this to throw when there are no shapes for the item stack
       val printData = itemCache.computeIfAbsent(stack) {
-        PrintItem.printData(stack) ?: throw NoPrintDataException()
+        PrintItem.printData(stack)
       }
       val shapes = printData.shapesOff
 

@@ -17,19 +17,19 @@ data class PrintData(
   private val initialLabel: String? = null,
   var tooltip: String? = null,
 
-  var isButton: Boolean = false,
-  var collideWhenOn: Boolean = true,
+  var isButton      : Boolean = false,
+  var collideWhenOn : Boolean = true,
   var collideWhenOff: Boolean = true,
-  var lightWhenOn: Boolean = true,
-  var lightWhenOff: Boolean = true,
+  var lightWhenOn   : Boolean = true,
+  var lightWhenOff  : Boolean = true,
 
-  var lightLevel: Int = 0,
-  var redstoneLevel: Int = 0,
+  var lightLevel   : Int     = 0,
+  var redstoneLevel: Int     = 0,
   var isBeaconBlock: Boolean = false,
-  var isQuiet: Boolean = false,
+  var isQuiet      : Boolean = false,
 
   val shapesOff: Shapes = Shapes(),
-  val shapesOn: Shapes = Shapes(),
+  val shapesOn : Shapes = Shapes(),
 ) {
   var label: String? = initialLabel
     set(value) {
@@ -90,19 +90,19 @@ data class PrintData(
     val noclipCostMultiplier: Int = config.get("printer.noclip_cost_multiplier")
 
     fun fromNbt(nbt: NbtCompound) = PrintData(
-      initialLabel = nbt.optString("label")?.takeIf { isValidLabel(it) }, // Cheaper than sanitiseLabel
-      tooltip = nbt.optString("tooltip")?.takeIf { isValidTooltip(it) },
-      isButton = nbt.getBoolean("isButton"),
-      collideWhenOn = nbt.getBoolean("collideWhenOn"),
+      initialLabel   = nbt.optString("label")?.takeIf { isValidLabel(it) },     // Cheaper than sanitiseLabel
+      tooltip        = nbt.optString("tooltip")?.takeIf { isValidTooltip(it) },
+      isButton       = nbt.getBoolean("isButton"),
+      collideWhenOn  = nbt.getBoolean("collideWhenOn"),
       collideWhenOff = nbt.getBoolean("collideWhenOff"),
-      lightWhenOn = nbt.getBoolean("lightWhenOn"),
-      lightWhenOff = nbt.getBoolean("lightWhenOff"),
-      lightLevel = nbt.getInt("lightLevel"),
-      redstoneLevel = nbt.getInt("redstoneLevel"),
-      isBeaconBlock = nbt.getBoolean("isBeaconBlock"),
-      isQuiet = nbt.getBoolean("isQuiet"),
-      shapesOff = nbt.getShapeSet("shapesOff"),
-      shapesOn = nbt.getShapeSet("shapesOn"),
+      lightWhenOn    = nbt.getBoolean("lightWhenOn"),
+      lightWhenOff   = nbt.getBoolean("lightWhenOff"),
+      lightLevel     = nbt.getInt("lightLevel"),
+      redstoneLevel  = nbt.getInt("redstoneLevel"),
+      isBeaconBlock  = nbt.getBoolean("isBeaconBlock"),
+      isQuiet        = nbt.getBoolean("isQuiet"),
+      shapesOff      = nbt.getShapeSet("shapesOff"),
+      shapesOn       = nbt.getShapeSet("shapesOn"),
     )
 
     private fun NbtCompound.getShapeSet(key: String): Shapes =

@@ -56,7 +56,7 @@ class PrintRecipe(
     }
 
     // Don't allow crafting if the user would be wasting beacon or honey blocks
-    val data = PrintItem.printData(items.print!!) ?: return null
+    val data = PrintItem.printData(items.print!!)
     if (data.isBeaconBlock && items.beaconBlock != null) {
       return null
     }
@@ -84,7 +84,7 @@ class PrintRecipe(
     val result = print.copyWithCount(1)
 
     // Get a fresh PrintData instance from the copy to mutate it
-    val data = PrintItem.printData(result) ?: return ItemStack.EMPTY
+    val data = PrintItem.printData(result)
     data.lightLevel = (data.lightLevel + items.lightIncrease).coerceIn(0, 15)
     if (items.beaconBlock != null) data.isBeaconBlock = true
     if (items.honeyBlock != null) data.isQuiet = true

@@ -125,7 +125,7 @@ class PrinterBlockEntity(
     if (stack.isOf(ModItems.chamelium)) {
       return chameliumValue
     } else if (stack.isOf(ModItems.print) && recycleMultiplier > 0) {
-      val data = PrintItem.printData(stack) ?: return 0
+      val data = PrintItem.printData(stack)
       val cost = data.computeCosts()?.first ?: return 0
       return (cost * recycleMultiplier).toInt()
     } else {

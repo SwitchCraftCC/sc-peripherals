@@ -5,7 +5,6 @@ import io.sc3.peripherals.Registration.ModBlocks
 import io.sc3.peripherals.Registration.ModItems
 import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.ScPeripherals.modId
-import io.sc3.peripherals.posters.PosterPrintData
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
@@ -17,12 +16,12 @@ import net.minecraft.world.World
 
 class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
   override fun getName(stack: ItemStack): Text {
-    return printData(stack)?.labelText ?: return super.getName(stack)
+    return printData(stack).labelText ?: return super.getName(stack)
   }
 
   override fun appendTooltip(stack: ItemStack, world: World?, tooltip: MutableList<Text>, context: TooltipContext) {
     // Don't call super here
-    val data = printData(stack) ?: return
+    val data = printData(stack)
     data.tooltip?.let { tooltip.add(literal(it)) }
 
     fun line(key: String, vararg args: Any) {
@@ -38,11 +37,11 @@ class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
   companion object {
     val id = ModId("item/print")
 
-    fun printData(stack: ItemStack): PrintData? =
-      stack.orCreateNbt.optCompound("data")?.let { PrintData.fromNbt(it) }
+    fun printData(stack: ItemStack): PrintData =
+      stack.orCreateNbt.optCompound("data")?.let { PrintData.fromNbt(it) } ?: PrintData()
 
     fun fromBlockEntity(be: PrintBlockEntity): ItemStack = ItemStack(ModItems.print).apply {
-      val data = be.data ?: return ItemStack.EMPTY
+      val data = be.data
       orCreateNbt.put("data", data.toNbt())
     }
 
@@ -52,7 +51,7 @@ class PrintItem(settings: Settings) : BlockItem(ModBlocks.print, settings) {
 
     @JvmStatic
     fun hasCustomName(stack: ItemStack) =
-      printData(stack)?.labelText != null
+      printData(stack).labelText != null
 
     @JvmStatic
     fun getCustomName(stack: ItemStack): Text =
