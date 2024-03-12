@@ -15,7 +15,7 @@ import io.sc3.peripherals.util.ScreenHandlerPropertyUpdateIntS2CPacket;
 public abstract class ServerPlayerEntityScreenHandlerSyncHandlerMixin {
   @Shadow
   @Final
-  private ServerPlayerEntity field_29182;
+  ServerPlayerEntity field_29182;
 
   /**
    * Sends an int for a property update value instead of a short

@@ -110,8 +110,8 @@ data class PrintData(
         .map { Shape.fromNbt(it as NbtCompound) }
         .toCollection(Shapes())
 
-    fun isValidLabel(s: String?) = s?.length in 1..MAX_LABEL_LENGTH
-    fun isValidTooltip(s: String?) = s?.length in 1..MAX_TOOLTIP_LENGTH
+    private fun isValidLabel(s: String?) = s?.length in 1..MAX_LABEL_LENGTH
+    private fun isValidTooltip(s: String?) = s?.length in 1..MAX_TOOLTIP_LENGTH
 
     fun sanitiseLabel(s: String?) = s?.takeIf { isValidLabel(it) }
       ?.let { stripInvalidChars(it) }

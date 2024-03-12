@@ -139,7 +139,7 @@ class PrinterBlockEntity(
   val canPrint
     get() = data.shapesOff.isNotEmpty() && data.shapesOff.size <= maxShapes && data.shapesOn.size <= maxShapes
 
-  fun canMergeOutput(): Boolean {
+  private fun canMergeOutput(): Boolean {
     val current = getStack(OUTPUT_SLOT)
     val output = PrintItem.create(data)
     return current.isEmpty || ItemStack.canCombine(current, output)

@@ -23,7 +23,7 @@ import org.joml.Matrix4f
 @Environment(EnvType.CLIENT)
 object PosterRenderer : AutoCloseable {
   val POSTER_BACKGROUND_RES = ModId("textures/item/poster_background.png")
-  val POSTER_BACKGROUND = RenderLayer.getText(POSTER_BACKGROUND_RES)
+  private val POSTER_BACKGROUND: RenderLayer = RenderLayer.getText(POSTER_BACKGROUND_RES)
 
   private val textureManager get() = MinecraftClient.getInstance().textureManager
 
@@ -62,10 +62,11 @@ object PosterRenderer : AutoCloseable {
         .computeIfAbsent(id) { PosterTexture(id, state) }
         .also { it.setState(state) }
 
-  fun clearStateTextures() {
+  private fun clearStateTextures() {
     for (mapTexture in posterTextures.values) {
       mapTexture.close()
     }
+
     posterTextures.clear()
   }
 

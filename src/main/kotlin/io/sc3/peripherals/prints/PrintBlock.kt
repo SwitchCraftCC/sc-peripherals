@@ -53,10 +53,10 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     builder.add(facing).add(on).add(waterlogged).add(luminance)
   }
 
-  override fun mirror(state: BlockState, mirror: BlockMirror) =
+  override fun mirror(state: BlockState, mirror: BlockMirror): BlockState =
     state.rotate(mirror.getRotation(state.get(facing)))
 
-  override fun rotate(state: BlockState, rotation: BlockRotation) =
+  override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
   override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState

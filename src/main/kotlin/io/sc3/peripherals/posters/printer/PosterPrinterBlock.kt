@@ -80,13 +80,13 @@ class PosterPrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Wa
     builder.add(facing, waterlogged, printing, hasPaper)
   }
 
-  override fun mirror(state: BlockState, mirror: BlockMirror) =
+  override fun mirror(state: BlockState, mirror: BlockMirror): BlockState =
     state.rotate(mirror.getRotation(state.get(facing)))
 
-  override fun rotate(state: BlockState, rotation: BlockRotation) =
+  override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
-  override fun getPlacementState(ctx: ItemPlacementContext) = defaultState
+  override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState
     .with(facing, ctx.horizontalPlayerFacing.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
     .with(printing, false)

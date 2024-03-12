@@ -125,7 +125,7 @@ class PosterPrinterBlockEntity(
   private fun inkValue(stack: ItemStack) =
     if (stack.isOf(ModItems.inkCartridge)) inkValue else 0
 
-  fun canMergeOutput(): Boolean {
+  private fun canMergeOutput(): Boolean {
     val current = getStack(OUTPUT_SLOT)
     val output = PosterItem.create(world ?: return false, data)
     return current.isEmpty || ItemStack.canCombine(current, output)

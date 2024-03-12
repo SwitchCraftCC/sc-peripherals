@@ -1,9 +1,6 @@
 package io.sc3.peripherals.prints
 
 import io.sc3.library.ext.optCompound
-import io.sc3.library.ext.rotateTowards
-import io.sc3.library.ext.unitBox
-import io.sc3.library.ext.volume
 import io.sc3.peripherals.Registration.ModBlockEntities.print
 import io.sc3.peripherals.util.BaseBlockEntity
 import net.minecraft.block.Block
@@ -15,7 +12,6 @@ import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
 
 class PrintBlockEntity(
@@ -29,7 +25,7 @@ class PrintBlockEntity(
       dataDirty = true
     }
 
-  val on
+  val on: Boolean
     get() = with(cachedState) { if (isAir) false else get(PrintBlock.on) }
   val facing: Direction
     get() = with(cachedState) { if (isAir) Direction.NORTH else get(PrintBlock.facing) }
@@ -48,13 +44,6 @@ class PrintBlockEntity(
     get() = emitsRedstone && !canTurnOn
   private val emitsRedstoneWhenOn
     get() = emitsRedstone && canTurnOn
-
-  private fun boundsForState(shapes: Shapes): Box {
-    val head = shapes.firstOrNull()?.bounds ?: unitBox
-    val bounds = shapes.drop(1).fold(head) { acc, shape -> acc.union(shape.bounds) }
-    return if (bounds.volume == 0) unitBox
-    else bounds.rotateTowards(facing)
-  }
 
   fun toggle() {
     val world = world ?: return

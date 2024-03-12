@@ -32,7 +32,7 @@ import net.minecraft.client.render.RenderLayer
 import org.slf4j.LoggerFactory
 
 object ScPeripheralsClient : ClientModInitializer {
-  val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!
+  private val log = LoggerFactory.getLogger("ScPeripherals/ScPeripheralsClient")!!
 
   override fun onInitializeClient() {
     log.info("sc-peripherals client initializing")

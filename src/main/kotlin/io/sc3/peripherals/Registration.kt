@@ -124,9 +124,9 @@ object Registration {
   }
 
   object ModScreens {
-    val printer = register(SCREEN_HANDLER, ModId("printer"),
+    val printer: ScreenHandlerType<PrinterScreenHandler> = register(SCREEN_HANDLER, ModId("printer"),
       ScreenHandlerType(::PrinterScreenHandler, FeatureFlags.VANILLA_FEATURES))
-    val posterPrinter = register(SCREEN_HANDLER, ModId("poster_printer"),
+    val posterPrinter: ExtendedScreenHandlerType<PosterPrinterScreenHandler> = register(SCREEN_HANDLER, ModId("poster_printer"),
       ExtendedScreenHandlerType(::PosterPrinterScreenHandler))
   }
 }

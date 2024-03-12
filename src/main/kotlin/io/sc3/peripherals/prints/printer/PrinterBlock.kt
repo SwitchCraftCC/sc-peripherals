@@ -57,13 +57,13 @@ class PrinterBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlog
     builder.add(facing, waterlogged)
   }
 
-  override fun mirror(state: BlockState, mirror: BlockMirror) =
+  override fun mirror(state: BlockState, mirror: BlockMirror): BlockState =
     state.rotate(mirror.getRotation(state.get(facing)))
 
-  override fun rotate(state: BlockState, rotation: BlockRotation) =
+  override fun rotate(state: BlockState, rotation: BlockRotation): BlockState =
     state.with(facing, rotation.rotate(state.get(facing)))
 
-  override fun getPlacementState(ctx: ItemPlacementContext) = defaultState
+  override fun getPlacementState(ctx: ItemPlacementContext): BlockState = defaultState
     .with(facing, ctx.horizontalPlayerFacing.opposite)
     .with(waterlogged, placementWaterlogged(ctx))
 
