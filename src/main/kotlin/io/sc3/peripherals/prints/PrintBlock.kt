@@ -15,7 +15,6 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
-import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.server.world.ServerWorld
@@ -133,7 +132,7 @@ class PrintBlock(settings: Settings) : BaseBlockWithEntity(settings), Waterlogga
     if (!stack.isOf(ModItems.print)) return 0
 
     val data = PrintItem.printData(ctx.stack)
-    return data?.lightLevel ?: 0
+    return if (data?.lightWhenOff == true) data.lightLevel else 0
   }
 
   // Redstone

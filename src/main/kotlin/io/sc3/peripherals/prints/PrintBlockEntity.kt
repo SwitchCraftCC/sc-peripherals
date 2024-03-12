@@ -39,6 +39,11 @@ class PrintBlockEntity(
   val collide
     get() = data?.let { if (on) it.collideWhenOn else it.collideWhenOff }
 
+  private val lightWhenOn
+    get() = data?.lightWhenOn ?: true
+  private val lightWhenOff
+    get() = data?.lightWhenOff ?: true
+
   private val emitsRedstone
     get() = (data?.redstoneLevel ?: 0) > 0
   private val emitsRedstoneWhenOff
@@ -57,7 +62,14 @@ class PrintBlockEntity(
     val world = world ?: return
     val block = cachedState.block as? PrintBlock ?: return
 
-    world.setBlockState(pos, cachedState.with(PrintBlock.on, !on), Block.NOTIFY_ALL)
+    val hasLight = if (on) lightWhenOn else lightWhenOff
+    val luminance = if (hasLight) data?.lightLevel ?: 0 else 0
+
+    val newState = cachedState
+      .with(PrintBlock.on, !on)
+      .with(PrintBlock.luminance, luminance)
+    world.setBlockState(pos, newState, Block.NOTIFY_ALL)
+
     if (data?.isQuiet != true) {
       world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
     }

@@ -82,6 +82,16 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : InventoryPeripheral(be) {
     be.data.collideWhenOn = collideWhenOn
     be.dataUpdated()
   }
+
+  @LuaFunction(mainThread = true)
+  fun getStateLighting(): MethodResult = of(be.data.lightWhenOff, be.data.lightWhenOn)
+
+  @LuaFunction(mainThread = true)
+  fun setStateLighting(lightWhenOff: Boolean, lightWhenOn: Boolean) {
+    be.data.lightWhenOff = lightWhenOff
+    be.data.lightWhenOn = lightWhenOn
+    be.dataUpdated()
+  }
   
   @LuaFunction(mainThread = true)
   fun getShapeCount(): MethodResult = of(be.data.shapesOff.size, be.data.shapesOn.size)

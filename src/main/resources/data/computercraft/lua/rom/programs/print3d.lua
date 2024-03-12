@@ -131,6 +131,7 @@ local function commitPrint(data)
   if data.tooltip then printer.setTooltip(data.tooltip) end
   printer.setButtonMode(data.isButton or false)
   printer.setCollidable(data.collideWhenOff ~= false, data.collideWhenOn ~= false)
+  printer.setStateLighting(data.lightWhenOff ~= false, data.lightWhenOn ~= false)
   printer.setRedstoneLevel(data.redstoneLevel or 0)
   printer.setLightLevel(data.lightLevel or 0)
 
