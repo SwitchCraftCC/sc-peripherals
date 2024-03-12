@@ -42,6 +42,9 @@ class PrintBakedModel(
   private val mc by lazy { MinecraftClient.getInstance() }
   private val missingModel by lazy { mc.bakedModelManager.missingModel }
 
+  // Allow it to throw here if the renderer is null (should never happen in practice??)
+  private val meshBuilder by lazy { RendererAccess.INSTANCE.renderer!!.meshBuilder() }
+
   override fun isVanillaAdapter() = false
 
   override fun emitBlockQuads(blockView: BlockRenderView, state: BlockState, pos: BlockPos,
@@ -50,16 +53,15 @@ class PrintBakedModel(
     val shapes = be.shapes // Get the shapes for the current state (on/off)
     val shapesFacing = ShapesFacing(shapes, be.facing)
 
-    val mesh = meshCache.computeIfAbsent(shapesFacing) {
+    meshCache.computeIfAbsent(shapesFacing) {
       buildPrintMesh(shapes, be.facing)
-    }
-    ctx.meshConsumer().accept(mesh)
+    }.outputTo(ctx.emitter)
   }
 
   override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<Random>, ctx: RenderContext) {
     // Quick-fail for completely empty item stacks (REI, JEI, etc)
     if (!stack.hasNbt()) {
-      ctx.fallbackConsumer().accept(missingModel)
+      missingModel.emitItemQuads(stack, randomSupplier, ctx)
       return
     }
 
@@ -70,10 +72,9 @@ class PrintBakedModel(
       }
       val shapes = printData.shapesOff
 
-      val mesh = itemMeshCache.computeIfAbsent(shapes) {
+      itemMeshCache.computeIfAbsent(shapes) {
         buildPrintMesh(shapes)
-      }
-      ctx.meshConsumer().accept(mesh)
+      }.outputTo(ctx.emitter)
     } catch (e: Exception) {
       when(e) {
         is NoPrintDataException -> { /* no-op */ }
@@ -81,21 +82,19 @@ class PrintBakedModel(
       }
 
       // Show the invalid model
-      ctx.bakedModelConsumer().accept(missingModel)
+      missingModel.emitItemQuads(stack, randomSupplier, ctx)
       return
     }
   }
 
   private fun buildPrintMesh(shapes: Shapes, facing: Direction = Direction.SOUTH): Mesh? {
-    val renderer = RendererAccess.INSTANCE.renderer ?: return null
-    val builder = renderer.meshBuilder()
-    val emitter = builder.emitter
+    val emitter = meshBuilder.emitter
 
     shapes.filter { it.texture != null }.forEach {
       buildShape(emitter, it, facing)
     }
 
-    return builder.build()
+    return meshBuilder.build()
   }
 
   private fun buildShape(emitter: QuadEmitter, shape: Shape, facing: Direction) {
