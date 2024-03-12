@@ -7,6 +7,7 @@ import io.sc3.peripherals.ScPeripherals.ModId
 import io.sc3.peripherals.prints.*
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh
+import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView.BAKE_LOCK_UV
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
@@ -42,25 +43,33 @@ class PrintBakedModel(
   private val mc by lazy { MinecraftClient.getInstance() }
   private val missingModel by lazy { mc.bakedModelManager.missingModel }
 
-  // Allow it to throw here if the renderer is null (should never happen in practice??)
-  private val meshBuilder by lazy { RendererAccess.INSTANCE.renderer!!.meshBuilder() }
+  private val meshBuilder = ThreadLocal.withInitial { RendererAccess.INSTANCE.renderer?.meshBuilder() }
 
   override fun isVanillaAdapter() = false
 
   override fun emitBlockQuads(blockView: BlockRenderView, state: BlockState, pos: BlockPos,
                               randomSupplier: Supplier<Random>, ctx: RenderContext) {
-    val be = blockView.getBlockEntity(pos, ModBlockEntities.print).orElse(null) ?: return // TODO: Return missingModel?
+    // If the renderer or block entity are null, return missingModel before trying to do anything else
+    val builder = meshBuilder.get()
+    val be = blockView.getBlockEntity(pos, ModBlockEntities.print).orElse(null)
+    if (builder == null || be == null) {
+      missingModel.emitBlockQuads(blockView, state, pos, randomSupplier, ctx)
+      return
+    }
+
     val shapes = be.shapes // Get the shapes for the current state (on/off)
     val shapesFacing = ShapesFacing(shapes, be.facing)
 
     meshCache.computeIfAbsent(shapesFacing) {
-      buildPrintMesh(shapes, be.facing)
+      buildPrintMesh(builder, shapes, be.facing)
     }.outputTo(ctx.emitter)
   }
 
   override fun emitItemQuads(stack: ItemStack, randomSupplier: Supplier<Random>, ctx: RenderContext) {
+    // If the renderer is null, return missingModel before trying to do anything else
     // Quick-fail for completely empty item stacks (REI, JEI, etc)
-    if (!stack.hasNbt()) {
+    val builder = meshBuilder.get()
+    if (builder == null || !stack.hasNbt()) {
       missingModel.emitItemQuads(stack, randomSupplier, ctx)
       return
     }
@@ -73,7 +82,7 @@ class PrintBakedModel(
       val shapes = printData.shapesOff
 
       itemMeshCache.computeIfAbsent(shapes) {
-        buildPrintMesh(shapes)
+        buildPrintMesh(builder, shapes)
       }.outputTo(ctx.emitter)
     } catch (e: Exception) {
       when(e) {
@@ -87,14 +96,18 @@ class PrintBakedModel(
     }
   }
 
-  private fun buildPrintMesh(shapes: Shapes, facing: Direction = Direction.SOUTH): Mesh? {
-    val emitter = meshBuilder.emitter
+  private fun buildPrintMesh(
+    builder: MeshBuilder,
+    shapes: Shapes,
+    facing: Direction = Direction.SOUTH
+  ): Mesh? {
+    val emitter = builder.emitter
 
     shapes.filter { it.texture != null }.forEach {
       buildShape(emitter, it, facing)
     }
 
-    return meshBuilder.build()
+    return builder.build()
   }
 
   private fun buildShape(emitter: QuadEmitter, shape: Shape, facing: Direction) {
