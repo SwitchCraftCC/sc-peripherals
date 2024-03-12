@@ -62,16 +62,14 @@ class PrintBlockEntity(
     val world = world ?: return
     val block = cachedState.block as? PrintBlock ?: return
 
-    var luminance = data?.lightLevel ?: 0
-    if (!on) {
-      // if we're turning on, and we don't want light when we're on, turn off the light
-      if (!lightWhenOn) luminance = 0
-    } else {
-      // conversely, if we're turning off, and we don't want light when we're off, turn off the light
-      if (!lightWhenOff) luminance = 0
-    }
+    val hasLight = if (on) lightWhenOn else lightWhenOff
+    val luminance = if (hasLight) data?.lightLevel ?: 0 else 0
 
-    world.setBlockState(pos, cachedState.with(PrintBlock.on, !on).with(PrintBlock.luminance, luminance), Block.NOTIFY_ALL)
+    val newState = cachedState
+      .with(PrintBlock.on, !on)
+      .with(PrintBlock.luminance, luminance)
+    world.setBlockState(pos, newState, Block.NOTIFY_ALL)
+
     if (data?.isQuiet != true) {
       world.playSound(null, pos, SoundEvents.BLOCK_LEVER_CLICK, SoundCategory.BLOCKS, 0.3f, if (on) 0.6f else 0.3f)
     }
