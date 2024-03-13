@@ -53,7 +53,9 @@ class PrintBakedModel(
     val builder = meshBuilder.get()
     val be = blockView.getBlockEntity(pos, ModBlockEntities.print).orElse(null)
     if (builder == null || be == null) {
-      missingModel.emitBlockQuads(blockView, state, pos, randomSupplier, ctx)
+      // 2024-03-13: if the print is too far away, the BE/data will be null, so returning missingModel results in the
+      //             world looking like you forgot to install Counter Strike: Source. so DON'T return missingModel here
+      // missingModel.emitBlockQuads(blockView, state, pos, randomSupplier, ctx)
       return
     }
 
