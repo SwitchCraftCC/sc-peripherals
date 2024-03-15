@@ -1,5 +1,6 @@
 package io.sc3.peripherals.prints
 
+import io.sc3.library.ext.optBoolean
 import io.sc3.library.ext.optString
 import io.sc3.library.ext.putOptString
 import io.sc3.peripherals.config.ScPeripheralsConfig.config
@@ -74,8 +75,8 @@ data class PrintData(
     nbt.putBoolean("isButton", isButton)
     nbt.putBoolean("collideWhenOn", collideWhenOn)
     nbt.putBoolean("collideWhenOff", collideWhenOff)
-    nbt.putBoolean("lightWhenOn", lightWhenOn)
-    nbt.putBoolean("lightWhenOff", lightWhenOff)
+    nbt.putBoolean("lightWhenOn2", lightWhenOn)
+    nbt.putBoolean("lightWhenOff2", lightWhenOff)
     nbt.putInt("lightLevel", lightLevel)
     nbt.putInt("redstoneLevel", redstoneLevel)
     nbt.putBoolean("isBeaconBlock", isBeaconBlock)
@@ -95,8 +96,8 @@ data class PrintData(
       isButton       = nbt.getBoolean("isButton"),
       collideWhenOn  = nbt.getBoolean("collideWhenOn"),
       collideWhenOff = nbt.getBoolean("collideWhenOff"),
-      lightWhenOn    = nbt.getBoolean("lightWhenOn"),
-      lightWhenOff   = nbt.getBoolean("lightWhenOff"),
+      lightWhenOn    = nbt.optBoolean("lightWhenOn2") ?: true,
+      lightWhenOff   = nbt.optBoolean("lightWhenOff2") ?: true,
       lightLevel     = nbt.getInt("lightLevel"),
       redstoneLevel  = nbt.getInt("redstoneLevel"),
       isBeaconBlock  = nbt.getBoolean("isBeaconBlock"),
