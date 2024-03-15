@@ -21,7 +21,7 @@ interface PrintData {
 interface Shape {
   bounds: [number, number, number, number, number, number];
   tint?: number | string;
-  texture: string;
+  texture: string | null;
 }
 
 export interface ConversionResults {
@@ -66,11 +66,15 @@ export function convert(original: string): ConversionResults {
     if (shapes) {
       for (const shape of shapes) {
         let texture = findKey(shape, "texture")
-        if (typeof texture !== "string") texture = "sc-peripherals:block/white";
+        if (texture === "") {
+          texture = null;
+        } else if (typeof texture !== "string") {
+          texture = "sc-peripherals:block/white";
+        }
 
         // Attempts to convert vanilla 1.12 texture names to 1.13+ texture names
         // (primarily targets 1.19)
-        texture = tryFindTexture(texture);
+        texture = texture ? tryFindTexture(texture) : null;
 
         let tint = findKey(shape, "tint")
         if (typeof tint !== "number") tint = 0xFFFFFF
@@ -126,7 +130,10 @@ function bound(arr: Array<number | Array<string | number>>, idx: number): number
   return 0;
 }
 
-function findKey(arr: Array<number | Array<string | number>>, key: string): string | number | boolean | undefined {
+function findKey(
+  arr: Array<number | Array<string | number>>,
+  key: string
+): string | number | boolean | undefined | null {
   const def = arr.find(a => isArray(a) && a[0] === key);
   if (!def || !isArray(def) || def.length < 2) return
 

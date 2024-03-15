@@ -100,7 +100,7 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : InventoryPeripheral(be) {
   fun getMaxShapeCount(): Int = maxShapes
 
   @LuaFunction(mainThread = true)
-  fun addShape(minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, texture: String,
+  fun addShape(minX: Int, minY: Int, minZ: Int, maxX: Int, maxY: Int, maxZ: Int, texture: Optional<String>,
                state: Optional<Boolean>, tint: Optional<Int>) {
     if (be.data.shapesOff.size >= maxShapes || be.data.shapesOn.size >= maxShapes) {
       throw LuaException("Too many shapes")
@@ -110,12 +110,19 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : InventoryPeripheral(be) {
       minX.coerceIn(0, 16), minY.coerceIn(0, 16), minZ.coerceIn(0, 16),
       maxX.coerceIn(0, 16), maxY.coerceIn(0, 16), maxZ.coerceIn(0, 16)
     )
-    val textureId = Identifier(texture.take(64))
-    val fixedTint = tint.orElse(0xFFFFFF) and 0xFFFFFF // Discard alpha component
-
     if (box.xLength <= 0 || box.yLength <= 0 || box.zLength <= 0) {
       throw LuaException("Empty block")
     }
+
+    val textureId = texture.orElse(null)?.let {
+      if (it.isNotEmpty()) {
+        Identifier(it.take(64))
+      } else {
+        null
+      }
+    }
+
+    val fixedTint = tint.orElse(0xFFFFFF) and 0xFFFFFF // Discard alpha component
 
     val shapes = if (state.orElse(false)) be.data.shapesOn else be.data.shapesOff
     shapes.add(Shape(box, textureId, fixedTint))
@@ -129,13 +136,14 @@ class PrinterPeripheral(val be: PrinterBlockEntity) : InventoryPeripheral(be) {
       if (i !is Double || !i.isFinite()) throw LuaException("Invalid shape table")
       if (shape !is Map<*, *>) throw badTableItem(i.toInt(), "table", getType(shape))
 
-      val texVal = shape["texture"]
-      val texture = texVal as? String ?: throw badField("texture", "string", getType(texVal))
+      val texture = shape["texture"]?.let {
+        it as? String ?: throw badField("texture", "string", getType(it))
+      }
 
       addShape(
         shape.getTableInt(1), shape.getTableInt(2), shape.getTableInt(3),
         shape.getTableInt(4), shape.getTableInt(5), shape.getTableInt(6),
-        texture,
+        Optional.ofNullable(texture),
         Optional.of(shape["state"] as? Boolean ?: false),
         if (shape.containsKey("tint")) Optional.of(shape.getTableInt("tint")) else Optional.empty()
       )

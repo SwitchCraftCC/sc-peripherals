@@ -1,12 +1,12 @@
 package io.sc3.peripherals.prints
 
-import net.minecraft.nbt.NbtCompound
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.Box
 import io.sc3.library.ext.byteToDouble
 import io.sc3.library.ext.optInt
 import io.sc3.library.ext.optString
 import io.sc3.library.ext.putOptInt
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.util.Identifier
+import net.minecraft.util.math.Box
 
 data class Shape(
   val bounds: Box,
@@ -52,7 +52,7 @@ data class Shape(
         nbt.byteToDouble("minX"), nbt.byteToDouble("minY"), nbt.byteToDouble("minZ"),
         nbt.byteToDouble("maxX"), nbt.byteToDouble("maxY"), nbt.byteToDouble("maxZ")
       ),
-      nbt.optString("tex")?.let { Identifier(it) },
+      nbt.optString("tex")?.let { if (it.isNotEmpty()) Identifier(it) else null },
       nbt.optInt("tint")
     )
   }
