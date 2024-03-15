@@ -62,4 +62,18 @@ public class ItemStackMixin {
       ci.cancel();
     }
   }
+  
+  @Inject(
+    method = "setRepairCost",
+    at = @At("HEAD"),
+    cancellable = true
+  )
+  private void setRepairCost(int repairCost, CallbackInfo ci) {
+    ItemStack stack = (ItemStack) (Object) this;
+    if (stack.getItem() instanceof PrintItem) {
+      // #43 - Anvils add RepairCost NBT to renamed 3D prints, meaning they're no longer identical to a labelled 3D
+      //       print. Cancel adding the RepairCost NBT tag.
+      ci.cancel();
+    }
+  }
 }
